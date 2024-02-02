@@ -49,7 +49,10 @@ console.log(cutAvg);
 const letters = "abc";
 // Get me the character "c"
 
-const charC = letters.charAt(2);
+const charC = letters.charAt(2); // Find char at index 2
+const charc2 = letters[2]; // laver en array og gemmer index 2 værdien i variablen
+const char3 = letters.substring(2, 3); // laver en substring fra index 2 til 3
+const.char4 = letters.slice(2, 3); // laver en slice fra index 2 til 3 og returnerer det
 console.log(charC);
 
 
