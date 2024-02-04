@@ -1,1 +1,1 @@
-This is a 
+This is a Node JS course, studying Computer Science. 
