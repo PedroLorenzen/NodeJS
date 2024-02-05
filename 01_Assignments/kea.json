@@ -1,4 +1,5 @@
 {
     "address": "Guldbergsgade",
-    "studentsInBuilding": 200
+    "studentsInBuilding": 200,
+    "students": [{"name": "Andreas" , "age": 23}]
 }
