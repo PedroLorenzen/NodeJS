@@ -99,7 +99,7 @@ app.get(`/drinks`, (req, res) => {
 app.get(`/drinks/:id`, (req, res) => {
 
     const id = req.params.id;
-    console.log(`id requested is: ${id}`); // `` gør at vi kan bruge variabler i strings.
+    console.log(`id requested is: ${id}`); // `` gør at vi kan bruge variabler i strings vs. '' eller ""
     console.log(req.params);
 
     const drink = allDrinks.drinks.find(d => d.id.toString() === id);
