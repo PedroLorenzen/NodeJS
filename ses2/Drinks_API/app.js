@@ -68,8 +68,7 @@ app.get("/drinks", (req, res) =>{
     }
 });
 
-app.get("/drinks/id/:id", (req, res) =>{ 
-// hvis jeg kun skulle have get id endpoint, ville jeg kalde endpointet for /drinks/:id, men da jeg åbner op for flere get endpoints valgte jeg at være kreativ. Er dette en god idé?
+app.get("/drinks/:id", (req, res) =>{ 
 
     const id = req.params.id;
     console.log(`id requested is: ${id}`); // `` gør at vi kan bruge variabler i strings.
@@ -94,36 +93,45 @@ app.get("/drinks/id/:id", (req, res) =>{
     }
 });
 
-app.get("/drinks/name/:name", (req, res) => {
-    const name = req.params.name;
-    console.log(`name requested is: ${name}`);
-    console.log(req.params);
+// query parameter for at finde drinks med et bestemt navn
+// Brug http://localhost:8080/drinks?name=Mojito f.eks.
+app.get("/drinks", (req, res) => {
+    const { name } = req.query;
+    if (name) {
+        console.log(`Name requested is: ${name}`);
+        const drink = allDrinks.drinks.find(d => d.name.toLowerCase() === name.toLowerCase());
 
-    const drink = allDrinks.drinks.find(d => d.name.toLowerCase() === name.toLowerCase());
-
-    if(drink){
-        console.log(drink, "\n");
-        res.send({drink_by_name: drink});
-    }
-    else {
-        res.send({error: `Drink with name: ${name} not found`});
-        console.log(`Drink with name: ${name} not found \n`);
+        if (drink) {
+            console.log(drink, "\n");
+            res.send({ drink_by_name: drink });
+        } else {
+            res.send({ error: `Drink with name: ${name} not found` });
+            console.log(`Drink with name: ${name} not found \n`);
+        }
+    } else {
+        console.log("No name requested");
+        res.send(allDrinks);
     }
 });
 
-app.get("/drinks/ingredient/:ingredient", (req, res) => {
-    const ingredient = req.params.ingredient;
-    console.log(`ingredient requested is: ${ingredient}`);
-    console.log(req.params);
+// query parameter for at finde drinks med en bestemt ingrediens
+// Brug http://localhost:8080/drinks?ingredient=Lime%20juice f.eks.
+app.get("/drinks", (req, res) => {
+    const { ingredient } = req.query;
+    if (ingredient) {
+        console.log(`Ingredient requested is: ${ingredient}`);
+        const drinks = allDrinks.drinks.filter(d => d.ingredients.includes(ingredient));
 
-    const drinks = allDrinks.drinks.filter(d => d.ingredients.includes(ingredient));
-
-    if (drinks.length > 0) {
-        res.send({drinks_by_ingredient: drinks});
-        console.log(drinks, "\n");
+        if (drinks.length > 0) {
+            res.send({ drinks_by_ingredient: drinks });
+            console.log(drinks, "\n");
+        } else {
+            res.send({ error: `No drinks found with ingredient: ${ingredient}` });
+            console.log(`No drinks found with ingredient: ${ingredient} \n`);
+        }
     } else {
-        res.send({ error: `No drinks found with ingredient: ${ingredient}`});
-        console.log(`No drinks found with ingredient: ${ingredient} \n`);
+        console.log("No ingredient requested");
+        res.send(allDrinks);
     }
 });
 
