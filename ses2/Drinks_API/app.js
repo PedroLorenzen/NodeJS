@@ -54,7 +54,7 @@ const allDrinks = {
         }
     ]
 }
-// Standard drinks endpoint med indbygget query parameter. Dette er den eneste måde at hente name eller ingredient ud fra drinks hvis man vil være striks med naming conventions.
+// Standard drinks endpoint med indbygget query parameter. Jeg fandt denne måde at være bedst for at hente name eller ingredient ud fra drinks hvis man vil være striks med naming conventions.
 // Brug http://localhost:8080/drinks?name=Mojito eller http://localhost:8080/drinks?ingredient=Lime%20juice
 app.get(`/drinks`, (req, res) => {
     const { name, ingredient } = req.query;
