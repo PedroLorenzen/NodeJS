@@ -1,0 +1,37 @@
+"use strict";
+// Strict mode gør at der er flere regler for hvad der er lov og ikke lov i javascript.
+// Nogle virker måske bruger dette, ellers kan de også statistical analysis for at finde fejl i koden.
+
+totalGlobalVariable = "Never do this!!"
+
+    console.log(totalGlobalVariable);
+
+// const: Kan ikke udeklareres eller omdeklareres til en anden type - can't change the assignment.
+// const værdien kan godt ændres hvis det er et array eller et objekt, så længe det ikke bliver til et andet array eller objekt.
+
+// var vs let: var kan tilgås overalt i koden, hvorimod let kun kan tilgås inden for et scope.
+
+//Scopes:
+// Global scope: Kan tilgås overalt i koden. - var kan også tilgås overalt i koden hvilket poluter koden.
+var globalScope = "I'm a global scope";
+
+// Function scope: Kan kun tilgås inden for en funktion.
+{
+    function functionScope() {
+        let functionScope = "I'm a function scope";
+        console.log(functionScope);
+    
+}
+
+// Block scope: Kan kun tilgås inden for en blok.
+{
+    let blockScope = "I'm a block scope";
+    console.log(blockScope);
+}}
+
+// var er ikke bundet lexacilly til en blok, hvorimod let er. Her vil man få 6x6 istedet 1, 2, 3...
+for (var i  = 0; i<= 6; i++) {
+    setTimeout(() => {
+        console.log(i)
+    }, 1000);
+}
