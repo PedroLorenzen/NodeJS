@@ -54,21 +54,49 @@ const allDrinks = {
         }
     ]
 }
+// Standard drinks endpoint med indbygget query parameter. Dette er den eneste måde at hente name eller ingredient ud fra drinks hvis man vil være striks med naming conventions.
+// Brug http://localhost:8080/drinks?name=Mojito eller http://localhost:8080/drinks?ingredient=Lime%20juice
+app.get(`/drinks`, (req, res) => {
+    const { name, ingredient } = req.query;
+    if (name) {
+        console.log(`Name requested is: ${name}`);
+        const drink = allDrinks.drinks.find(d => d.name.toLowerCase() === name.toLowerCase());
+        if (drink) {
+            res.send({ drink_by_name: drink });
+            console.log(drink, `\n`);
+        }
+        else {
+            res.send({ error: `Drink with name: ${name} not found` });
+            console.log(`Drink with name: ${name} not found \n`);
+        }
+    }
+    else if (ingredient) {
+        console.log(`Ingredient requested is: ${ingredient}`);
+        const drinks = allDrinks.drinks.filter(d => d.ingredients.includes(ingredient));
+        if (drinks.length > 0) {
+            res.send({ drinks_by_ingredient: drinks });
+            console.log(drinks, `\n`);
+        }
+        else {
+            res.send({ error: `No drinks found with ingredient: ${ingredient}` });
+            console.log(`No drinks found with ingredient: ${ingredient} \n`);
+        }
+    }
+    else {
+        if (allDrinks) {
+            res.send({ allDrinks: allDrinks });
+            console.log(`No valid parameters, returning all drinks:`)
+            console.log(allDrinks, `\n`);
+        }
+        else {
+            res.send({ error: `No drinks found` });
+            console.log(`No drinks found \n`);
+        }
+    }
 
-app.get("/drinks", (req, res) =>{
-    if(allDrinks)
-    {
-        res.send({allDrinks: allDrinks});
-        console.log(allDrinks, "\n");
-    }
-    else
-    {
-        res.send({error: "No drinks found"});
-        console.log("No drinks found \n");
-    }
 });
 
-app.get("/drinks/:id", (req, res) =>{ 
+app.get(`/drinks/:id`, (req, res) => {
 
     const id = req.params.id;
     console.log(`id requested is: ${id}`); // `` gør at vi kan bruge variabler i strings.
@@ -83,55 +111,13 @@ app.get("/drinks/:id", (req, res) =>{
         }
     } */
 
-    if(drink){
-        console.log(drink, "\n");
-        res.send({drink_by_id: drink});
+    if (drink) {
+        console.log(drink, `\n`);
+        res.send({ drink_by_id: drink });
     }
     else {
-        res.send({error: `Drink with id: ${id} not found`}); // send altid JSON tilbage når vi arbejder med data.
+        res.send({ error: `Drink with id: ${id} not found` }); // send altid JSON tilbage når vi arbejder med data.
         console.log(`Drink with id: ${id} not found \n`);
-    }
-});
-
-// query parameter for at finde drinks med et bestemt navn
-// Brug http://localhost:8080/drinks?name=Mojito f.eks.
-app.get("/drinks", (req, res) => {
-    const { name } = req.query;
-    if (name) {
-        console.log(`Name requested is: ${name}`);
-        const drink = allDrinks.drinks.find(d => d.name.toLowerCase() === name.toLowerCase());
-
-        if (drink) {
-            console.log(drink, "\n");
-            res.send({ drink_by_name: drink });
-        } else {
-            res.send({ error: `Drink with name: ${name} not found` });
-            console.log(`Drink with name: ${name} not found \n`);
-        }
-    } else {
-        console.log("No name requested");
-        res.send(allDrinks);
-    }
-});
-
-// query parameter for at finde drinks med en bestemt ingrediens
-// Brug http://localhost:8080/drinks?ingredient=Lime%20juice f.eks.
-app.get("/drinks", (req, res) => {
-    const { ingredient } = req.query;
-    if (ingredient) {
-        console.log(`Ingredient requested is: ${ingredient}`);
-        const drinks = allDrinks.drinks.filter(d => d.ingredients.includes(ingredient));
-
-        if (drinks.length > 0) {
-            res.send({ drinks_by_ingredient: drinks });
-            console.log(drinks, "\n");
-        } else {
-            res.send({ error: `No drinks found with ingredient: ${ingredient}` });
-            console.log(`No drinks found with ingredient: ${ingredient} \n`);
-        }
-    } else {
-        console.log("No ingredient requested");
-        res.send(allDrinks);
     }
 });
 
