@@ -85,18 +85,21 @@ console.log(charArray);
 
 const numbers  = [5, 3, 2, 7, 11, 12, 0, -20, 6];
 
-const discardedNumbers = [];
-
 // log the element if the number is above 6 or below 0
 // else push them to the array discardedNumbers
 
-let numbersArray = [];
+const numbersArray = [];
+const discardedNumbers = [];
 
 for (let i = 0; i < numbers.length; i++)
 {
     if (numbers[i] > 6 || numbers[i] < 0)
     {
         numbersArray.push(numbers[i]);
+    }
+    else 
+    {
+        discardedNumbers.push(numbers[i]);
     }
 }
 
