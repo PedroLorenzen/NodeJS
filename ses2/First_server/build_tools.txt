@@ -1,0 +1,11 @@
+Java examples: maven, gradle, ant.
+Rust example: cargo
+Javascript example: npm
+
+Java                    Node.js
+maven                   npm, yearn etc.
+pom.xml                 package.json
+
+meta info (versioner)   meta info (versioner)    
+dependencies            dependencies
+life cycles             scripts
