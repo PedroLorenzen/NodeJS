@@ -1,5 +1,8 @@
+// import express from "express";
+const express = require("express");
 const app = require("express")();
 
+// Array af objekter med
 const allDrinks = {
     "drinks": [
         {
@@ -62,7 +65,7 @@ app.get(`/drinks`, (req, res) => {
         console.log(`Name requested is: ${name}`);
         const drink = allDrinks.drinks.find(d => d.name.toLowerCase() === name.toLowerCase());
         if (drink) {
-            res.send({ drink_by_name: drink });
+            res.send({ data: drink });
             console.log(drink, `\n`);
         }
         else {
@@ -74,7 +77,7 @@ app.get(`/drinks`, (req, res) => {
         console.log(`Ingredient requested is: ${ingredient}`);
         const drinks = allDrinks.drinks.filter(d => d.ingredients.includes(ingredient));
         if (drinks.length > 0) {
-            res.send({ drinks_by_ingredient: drinks });
+            res.send({ data: drinks });
             console.log(drinks, `\n`);
         }
         else {
@@ -84,7 +87,7 @@ app.get(`/drinks`, (req, res) => {
     }
     else {
         if (allDrinks) {
-            res.send({ allDrinks: allDrinks });
+            res.send({ data: allDrinks });
             console.log(`No valid parameters, returning all drinks:`)
             console.log(allDrinks, `\n`);
         }
@@ -98,11 +101,12 @@ app.get(`/drinks`, (req, res) => {
 
 app.get(`/drinks/:id`, (req, res) => {
 
-    const id = req.params.id;
+    const id = Number(req.params.id);
     console.log(`id requested is: ${id}`); // `` gør at vi kan bruge variabler i strings vs. '' eller ""
     console.log(req.params);
 
-    const drink = allDrinks.drinks.find(d => d.id.toString() === id);
+    // Man skal ikke bruge filter da man derfor får et array af objekter og måske flere elementer istedet for kun 1. 
+    const drink = allDrinks.drinks.find(d => d.id === id);
     /* Det samme som:
     for (let i = 0; i < allDrinks.drinks.length; i++){
         if(allDrinks.drinks[i].id.toString() === id)
@@ -113,7 +117,7 @@ app.get(`/drinks/:id`, (req, res) => {
 
     if (drink) {
         console.log(drink, `\n`);
-        res.send({ drink_by_id: drink });
+        res.send({ data: drink });
     }
     else {
         res.send({ error: `Drink with id: ${id} not found` }); // send altid JSON tilbage når vi arbejder med data.
@@ -121,4 +125,11 @@ app.get(`/drinks/:id`, (req, res) => {
     }
 });
 
-app.listen(8080);
+// Start server
+app.listen(8080, (error) => {
+    if (error) {
+        console.log(`Error starting the server: ${error}`);
+        return;
+    }
+    console.log("Server started on http://localhost:8080");
+});
