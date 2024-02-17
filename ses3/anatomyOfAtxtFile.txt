@@ -1,0 +1,10 @@
+
+https://www.google.dk/search?q=test
+
+Protokol: https
+Subdomain: www
+domain: google
+top-level domain: dk
+path: /search
+query parameters: q=test
+query string: ?q=test

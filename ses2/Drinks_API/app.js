@@ -59,6 +59,8 @@ const allDrinks = {
 }
 // Standard drinks endpoint med indbygget query parameter. Jeg fandt denne måde at være bedst for at hente name eller ingredient ud fra drinks hvis man vil være striks med naming conventions.
 // Brug http://localhost:8080/drinks?name=Mojito eller http://localhost:8080/drinks?ingredient=Lime%20juice
+// Hvis der er flere query parameters i samme string: http://localhost:8080/drinks?name=Mojito&ingredient=Lime%20juice
+// req.query: Her er parameter navnene keys og parameter værdierne values.
 app.get(`/drinks`, (req, res) => {
     const { name, ingredient } = req.query;
     if (name) {
