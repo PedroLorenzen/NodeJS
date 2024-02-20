@@ -2,6 +2,9 @@
 const express = require("express");
 const app = require("express")();
 
+
+// ------------------------------------------------ GET ------------------------------------------------ //
+
 // Array af objekter med
 const allDrinks = {
     "drinks": [
@@ -57,7 +60,10 @@ const allDrinks = {
         }
     ]
 }
-// Standard drinks endpoint med indbygget query parameter. Jeg fandt denne måde at være bedst for at hente name eller ingredient ud fra drinks hvis man vil være striks med naming conventions.
+
+let lastId = allDrinks.drinks[allDrinks.drinks.length - 1].id; // Variabel til at holde styr på at give det rigtige id til nye objekter. Se POST request.
+
+// Standard drinks endpoint med indbygget query parameter.
 // Brug http://localhost:8080/drinks?name=Mojito eller http://localhost:8080/drinks?ingredient=Lime%20juice
 // Hvis der er flere query parameters i samme string: http://localhost:8080/drinks?name=Mojito&ingredient=Lime%20juice
 // req.query: Her er parameter navnene keys og parameter værdierne values.
@@ -104,14 +110,14 @@ app.get(`/drinks`, (req, res) => {
 app.get(`/drinks/:id`, (req, res) => {
 
     const id = Number(req.params.id);
-    console.log(`id requested is: ${id}`); // `` gør at vi kan bruge variabler i strings vs. '' eller ""
+    console.log(`id requested for GET is: ${id}`); // `` gør at vi kan bruge variabler i strings vs. '' eller ""
     console.log(req.params);
 
     // Man skal ikke bruge filter da man derfor får et array af objekter og måske flere elementer istedet for kun 1. 
     const drink = allDrinks.drinks.find(d => d.id === id);
     /* Det samme som:
     for (let i = 0; i < allDrinks.drinks.length; i++){
-        if(allDrinks.drinks[i].id.toString() === id)
+        if(allDrinks.drinks[i].id === id)
         {
             drink = allDrinks.drinks[i];
         }
@@ -126,6 +132,73 @@ app.get(`/drinks/:id`, (req, res) => {
         console.log(`Drink with id: ${id} not found \n`);
     }
 });
+
+// ------------------------------------------------ POST ------------------------------------------------ //
+
+app.post('/drinks', (req, res) => {
+    const { name, ingredients } = req.body;
+
+    if (!name || !ingredients) {
+        return res.send({ error: 'Your post request did not go through. Did you set Name and ingredients correctly?' });
+        console.log('Your post request did not go through. Did you set Name and ingredients correctly? \n');
+    }
+    else
+    {
+        const newId = ++lastId; // Se variabel deklaration øverst i filen. Increment til at give nye objekter et nyt id som er unikt selvom der slettes objekter.
+        const newDrink = { id: newId, name: name, ingredients: ingredients }; 
+        // det er ikke nødvendigt at skrive name: name og ingredients..., da hvis navnet er det samme så fungerer det som property shorthand, men for overblik gør jeg det sådan.
+
+        allDrinks.drinks.push(newDrink); // Se 
+        res.send({ data: newDrink });
+        console.log(`New drink requested for POST is: ${newDrink}`);
+    }
+});
+
+// ------------------------------------------------ PUT ------------------------------------------------ //
+
+app.put('/drinks/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const { updatedName, updatedIngredients } = req.body;
+    console.log(`id requested for PUT is: ${id}`);
+
+    if (!updatedName || !updatedIngredients) {
+        return res.send({ error: 'Your put request did not go through. Did you set Name and ingredients?' });
+    }
+
+    const drink = allDrinks.drinks.find(d => d.id === id);
+    if (drink) {
+        drink.name = updatedName;
+        drink.ingredients = updatedIngredients;
+        res.send({ data: drink });
+        console.log(`Updated drink for PUT is: ${drink}`);
+        // Jeg opdaterer ikke ID da jeg tænker det kan påvirke andre objekter hvis jeg ændrer ID'et - hvis dette var et større program.
+    }
+    else {
+        res.send({ error: `Drink with id: ${id} not found` });
+    }
+});
+
+// ------------------------------------------------ DELETE ------------------------------------------------ //
+
+app.delete('/drinks/:id', (req, res) => {
+    const id = Number(req.params.id);
+    console.log(`id requested for DELETE is: ${id}`);
+
+    const drinkIndex = allDrinks.drinks.findIndex(d => d.id === id);
+    if (drinkIndex > -1) {
+        const [deletedDrink] = allDrinks.drinks.splice(drinkIndex, 1);
+        //splice her bruges til at fjerne et element fra et array og returnere det fjernede element som et nyt array.
+        res.send({ data: deletedDrink });
+        console.log(`Deleted drink for DELETE is: ${JSON.stringify(deletedDrink)}`);
+    } else {
+        res.send({ error: `Drink with id: ${id} not found` });
+    }
+});
+
+
+
+
+
 
 // Start server
 app.listen(8080, (error) => {
