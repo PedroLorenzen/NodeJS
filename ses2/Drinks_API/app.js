@@ -2,8 +2,7 @@
 const express = require("express");
 const app = require("express")();
 
-
-// ------------------------------------------------ GET ------------------------------------------------ //
+app.use(express.json()); // Middleware til at parse JSON data fra body i requests. Skal være før routes. Ellers kan vi ikke bruge req.body i POST, PUT, PATCH requests.
 
 // Array af objekter med
 const allDrinks = {
@@ -62,6 +61,8 @@ const allDrinks = {
 }
 
 let lastId = allDrinks.drinks[allDrinks.drinks.length - 1].id; // Variabel til at holde styr på at give det rigtige id til nye objekter. Se POST request.
+
+// ------------------------------------------------ GET ------------------------------------------------ //
 
 // Standard drinks endpoint med indbygget query parameter.
 // Brug http://localhost:8080/drinks?name=Mojito eller http://localhost:8080/drinks?ingredient=Lime%20juice
@@ -158,20 +159,43 @@ app.post('/drinks', (req, res) => {
 
 app.put('/drinks/:id', (req, res) => {
     const id = Number(req.params.id);
-    const { updatedName, updatedIngredients } = req.body;
+    const { name, ingredients } = req.body;
     console.log(`id requested for PUT is: ${id}`);
 
-    if (!updatedName || !updatedIngredients) {
+    if (!name || !ingredients) {
         return res.send({ error: 'Your put request did not go through. Did you set Name and ingredients?' });
     }
 
     const drink = allDrinks.drinks.find(d => d.id === id);
     if (drink) {
-        drink.name = updatedName;
-        drink.ingredients = updatedIngredients;
+        drink.name = name;
+        drink.ingredients = ingredients;
         res.send({ data: drink });
         console.log(`Updated drink for PUT is: ${drink}`);
         // Jeg opdaterer ikke ID da jeg tænker det kan påvirke andre objekter hvis jeg ændrer ID'et - hvis dette var et større program.
+    }
+    else {
+        res.send({ error: `Drink with id: ${id} not found` });
+    }
+});
+
+// ------------------------------------------------ PATCH ------------------------------------------------ //
+
+app.patch('/drinks/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const { name, ingredients } = req.body;
+    console.log(`id requested for PATCH is: ${id}`);
+
+    const drink = allDrinks.drinks.find(d => d.id === id);
+    if (drink) {
+        if (name) {
+            drink.name = name;
+        }
+        if (ingredients) {
+            drink.ingredients = ingredients;
+        }
+        res.send({ data: drink });
+        console.log(`Updated drink for PATCH is: ${drink}`);
     }
     else {
         res.send({ error: `Drink with id: ${id} not found` });
@@ -196,11 +220,8 @@ app.delete('/drinks/:id', (req, res) => {
 });
 
 
+// ------------------------------------------------ START SERVER ------------------------------------------------ //
 
-
-
-
-// Start server
 app.listen(8080, (error) => {
     if (error) {
         console.log(`Error starting the server: ${error}`);
