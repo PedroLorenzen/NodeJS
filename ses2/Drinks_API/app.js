@@ -61,6 +61,7 @@ const allDrinks = {
 }
 
 let lastId = allDrinks.drinks[allDrinks.drinks.length - 1].id; // Variabel til at holde styr på at give det rigtige id til nye objekter. Se POST request.
+// -1 fordi vi bruger 0 indexering i arrays. Så sidste element er altid length - 1.
 
 // ------------------------------------------------ GET ------------------------------------------------ //
 
@@ -209,7 +210,7 @@ app.delete('/drinks/:id', (req, res) => {
     console.log(`id requested for DELETE is: ${id}`);
 
     const drinkIndex = allDrinks.drinks.findIndex(d => d.id === id);
-    if (drinkIndex > -1) {
+    if (drinkIndex > -1) { // -1 er en standard værdi for at sige at noget ikke findes. Ellers kan man også bruge >=0
         const [deletedDrink] = allDrinks.drinks.splice(drinkIndex, 1);
         //splice her bruges til at fjerne et element fra et array og returnere det fjernede element som et nyt array.
         res.send({ data: deletedDrink });
