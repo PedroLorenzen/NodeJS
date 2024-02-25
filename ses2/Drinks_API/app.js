@@ -73,10 +73,10 @@ app.get(`/drinks`, (req, res) => {
     const { name, ingredient } = req.query;
     if (name) {
         console.log(`Name requested is: ${name}`);
-        const drink = allDrinks.drinks.find(d => d.name.toLowerCase() === name.toLowerCase());
-        if (drink) {
-            res.send({ data: drink });
-            console.log(drink, `\n`);
+        const drinkFromName = allDrinks.drinks.find(d => d.name.toLowerCase() === name.toLowerCase());
+        if (drinkFromName) {
+            res.send({ data: drinkFromName });
+            console.log(drinkFromName, `\n`);
         }
         else {
             res.send({ error: `Drink with name: ${name} not found` });
@@ -85,10 +85,10 @@ app.get(`/drinks`, (req, res) => {
     }
     else if (ingredient) {
         console.log(`Ingredient requested is: ${ingredient}`);
-        const drinks = allDrinks.drinks.filter(d => d.ingredients.includes(ingredient));
-        if (drinks.length > 0) {
-            res.send({ data: drinks });
-            console.log(drinks, `\n`);
+        const drinksFromIngredient = allDrinks.drinks.filter(d => d.ingredients.includes(ingredient));
+        if (drinksFromIngredient.length > 0) {
+            res.send({ data: drinksFromIngredient });
+            console.log(drinksFromIngredient, `\n`);
         }
         else {
             res.send({ error: `No drinks found with ingredient: ${ingredient}` });
@@ -111,12 +111,12 @@ app.get(`/drinks`, (req, res) => {
 
 app.get(`/drinks/:id`, (req, res) => {
 
-    const id = Number(req.params.id);
-    console.log(`id requested for GET is: ${id}`); // `` gør at vi kan bruge variabler i strings vs. '' eller ""
+    const providedDrinkId = Number(req.params.id);
+    console.log(`id requested for GET is: ${providedDrinkId}`); // `` gør at vi kan bruge variabler i strings vs. '' eller ""
     console.log(req.params);
 
     // Man skal ikke bruge filter da man derfor får et array af objekter og måske flere elementer istedet for kun 1. 
-    const drink = allDrinks.drinks.find(d => d.id === id);
+    const providedDrink = allDrinks.drinks.find(d => d.id === providedDrinkId);
     /* Det samme som:
     for (let i = 0; i < allDrinks.drinks.length; i++){
         if(allDrinks.drinks[i].id === id)
@@ -125,13 +125,13 @@ app.get(`/drinks/:id`, (req, res) => {
         }
     } */
 
-    if (drink) {
-        console.log(drink, `\n`);
-        res.send({ data: drink });
+    if (providedDrink) {
+        console.log(providedDrink, `\n`);
+        res.send({ data: providedDrink });
     }
     else {
-        res.send({ error: `Drink with id: ${id} not found` }); // send altid JSON tilbage når vi arbejder med data.
-        console.log(`Drink with id: ${id} not found \n`);
+        res.send({ error: `Drink with id: ${providedDrinkId} not found` }); // send altid JSON tilbage når vi arbejder med data.
+        console.log(`Drink with id: ${providedDrinkId} not found \n`);
     }
 });
 
@@ -159,64 +159,64 @@ app.post('/drinks', (req, res) => {
 // ------------------------------------------------ PUT ------------------------------------------------ //
 
 app.put('/drinks/:id', (req, res) => {
-    const id = Number(req.params.id);
+    const drinkIdToUpdate = Number(req.params.id);
     const { name, ingredients } = req.body;
-    console.log(`id requested for PUT is: ${id}`);
+    console.log(`id requested for PUT is: ${drinkIdToUpdate}`);
 
     if (!name || !ingredients) {
         return res.send({ error: 'Your put request did not go through. Did you set Name and ingredients?' });
     }
 
-    const drink = allDrinks.drinks.find(d => d.id === id);
-    if (drink) {
-        drink.name = name;
-        drink.ingredients = ingredients;
-        res.send({ data: drink });
-        console.log(`Updated drink for PUT is: ${drink}`);
+    const drinkToUpdate = allDrinks.drinks.find(d => d.id === drinkIdToUpdate);
+    if (drinkToUpdate) {
+        drinkToUpdate.name = name;
+        drinkToUpdate.ingredients = ingredients;
+        res.send({ data: drinkToUpdate });
+        console.log(`Updated drink for PUT is: ${drinkToUpdate}`);
         // Jeg opdaterer ikke ID da jeg tænker det kan påvirke andre objekter hvis jeg ændrer ID'et - hvis dette var et større program.
     }
     else {
-        res.send({ error: `Drink with id: ${id} not found` });
+        res.send({ error: `Drink with id: ${drinkIdToUpdate} not found` });
     }
 });
 
 // ------------------------------------------------ PATCH ------------------------------------------------ //
 
 app.patch('/drinks/:id', (req, res) => {
-    const id = Number(req.params.id);
+    const drinkIdToPatch = Number(req.params.id);
     const { name, ingredients } = req.body;
-    console.log(`id requested for PATCH is: ${id}`);
+    console.log(`id requested for PATCH is: ${drinkIdToPatch}`);
 
-    const drink = allDrinks.drinks.find(d => d.id === id);
-    if (drink) {
+    const drinkToPatch = allDrinks.drinks.find(d => d.id === drinkIdToPatch);
+    if (drinkToPatch) {
         if (name) {
-            drink.name = name;
+            drinkToPatch.name = name;
         }
         if (ingredients) {
-            drink.ingredients = ingredients;
+            drinkToPatch.ingredients = ingredients;
         }
-        res.send({ data: drink });
-        console.log(`Updated drink for PATCH is: ${drink}`);
+        res.send({ data: drinkToPatch });
+        console.log(`Updated drink for PATCH is: ${drinkToPatch}`);
     }
     else {
-        res.send({ error: `Drink with id: ${id} not found` });
+        res.send({ error: `Drink with id: ${drinkIdToPatch} not found` });
     }
 });
 
 // ------------------------------------------------ DELETE ------------------------------------------------ //
 
 app.delete('/drinks/:id', (req, res) => {
-    const id = Number(req.params.id);
-    console.log(`id requested for DELETE is: ${id}`);
+    const drinkIdToDelete = Number(req.params.id);
+    console.log(`id requested for DELETE is: ${drinkIdToDelete}`);
 
-    const drinkIndex = allDrinks.drinks.findIndex(d => d.id === id);
+    const drinkIndex = allDrinks.drinks.findIndex(d => d.id === drinkIdToDelete);
     if (drinkIndex > -1) { // -1 er en standard værdi for at sige at noget ikke findes. Ellers kan man også bruge >=0
         const [deletedDrink] = allDrinks.drinks.splice(drinkIndex, 1);
         //splice her bruges til at fjerne et element fra et array og returnere det fjernede element som et nyt array.
         res.send({ data: deletedDrink });
         console.log(`Deleted drink for DELETE is: ${JSON.stringify(deletedDrink)}`);
     } else {
-        res.send({ error: `Drink with id: ${id} not found` });
+        res.send({ error: `Drink with id: ${drinkIdToDelete} not found` });
     }
 });
 
