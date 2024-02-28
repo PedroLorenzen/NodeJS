@@ -56,28 +56,24 @@
             border-radius: 8px;
             margin: 20px 0;
         }
-
         .greeting-input {
             flex-direction: row;
             display: flex;
             justify-content: center;
 
         }
-
         #greetingButton {
             margin: 20px;
             border-radius: 5px;
-            background-color: red;
+            background-color: #888;
             padding: 5%;
         }
-
         #nameInput {
             margin: 20px;
             padding: 5%;
             background-color: #888;
             border-radius: 5px;
         }
-
         .capsule-input {
             flex-direction: row;
             display: flex;
@@ -85,14 +81,12 @@
             display: none;
 
         }
-
         #capsuleButton {
             margin: 10px;
             border-radius: 5px;
             background-color: #888;
             padding: 5%;
         }
-
         #messageInput {
             margin-top: 20px;
             padding: 5%;
@@ -126,14 +120,14 @@
             const nameInput = document.getElementById("nameInput");
             const name = nameInput.value.trim();
             if (name) {
-                fetch(`https://server-8lcad6cu3-christian-lorenzens-projects.vercel.app/greet?name=${encodeURIComponent(name)}`)
+                fetch(`https://server-ae4el692z-christian-lorenzens-projects.vercel.app/greet?name=${encodeURIComponent(name)}`)
                     .then(response => response.json())
-                    .then(data => console.log(data))
                     .then(data => {
                         document.getElementById("greetingDisplay").textContent = data.greeting;
                         document.getElementById("capsuleInput").style.display = 'block';
                         document.getElementById("nameInput").style.display = "none";
                         document.getElementById("greetingButton").style.display = "none";
+
                     })
                     .catch(error => {
                         console.error('Error fetching greeting:', error);
@@ -176,9 +170,9 @@
             capsules.forEach(capsule => displayCapsule(capsule));
         }*/
 
-        /* window.onload = function () {
-             loadAndDisplayCapsules();
-         };*/
+       /* window.onload = function () {
+            loadAndDisplayCapsules();
+        };*/
     </script>
 
 </body>

@@ -11,6 +11,10 @@ const PORT = 3000;
 
 app.use(express.json());
 
+app.get('/favicon.ico', (req, res) => {
+    res.status(204).end();
+});
+
 app.get("/", (req, res) => {
     res.send("Express running on Vercel");
 });
