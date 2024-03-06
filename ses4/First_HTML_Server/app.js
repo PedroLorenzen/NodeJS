@@ -34,9 +34,17 @@ app.get("/knownpeople", (req, res) => {
 });
 
 app.get("/proxy", (req, res) => {
-    res.fetch("https://www.google.com");
+    // fetch("https://www.google.com")
+    // .then((response) => response.text())
+    // .then((result) => res.send(result));
+    fetch("https://google.com")
+    .then(response => response.arrayBuffer())
+    .then(buffer => {
+        const decoder = new TextDecoder('iso-8859-1');
+        const text = decoder.decode(buffer);
+        res.send(text);
+    });
 });
-
 
 const PORT = 8080;
 app.listen(PORT, () => console.log("Server is running on port", PORT));
