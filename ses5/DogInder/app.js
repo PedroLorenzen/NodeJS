@@ -5,17 +5,9 @@ app.use(express.static('public'));
 // vi bruger express.static for at vise vores statiske filer til brugeren
 // app.use static gør at brugeren udelukkende har adgang til en enkel side så de ikke kan gå ind og se ting de ikke må/har brug for.
 
-
-import path from 'path';
 import getMatches from './util/matches.js';
 
-import fs from "fs";
-import { send } from 'process';
-const homepage = fs.readFileSync("./public/pages/homepage/homepage.html").toString();
-console.log(homepage);
-
-const header = fs.readFileSync("./public/components/header/header.html").toString();
-const footer = fs.readFileSync("./public/components/footer/footer.html").toString();
+import { homepagePage, matchesPage, contactPage } from './util/readPages.js';
 
 //getMatches();
 
@@ -23,25 +15,22 @@ const footer = fs.readFileSync("./public/components/footer/footer.html").toStrin
 
 app.get('/', (req, res) => {
     //res.sendFile(path.resolve("public/pages/homepage/homepage.html"));
-    res.send(homepage);
+    res.send(homepagePage);
 });
 
 app.get('/matches', (req, res) => {
-    res.sendFile(path.resolve("public/pages/matches/matches.html"));
+    //res.sendFile(path.resolve("public/pages/matches/matches.html"));
+    res.send(matchesPage);
 });
 
 app.get('/contact', (req, res) => {
-    res.sendFile(path.resolve("public/pages/contact/contact.html"));
-});
-
-app.get('/page', (req, res) => {
-    res.sendFile(path.resolve("public/pages/contact/contact.html"));
+    //res.sendFile(path.resolve("public/pages/contact/contact.html"));
+    res.send(contactPage);
 });
 
 // ================================ API =============================== //
 
 app.get('/api/matches', async (req, res) => {
-    console.log("i am in this endpoint")
     const matches = await getMatches();
     res.send({data: matches});
 });
