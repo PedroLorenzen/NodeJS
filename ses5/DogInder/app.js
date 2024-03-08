@@ -22,8 +22,9 @@ app.get('/matches', (req, res) => {
 
 // ================================ API =============================== //
 
-app.get('/api/matches', (req, res) => {
-    const matches = getMatches();
+app.get('/api/matches', async (req, res) => {
+    console.log("i am in this endpoint")
+    const matches = await getMatches();
     res.send({data: matches});
 });
 

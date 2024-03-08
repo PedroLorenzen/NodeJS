@@ -1,12 +1,17 @@
 import { fakerEN_IN } from '@faker-js/faker';
 
-export default function getMatches(numberOfMatches = 10) {
-    const matches = [];
+export default async function getMatches(numberOfMatches = 10) {
+    const promises = [];
     for (let i = 0; i < numberOfMatches; i++) {
-        fetch("https://dog.ceo/api/breeds/image/random")
+        const promise = fetch("https://dog.ceo/api/breeds/image/random")
             .then((response) => response.json())
-            .then((result) => console.log(result));
+            promises.push(promise);
     }
+
+    const results = await Promise.all(promises);
+    const matches = results.map((match) => ({...match, ...getIndiaProfile()}));
+    
+    return matches;
 }
 
 function getIndiaProfile() {

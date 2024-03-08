@@ -46,5 +46,24 @@ app.get("/proxy", (req, res) => {
     });
 });
 
+app.get("/publicSquare", (req, res) => {
+    console.log("redirecting to publicSquare");
+    res.redirect("/publicsquare");
+});
+
+app.get("/treasuretrove", (req, res) => {
+    res.send({data: "you found the correct passphrase and is inside the treasure trove endpoint!"});
+});
+
+// query: http://localhost:8080/secretpassphrase?passphrase=Sesame%20open%20up!
+app.get("/secretpassphrase", (req, res) => {
+    const passphrase = req.query.passphrase;
+    if (passphrase !== "Sesame open up!") {
+        res.status(400).send({ data: "Wrong passphrase" });
+    } else {
+        res.redirect("/treasuretrove");
+    }
+});
+
 const PORT = 8080;
 app.listen(PORT, () => console.log("Server is running on port", PORT));

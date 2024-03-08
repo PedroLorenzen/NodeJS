@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     </style>
     <title>Homepage</title>
 </head>
+
 <body>
     <h1>Does this work!?!?!?!</h1>
 
@@ -21,10 +23,22 @@
 
     <input id="name-input" placeholder="Your name here" />
     <button onclick="showGreeting()">Get Greeting</button>
-    
+
     <h2 id="greeting-text"></h2>
 
     <a href="/publicsquare">Public Square</a>
+
+    <script>
+        // Uden arrow functions:
+        /*function redirect() {
+            setTimeout(function () {
+                window.location.href = "/publicsquare.html";
+            }, 3000);
+        }
+        redirect();*/
+        // Med arrow functions:
+        setTimeout(() => window.location.href = "../publicSquare/publicSquare.html", 3000);
+    </script>
 
     <script>
         const nameInput = document.getElementById("name-input");
@@ -33,12 +47,13 @@
         function showGreeting() {
             const name = nameInput.value;
             fetch("/greeting?name=" + name)
-            .then((response) => response.json())
-            .then((result) => {
-                greetingH2.textContent = result.data;
-            });
+                .then((response) => response.json())
+                .then((result) => {
+                    greetingH2.textContent = result.data;
+                });
         }
     </script>
     <script src="./homepage/homepage.js"></script>
 </body>
+
 </html>
