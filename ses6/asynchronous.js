@@ -126,7 +126,6 @@ async function myFetch(url) {
         console.log(error);
     }
 }
-
 myFetch("https://jsonplaceholder.typicode.com/posts/1")
     .then(data => console.log(data))
     .catch(error => console.log(error));
