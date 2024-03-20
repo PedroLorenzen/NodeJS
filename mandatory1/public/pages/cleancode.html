@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/output.css">
+    <title>Clean Code Page</title>
+</head>
+<body>
+    <div>
+        <div>
+            <Header />
+        </div>
+        <div>
+            <p class="p-20 bg-stone-800"></p>
+        </div>
+        <div class="infoDiv">
+            <div class="infoInnerDiv" id="debugging">
+                <h2 class="infoHeadline">Debugging (Console.log, browser, ESLint)</h2>
+                <p class="infoParagraph">
+                    When using console.log you can easily and quickly make checkpoints your code that gives you information about what your code
+                    returns, executes or prints. It's a good way to debug your code and see what's happening in your code. It's a fundamental
+                    method for dynamic logging. It can though lead to log pollution if not handled correctly and affect performance.
+                </p>
+                <p class="infoParagraph">
+                    ESLint is a tool that automatically analyses your codebase and identifies errors in your syntax and logic before runtime. It
+                    has automatic refactoring that can fix the issues it finds, even though it then will change the code and potentially introduce
+                    new bugs or confuse you. I use it to scan my code and give me feedback on how to improve my code.
+                </p>
+                <p class="infoParagraphBottom">
+                    Browsers today has integrated debugging tools which you can use to set breakpoints, step through code and examine call stacks.
+                    It helps me to understand where the code is failing and why. 
+                </p>
+            </div>
+            <div class="infoPicDiv">
+                <img src="../assets/images/cleanCode/esLint.png" alt="." class="infoPic" />
+            </div>
+        </div>
+        <div class="infoDiv">
+            <div class="infoPicDiv">
+                <img src="../assets/images/cleanCode/promises.png" alt="." class="infoPic" />
+            </div>
+            <div class="infoInnerDiv" id="promises">
+                <h2 class="infoHeadline">Promises (async, await, then, catch)</h2>
+                <p class="infoParagraph">
+                    Promises in JavaScript makes using asynchronous code easier to read and write. When using async and await it allows for a more intuitive flow of execution.
+                    This syntactic sugar lets you pause your code while waiting for a Promise to settle without blocking the execution of the code.
+                    Even though Javascript is single-threaded it manages tasks efficiently thanks to its event loop deciding the execution sequence.
+                </p>
+                <p class="infoParagraphBottom">
+                    Putting async before a function means you're going to use await in the function, which waits for a Promise to settle (either
+                    complete or fail) before continuing execution. This makes my code much cleaner and saves me from falling into the dreaded
+                    Callback Hell or Pyramid of Doom where i'd have a lot of callbacks nested inside callbacks, making everything harder to read
+                    and debug.
+                </p>
+            </div>
+        </div>
+        <div class="infoDiv">
+            <div class="infoInnerDiv" id="prettier">
+                <h2 class="infoHeadline">Prettier</h2>
+                <p class="infoParagraph">
+                    Prettier is a code formatting tool that automates the task of enforcing consistent coding styles across various languages like
+                    JavaScript, TypeScript, CSS, HTML, and JSON. It integrates with most code editors, streamlining workflows by formatting code
+                    on-the-fly or through pre-commit hooks. This uniformity simplifies code reviews and collaboration, making it easier for teams
+                    to maintain a clean, readable codebase.
+                </p>
+                <p class="infoParagraphBottom">
+                    However, Prettier's opinionated approach and limited configuration options can be a drawback for those with specific
+                    formatting preferences. Additionally, integrating Prettier into large projects may lead to extensive changes in a single
+                    commit, potentially complicating the git history. Despite these challenges, its benefits in reducing manual formatting efforts
+                    and promoting consistency are widely appreciated.
+                </p>
+            </div>
+            <div class="infoPicDiv">
+                <img src="../assets/images/cleanCode/promises.png" alt="." class="infoPic" />
+            </div>
+        </div>
+        <div class="infoDiv">
+            <div class="infoPicDiv">
+                <img src="../assets/images/cleanCode/arrow.png" alt="." class="infoPic" />
+            </div>
+            <div class="infoInnerDiv" id="arrow">
+                <h2 class="infoHeadline">Arrow vs. normal functions</h2>
+                <p class="infoParagraph">
+                    Arrow functions provide a concise syntax and lexically bind this, making code cleaner, especially in callbacks and functions
+                    where this refers to the surrounding context, not the function itself. This eliminates common errors related to this in
+                    traditional functions, enhancing readability and reducing boilerplate in scenarios like array operations.
+                </p>
+                <p class="infoParagraphBottom">
+                    Traditional functions are valuable for object methods and complex functions due to their ability to access the dynamic this
+                    context and their suitability for constructors. Their flexibility in handling this, the arguments object, and function
+                    hoisting makes them better suited where context and functionality is important.
+                </p>
+            </div>
+        </div>
+        <div class="infoDiv">
+            <div class="infoInnerDiv" id="codingStandards">
+                <h2 class="infoHeadline">Coding Standards</h2>
+                <p class="infoParagraph">
+                    Coding standards are crucial for maintaining clean code, serving as a blueprint for developers to follow, ensuring
+                    consistency, readability, and maintainability across a project. They minimize cognitive load by providing clear guidelines on
+                    naming conventions, file organization, formatting, and best practices, allowing developers to focus on solving problems rather
+                    than deciphering code.
+                </p>
+                <p class="infoParagraph">
+                    Adhering to these standards facilitates smoother collaboration within teams, as code written by one developer is easily
+                    understood by others, streamlining the review process and reducing the likelihood of errors.{' '}
+                </p>
+            </div>
+            <div class="infoPicDiv">
+                <img src="../assets/images/cleanCode/codingStandards.png" alt="." class="infoPic" />
+            </div>
+        </div>
+        <div>
+            <Menu />
+        </div>
+        <div>
+            <Footer />
+        </div>
+    </div>
+</body>
+</html>

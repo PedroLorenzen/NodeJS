@@ -3,8 +3,7 @@ import express from 'express';
 const app = express();
 app.use(express.static('public')); 
 // vi bruger express.static for at vise vores statiske filer til brugeren
-// app.use static gør at brugeren udelukkende har adgang til en enkel side så de ikke kan gå ind og se ting de ikke må/har brug for.
-
+// app.use static gør at brugeren udelukkende har adgang til en enkel side
 import matchesRouter from './routers/matchesRouter.js';
 import pagesRouter from './routers/pagesRouter.js';
 

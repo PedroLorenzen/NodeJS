@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btn {
+        @apply self-center px-4 py-2 bg-stone-500 hover:bg-stone-600 rounded-lg font-semibold;
+    }
+
+    .menuHeadlines {
+        @apply text-xl font-medium block hover:scale-125 transition duration-300 ease-in-out;
+    }
+    .menuSubCategories {
+        @apply p-3 border bg-stone-400 hover:bg-stone-700 hover:text-white rounded-lg hover:cursor-pointer;
+    }
+
+    .headerRelativeHeadlines {
+        @apply py-4 px-3 hover:bg-stone-800 hover:text-white hover:rounded-lg;
+    }
+    .headerDropdownDiv {
+        @apply absolute hidden group-hover:block bg-stone-800 rounded-lg;
+    }
+    .headerDropdownElement {
+        @apply block py-2 px-4 hover:bg-stone-700  hover:text-white hover:rounded-lg;
+    }
+
+    .infoDiv {
+        @apply flex flex-row relative w-full bg-stone-800 pb-20 pl-10 pr-10;
+    }
+    .infoInnerDiv {
+        @apply basis-3/4 items-start text-white z-10;
+    }
+    .infoHeadline {
+        @apply text-2xl my-5 font-semibold;
+    }
+    .infoParagraph {
+        @apply text-base text-left mb-4;
+    }
+    .infoParagraphBottom {
+        @apply text-base text-left;
+    }
+    .infoPicDiv {
+        @apply flex-grow overflow-hidden mr-10 ml-5 mt-1;
+    }
+    .infoPic {
+        @apply w-full h-full object-contain z-10;
+    }
+}

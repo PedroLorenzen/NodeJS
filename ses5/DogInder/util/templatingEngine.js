@@ -4,8 +4,6 @@ export function readPage(path) {
     return fs.readFileSync(path).toString();
 }
 
-
-
 const footer = fs.readFileSync("./public/components/footer/footer.html").toString();
 
 export function renderPage(page, config={}) { // Hvis config er undefined er det bare et tomt objekt.
