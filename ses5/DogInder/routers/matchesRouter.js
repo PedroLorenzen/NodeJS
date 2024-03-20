@@ -1,10 +1,12 @@
-import { Router } from 'express';
+import { Router } from "express";
+
+import getMatches from "../util/matches.js";
 
 const router = Router();
 
-export default router;
-
-app.get('/api/matches', async (req, res) => {
+router.get("/api/matches", async (req, res) => {
     const matches = await getMatches();
-    res.send({data: matches});
+    res.send({ data: matches });
 });
+
+export default router;
