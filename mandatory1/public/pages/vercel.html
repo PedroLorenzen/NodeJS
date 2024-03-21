@@ -3,11 +3,60 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../assets/css/output.css" />
         <title>Vercel Page</title>
     </head>
     <body>
-        <h1>About Page</h1>
+        <div>
+            <div>
+            </div>
+            <div>
+                <p class="p-20 bg-stone-800"></p>
+            </div>
+            <div class="infoDiv">
+                <div class="infoInnerDiv" id="node">
+                    <h2 class="infoHeadline">What is Vercel</h2>
+                    <p class="infoParagraph">
+                        Vercel is a very easy to use platform for deploying the frontend part of web applications. 
+                        It is a cloud platform for static sites and serverless functions that enables me to host my projects with ease.
+                        Vercel has nice featues to analyze the performance of the site and to monitor the deployment process while also providing a nice overview of the project.
+                    </p>
+                    <p class="infoParagraphBottom">
+                        The cool thing about Vercel is that it handles all the server-side rendering for me, so I can focus on the frontend part of the project.
+                        It renders the css and javascript files and serves the html files to the client. This is a great way to deploy a project, as it is very easy to use.
 
-        <!-- Your content goes here -->
+                    </p>
+                </div>
+                <div class="infoPicDiv">
+                    <img src="../assets/images/vercel/verceldashboard.png" alt="." class="infoPic" />
+                </div>
+            </div>
+            <div class="infoDiv">
+                <div class="infoPicDiv">
+                    <img src="../assets/images/vercel/verceljson.png" alt="." class="infoPic" />
+                </div>
+                <div class="infoInnerDiv" id="express">
+                    <h2 class="infoHeadline">Applying to a project</h2>
+                    <p class="infoParagraph">
+                        When deploying a project to Vercel, I need to install the package usin <i> npm install -g vercel </i> and then run <i> vercel login </i> to log in to my account.
+                        Afterwards I can run <i> vercel </i> in the project folder to deploy and configure the project where the settings are stored in a vercel.json file.
+                        This file is used to configure the deployment settings for the project. It has details about the build settings, routes, and other settings for the project.
+                    </p>
+                    <p class="infoParagraph">
+                        After the project is deployed, I can see the deployment process in the Vercel dashboard, where I can see the performance of the site and monitor the deployment process.
+                        I also have to opportunity to connect the project to my github repository, so that the project is automatically deployed when I push changes to the repository.
+                        It can essentially handle the CI/CD for me.
+                    </p>
+                    <p class="infoParagraphBottom">
+                        In the dashboard I can follow a link to the deployed project and see the site live. This is a great way to deploy a project, as it is very easy to use.
+                        I just copy the vercel link and send it to anyone who wants to see the project.
+                    </p>
+                </div>
+            </div>
+            <div>
+            </div>
+            <div>
+            </div>
+        </div>
     </body>
 </html>

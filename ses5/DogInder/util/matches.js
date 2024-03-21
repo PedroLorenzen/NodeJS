@@ -10,6 +10,7 @@ export default async function getMatches(numberOfMatches=5) {
     }
     const results = await Promise.all(promises);
     const matches = results.map((match) => ({ ...match, ...getIndianProfile() }));
+    console.log(matches);
     return matches;
 }
 

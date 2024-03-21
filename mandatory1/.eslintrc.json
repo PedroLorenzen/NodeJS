@@ -10,6 +10,5 @@
         "sourceType": "module",
         "eslint": "recommended"
     },
-    "ignorePatterns": ["output.css", "input.css"],
     "rules": {}
 }
