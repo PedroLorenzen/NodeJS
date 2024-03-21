@@ -14,15 +14,16 @@
                 <p class="p-20 bg-stone-800"></p>
             </div>
             <div class="infoDiv">
-                <div class="infoInnerDiv" id="node">
+                <div class="infoInnerDiv" id="vercel">
                     <h2 class="infoHeadline">What is Vercel</h2>
                     <p class="infoParagraph">
-                        Vercel is a very easy to use platform for deploying the frontend part of web applications. 
-                        It is a cloud platform for static sites and serverless functions that enables me to host my projects with ease.
+                        Vercel is a very easy to use platform for deploying webapplications and static websites. 
+                        It can both work with node projects and static sites, and it is very easy to deploy a project to Vercel.
                         Vercel has nice featues to analyze the performance of the site and to monitor the deployment process while also providing a nice overview of the project.
                     </p>
                     <p class="infoParagraphBottom">
-                        The cool thing about Vercel is that it handles all the server-side rendering for me, so I can focus on the frontend part of the project.
+                        The good thing about Vercel is that it handles installation of node modules and dependencies for me, so I can focus on the frontend part of the project.
+                        If i'm not using node, it will still deploy the project as a static site.
                         It renders the css and javascript files and serves the html files to the client. This is a great way to deploy a project, as it is very easy to use.
 
                     </p>
@@ -35,12 +36,14 @@
                 <div class="infoPicDiv">
                     <img src="../assets/images/vercel/verceljson.png" alt="." class="infoPic" />
                 </div>
-                <div class="infoInnerDiv" id="express">
+                <div class="infoInnerDiv" id="deploy">
                     <h2 class="infoHeadline">Applying to a project</h2>
                     <p class="infoParagraph">
-                        When deploying a project to Vercel, I need to install the package usin <i> npm install -g vercel </i> and then run <i> vercel login </i> to log in to my account.
-                        Afterwards I can run <i> vercel </i> in the project folder to deploy and configure the project where the settings are stored in a vercel.json file.
-                        This file is used to configure the deployment settings for the project. It has details about the build settings, routes, and other settings for the project.
+                        When deploying a project to Vercel, I need to install the package using <i> npm install -g vercel<br /> </i>
+                        Afterwards I need to login to my vercel account: <i> vercel login<br /> </i>
+                        When I have logged in I can start the deployment process by running: <i> vercel<br /> </i>
+                        Here I have to specify the project folder and the settings for the deployment. These settings are stored in a vercel.json file.
+                        <i>vercel.json</i> has details about the build settings, routes, and other settings for the project.
                     </p>
                     <p class="infoParagraph">
                         After the project is deployed, I can see the deployment process in the Vercel dashboard, where I can see the performance of the site and monitor the deployment process.
