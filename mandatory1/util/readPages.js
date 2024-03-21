@@ -20,3 +20,6 @@ export const renderingPage = renderPage(rendering)
 
 const vercel = readPage('./public/pages/vercel.html')
 export const vercelPage = renderPage(vercel)
+
+const styling = readPage('./public/pages/styling.html')
+export const stylingPage = renderPage(styling)

@@ -1,4 +1,4 @@
-import { aboutPage, cleancodePage, contactPage, homePage, nodePage, renderingPage, vercelPage } from '../util/readPages.js'
+import { aboutPage, cleancodePage, contactPage, homePage, nodePage, renderingPage, vercelPage, stylingPage } from '../util/readPages.js'
 import { Router } from 'express'
 
 const router = Router()
@@ -29,6 +29,10 @@ router.get('/rendering', (req, res) => {
 
 router.get('/vercel', (req, res) => {
   res.send(vercelPage)
+})
+
+router.get('/styling', (req, res) => {
+  res.send(stylingPage)
 })
 
 export default router
