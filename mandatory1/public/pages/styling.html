@@ -1,66 +1,80 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../assets/css/output.css" />
-        <title>Vercel Page</title>
-    </head>
-    <body>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/css/output.css" />
+    <title>Vercel Page</title>
+</head>
+
+<body>
+    <div>
         <div>
-            <div>
-                <p class="p-20 bg-stone-800"></p>
+            <p class="p-20 bg-stone-800"></p>
+        </div>
+        <div class="infoDiv">
+            <div class="infoInnerDiv" id="css">
+                <h2 class="infoHeadline">Styling with CSS</h2>
+                <p class="infoParagraph">
+                    Styling with CSS is a common and popular way to style a website.
+                    CSS basically communicates with the HTML through selectors and properties.
+                    These selectors can be classes, ids, or elements, and the properties are the styles that are applied
+                    to the selectors.
+                </p>
+                <p class="infoParagraph">
+                    When I style with CSS, firstly I have to make sure the CSS file is linked to the HTML file.
+                    I can do this by adding a link tag in the head of the HTML file.
+                </p>
+                <p class="infoParagraphBottom">
+                    One of the drawbacks of CSS is that it can be hard to maintain and scale, especially in larger
+                    projects.
+                    Also the fine details and time it takes to style a website can be time consuming.
+                    It is a common problem that it can be difficult to maintain a consistent look and feel across the
+                    website using vanilla CSS.
+                </p>
             </div>
-            <div class="infoDiv">
-                <div class="infoInnerDiv" id="css">
-                    <h2 class="infoHeadline">Styling with CSS</h2>
-                    <p class="infoParagraph">
-                        Styling with CSS is a common and popular way to style a website.
-                        CSS basically communicates with the HTML through selectors and properties.
-                        These selectors can be classes, ids, or elements, and the properties are the styles that are applied to the selectors.
-                    </p>
-                    <p class="infoParagraph">
-                        When I style with CSS, firstly I have to make sure the CSS file is linked to the HTML file. 
-                        I can do this by adding a link tag in the head of the HTML file.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        One of the drawbacks of CSS is that it can be hard to maintain and scale, especially in larger projects.
-                        Also the fine details and time it takes to style a website can be time consuming.
-                        It is a common problem that it can be difficult to maintain a consistent look and feel across the website using vanilla CSS.
-                    </p>
-                </div>
-                <div class="infoPicDiv">
-                    <img src="../assets/images/styling/css.png" alt="." class="infoPic" />
-                </div>
-            </div>
-            <div class="infoDiv">
-                <div class="infoPicDiv">
-                    <img src="../assets/images/styling/tailwind.png" alt="." class="infoPic" />
-                </div>
-                <div class="infoInnerDiv" id="tailwind">
-                    <h2 class="infoHeadline">Styling with Tailwind</h2>
-                    <p class="infoParagraph">
-                        Styling with tailwind is a new way to style a website. It is a utility-first CSS framework that is easy to use and maintain.
-                        It has a lot of prebuilt utility classes that can be used to style the website, making the styling process faster and easier.
-                        It is a framework where I write the css-classes directly in the HTML file. 
-                        Though it sounds like it could lead to a messy HTML file, it is actually a very good tool to maintain a consistent look and feel across the website.
-                        One of the best features is that I like in vanilla CSS can make my own classes combining the prebuilt classes.
-                    </p>
-                    <p class="infoParagraph">
-                        Installing tailwind is easy. I just have to run the command:<br /> <i>npm install tailwindcss</i><br /> and then I have to create a tailwind.config.js file.
-                        In the tailwind.config.js file I can specify the settings for the tailwind framework like fonts and colors I want to make standard.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        Tailwind takes the utility classes and converts them to css-classes in the output.css file. As in vanilla CSS, the output.css also needs to be linked to the HTML file.
-                        So it has an input.css where I can write reusable utility classes and an output.css where the classes are converted to css-classes.
-                        Like:<br />
-                        <i>
-                            .btn {<br />
-                                @apply self-center px-4 py-2 bg-stone-500 hover:bg-stone-600 rounded-lg font-semibold; <br />
-                            }</i>
-                    </p>
-                </div>
+            <div class="infoPicDiv">
+                <img src="../assets/images/styling/css.png" alt="." class="infoPic" />
             </div>
         </div>
-    </body>
+        <div class="infoDiv">
+            <div class="infoPicDiv">
+                <img src="../assets/images/styling/tailwind.png" alt="." class="infoPic" />
+            </div>
+            <div class="infoInnerDiv" id="tailwind">
+                <h2 class="infoHeadline">Styling with Tailwind</h2>
+                <p class="infoParagraph">
+                    Styling with tailwind is a new way to style a website. It is a utility-first CSS framework that is
+                    easy to use and maintain.
+                    It has a lot of prebuilt utility classes that can be used to style the website, making the styling
+                    process faster and easier.
+                    It is a framework where I write the css-classes directly in the HTML file.
+                    Though it sounds like it could lead to a messy HTML file, it is actually a very good tool to
+                    maintain a consistent look and feel across the website.
+                    One of the best features is that I like in vanilla CSS can make my own classes combining the
+                    prebuilt classes.
+                </p>
+                <p class="infoParagraph">
+                    Installing tailwind is easy. I just have to run the command:<br /> <i>npm install
+                        tailwindcss</i><br /> and then I have to create a tailwind.config.js file.
+                    In the tailwind.config.js file I can specify the settings for the tailwind framework like fonts and
+                    colors I want to make standard.
+                </p>
+                <p class="infoParagraphBottom">
+                    Tailwind takes the utility classes and converts them to css-classes in the output.css file. As in
+                    vanilla CSS, the output.css also needs to be linked to the HTML file.
+                    So it has an input.css where I can write reusable utility classes and an output.css where the
+                    classes are converted to css-classes.
+                    Like:<br />
+                    <i>
+                        .btn {<br />
+                        @apply self-center px-4 py-2 bg-stone-500 hover:bg-stone-600 rounded-lg font-semibold; <br />
+                        }</i>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

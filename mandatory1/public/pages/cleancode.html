@@ -1,98 +1,123 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../assets/css/output.css" />
-        <title>Clean Code Page</title>
-    </head>
-    <body>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/css/output.css" />
+    <title>Clean Code Page</title>
+</head>
+
+<body>
+    <div>
         <div>
-            <div>
-                <p class="p-20 bg-stone-800"></p>
+            <p class="p-20 bg-stone-800"></p>
+        </div>
+        <div class="infoDiv">
+            <div class="infoInnerDiv" id="debugging">
+                <h2 class="infoHeadline">Debugging (Console.log, browser, ESLint)</h2>
+                <p class="infoParagraph">
+                    Using console.log gives me the posiblity to easily and quickly make checkpoints in my code that
+                    gives me information about what the code
+                    returns, executes or prints. It's a good way to debug and help me understand my code. It's a
+                    fundamental
+                    method for dynamic logging. It can though lead to log pollution if overused and can also affect
+                    performance.
+                </p>
+                <p class="infoParagraph">
+                    ESLint is a tool that automatically analyses my codebase from some criteria specified in the
+                    eslintrc.json file.
+                    The linter identifies errors in my syntax and logic before runtime. It
+                    has automatic refactoring that can fix the issues it finds, even though it then will change the code
+                    and possibly affect the understanding of my code and confuse me.
+                    I use it to scan my code and give me feedback on how to improve my code. I have made two scripts in
+                    package.json to run ESLint when I see fit: <br />
+                    <i>"lint": "eslint . --ext .js", <br /> </i>
+                    <i>"lint:fix": "eslint . --ext .js --fix"</i>
+                </p>
             </div>
-            <div class="infoDiv">
-                <div class="infoInnerDiv" id="debugging">
-                    <h2 class="infoHeadline">Debugging (Console.log, browser, ESLint)</h2>
-                    <p class="infoParagraph">
-                        Using console.log gives me the posiblity to easily and quickly make checkpoints in my code that gives me information about what the code
-                        returns, executes or prints. It's a good way to debug and help me understand my code. It's a fundamental
-                        method for dynamic logging. It can though lead to log pollution if overused and can also affect performance.
-                    </p>
-                    <p class="infoParagraph">
-                        ESLint is a tool that automatically analyses my codebase from some criteria specified in the eslintrc.json file. 
-                        The linter identifies errors in my syntax and logic before runtime. It
-                        has automatic refactoring that can fix the issues it finds, even though it then will change the code and possibly affect the understanding of my code and confuse me. 
-                        I use it to scan my code and give me feedback on how to improve my code. I have made two scripts in package.json to run ESLint when I see fit: <br />
-                        <i>"lint": "eslint . --ext .js", <br /> </i>
-                        <i>"lint:fix": "eslint . --ext .js --fix"</i>
-                    </p>
-                </div>
-                <div class="infoPicDiv">
-                    <img src="../assets/images/cleanCode/debugging.png" alt="." class="infoPic" />
-                </div>
-            </div>
-            <div class="infoDiv">
-                <div class="infoPicDiv">
-                    <img src="../assets/images/cleanCode/promises.png" alt="." class="infoPic" />
-                </div>
-                <div class="infoInnerDiv" id="promises">
-                    <h2 class="infoHeadline">Promises (async, await, then, catch)</h2>
-                    <p class="infoParagraph">
-                        Promises in Javascipt are essentially objects that represent the eventual completion (failure or success) of an asynchronous operation and its resulting value.
-                        Promises in JavaScript makes using asynchronous code easier to read and write. When using async and await it allows me to write code with a more
-                        intuitive flow of execution. This syntactic sugar lets me pause my code while waiting for a Promise to settle without
-                        blocking the execution of the code. Even though Javascript is single-threaded it manages tasks efficiently thanks to its event
-                        loop deciding the execution sequence.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        Putting async before a function means i'm going to use await in the function, which waits for a Promise to settle (either
-                        complete or fail) before continuing the execution of the code. This makes my code much cleaner and saves me from falling into the dreaded
-                        Callback Hell or Pyramid of Doom where i'd have a lot of callbacks nested inside callbacks, making everything harder to read
-                        and debug.
-                    </p>
-                </div>
-            </div>
-            <div class="infoDiv">
-                <div class="infoInnerDiv" id="arrow">
-                    <h2 class="infoHeadline">Arrow vs. normal functions</h2>
-                    <p class="infoParagraph">
-                        Arrow functions provide a more compressed syntax and lexically bind this, 
-                        meaning the this value inside an arrow function is determined at the it's created not called based on the surrounding lexical scope.
-                    </p>
-                    <p class="infoParagraph">
-                        Normal functions are more dynamic with their this value. The value of this within a normal function depends on how the function is called. 
-                        For example, using new to call a function will create a new object and set this to that object within the function.                        
-                        Traditional functions are valuable for object methods and complex functions due to their ability to access the dynamic this
-                        context and their suitability for constructors.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        Both arrow and normal functions has their advantages and 
-                        it's important to be clear what to use in which context to enhance readability and clean code.
-                    </p>
-                </div>
-                <div class="infoPicDiv">
-                    <img src="../assets/images/cleanCode/arrow.png" alt="." class="infoPic" />
-                </div>
-            </div>
-            <div class="infoDiv">
-                <div class="infoPicDiv">
-                    <img src="../assets/images/cleanCode/codingStandards.png" alt="." class="infoPic" />
-                </div>
-                <div class="infoInnerDiv" id="codingStandards">
-                    <h2 class="infoHeadline">Coding Standards</h2>
-                    <p class="infoParagraph">
-                        Coding standards are important for maintaining clean code, serving as a blueprint for developers to follow, ensuring
-                        consistency, readability, and maintainability across a project. Coding standards has for several earlier projects helped us develop clear guidelines on
-                        naming conventions, file organization, formatting, and best practices, allowing the team to focus on solving problems rather
-                        than deciphering and changing code.
-                    </p>
-                    <p class="infoParagraph">
-                        Following these standards gives a smoother collaboration within teams, as code written by one developer is easily
-                        understood by others, streamlining the review process and reducing the likelihood of errors and refactoring.
-                    </p>
-                </div>
+            <div class="infoPicDiv">
+                <img src="../assets/images/cleanCode/debugging.png" alt="." class="infoPic" />
             </div>
         </div>
-    </body>
+        <div class="infoDiv">
+            <div class="infoPicDiv">
+                <img src="../assets/images/cleanCode/promises.png" alt="." class="infoPic" />
+            </div>
+            <div class="infoInnerDiv" id="promises">
+                <h2 class="infoHeadline">Promises (async, await, then, catch)</h2>
+                <p class="infoParagraph">
+                    Promises in Javascipt are essentially objects that represent the eventual completion (failure or
+                    success) of an asynchronous operation and its resulting value.
+                    Promises in JavaScript makes using asynchronous code easier to read and write. When using async and
+                    await it allows me to write code with a more
+                    intuitive flow of execution. This syntactic sugar lets me pause my code while waiting for a Promise
+                    to settle without
+                    blocking the execution of the code. Even though Javascript is single-threaded it manages tasks
+                    efficiently thanks to its event
+                    loop deciding the execution sequence.
+                </p>
+                <p class="infoParagraphBottom">
+                    Putting async before a function means i'm going to use await in the function, which waits for a
+                    Promise to settle (either
+                    complete or fail) before continuing the execution of the code. This makes my code much cleaner and
+                    saves me from falling into the dreaded
+                    Callback Hell or Pyramid of Doom where i'd have a lot of callbacks nested inside callbacks, making
+                    everything harder to read
+                    and debug.
+                </p>
+            </div>
+        </div>
+        <div class="infoDiv">
+            <div class="infoInnerDiv" id="arrow">
+                <h2 class="infoHeadline">Arrow vs. normal functions</h2>
+                <p class="infoParagraph">
+                    Arrow functions provide a more compressed syntax and lexically bind this,
+                    meaning the this value inside an arrow function is determined at the it's created not called based
+                    on the surrounding lexical scope.
+                </p>
+                <p class="infoParagraph">
+                    Normal functions are more dynamic with their this value. The value of this within a normal function
+                    depends on how the function is called.
+                    For example, using new to call a function will create a new object and set this to that object
+                    within the function.
+                    Traditional functions are valuable for object methods and complex functions due to their ability to
+                    access the dynamic this
+                    context and their suitability for constructors.
+                </p>
+                <p class="infoParagraphBottom">
+                    Both arrow and normal functions has their advantages and
+                    it's important to be clear what to use in which context to enhance readability and clean code.
+                </p>
+            </div>
+            <div class="infoPicDiv">
+                <img src="../assets/images/cleanCode/arrow.png" alt="." class="infoPic" />
+            </div>
+        </div>
+        <div class="infoDiv">
+            <div class="infoPicDiv">
+                <img src="../assets/images/cleanCode/codingStandards.png" alt="." class="infoPic" />
+            </div>
+            <div class="infoInnerDiv" id="codingStandards">
+                <h2 class="infoHeadline">Coding Standards</h2>
+                <p class="infoParagraph">
+                    Coding standards are important for maintaining clean code, serving as a blueprint for developers to
+                    follow, ensuring
+                    consistency, readability, and maintainability across a project. Coding standards has for several
+                    earlier projects helped us develop clear guidelines on
+                    naming conventions, file organization, formatting, and best practices, allowing the team to focus on
+                    solving problems rather
+                    than deciphering and changing code.
+                </p>
+                <p class="infoParagraph">
+                    Following these standards gives a smoother collaboration within teams, as code written by one
+                    developer is easily
+                    understood by others, streamlining the review process and reducing the likelihood of errors and
+                    refactoring.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

@@ -1,107 +1,131 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../assets/css/output.css" />
-        <title>Node Page</title>
-    </head>
-    <body>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/css/output.css" />
+    <title>Node Page</title>
+</head>
+
+<body>
+    <div>
         <div>
-            <div>
-                <p class="p-20 bg-stone-800"></p>
+            <p class="p-20 bg-stone-800"></p>
+        </div>
+        <div class="infoDiv">
+            <div class="infoInnerDiv" id="node">
+                <h2 class="infoHeadline">What is Node</h2>
+                <p class="infoParagraph">
+                    Node.js is an cross-platform JavaScript runtime environment that gives me the opportunity to execute
+                    JavaScript code outside of a web
+                    browser. It is suitable for building a wide range of server-side applications and tools like API's
+                    and databases and servers.
+                </p>
+                <p class="infoParagraph">
+                    Node.js comes with a ecosystem of modules and packages, managed through the Node Package Manager
+                    (npm). This simplifies
+                    adding functionalities and managing dependencies in Node.js applications and allows me to use a vast
+                    array of
+                    open-source libraries. These libraries are already developed and maintained functionalities so that
+                    I can use them instead of me writing and maintaining the code myself. <br />
+                    To be able to install and use node and its packages I need to have a package.json file,
+                    where I can specify any eventual packages and dependencies that has been or needs to be installed in
+                    the projet together with other valuable info to node like scripts.
+                </p>
+                <p class="infoParagraphBottom">
+                    Node.js's use of JavaScript on both the client and server side gives me the opportunityto
+                    development of isomorphic single-page applications,
+                    enabling code reuse and streamlining the development workflow. This also means that I only need to
+                    be good at coding in
+                    JavaScript to work across the entire stack.
+                </p>
             </div>
-            <div class="infoDiv">
-                <div class="infoInnerDiv" id="node">
-                    <h2 class="infoHeadline">What is Node</h2>
-                    <p class="infoParagraph">
-                        Node.js is an cross-platform JavaScript runtime environment that gives me the opportunity to execute JavaScript code outside of a web
-                        browser. It is suitable for building a wide range of server-side applications and tools like API's and databases and servers.
-                    </p>
-                    <p class="infoParagraph">
-                        Node.js comes with a ecosystem of modules and packages, managed through the Node Package Manager (npm). This simplifies
-                        adding functionalities and managing dependencies in Node.js applications and allows me to use a vast array of
-                        open-source libraries. These libraries are already developed and maintained functionalities so that I can use them instead of me writing and maintaining the code myself. <br />
-                        To be able to install and use node and its packages I need to have a package.json file,
-                        where I can specify any eventual packages and dependencies that has been or needs to be installed in the projet together with other valuable info to node like scripts.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        Node.js's use of JavaScript on both the client and server side gives me the opportunityto development of isomorphic single-page applications,
-                        enabling code reuse and streamlining the development workflow. This also means that I only need to be good at coding in
-                        JavaScript to work across the entire stack.
-                    </p>
-                </div>
-                <div class="infoPicDiv">
-                    <img src="../assets/images/Node/whatisnode.png" alt="." class="infoPic" />
-                </div>
-            </div>
-            <div class="infoDiv">
-                <div class="infoPicDiv">
-                    <img src="../assets/images/Node/express.png" alt="." class="infoPic" />
-                </div>
-                <div class="infoInnerDiv" id="express">
-                    <h2 class="infoHeadline">What is Express</h2>
-                    <p class="infoParagraph">
-                        Express.js, often simply called Express, is a minimalist and flexible Node.js web application framework,
-                        that provides a set of features to develop web and mobile applications. Express simplifies the server creation process.
-                    </p>
-                    <p class="infoParagraph">
-                        The minimalist approach does not lock developers into a specific way of doing things, offering the freedom to use any
-                        database and templating engine, and to structure the application as they see fit. This flexibility, however, requires
-                        me to make more decisions about my application architecture and third-party libraries, potentially leading to a higher
-                        complexity in larger applications.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        The framework is widely used meaning a wealth of plugins, middleware, and tutorials are
-                        readily available, making it easier to add features or solve common problems.
-                    </p>
-                </div>
-            </div>
-            <div class="infoDiv">
-                <div class="infoInnerDiv" id="useexpress">
-                    <h2 class="infoHeadline">How to use Express</h2>
-                    <p class="infoParagraph">
-                        In Node.js with Express, initializing an app starts with <br />
-                        <i>import express from 'express'; <br /> </i>
-                        <i>const app = express(); <br /> </i>
-                        This is to set up the server. Using <i>app.listen(port);</i> launches the server, while <i>app.get('/')</i> and <i>app.post('/')</i> manage web
-                        requests.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        An example of an endpoint I am using for this project looks like this:
-                        <i>router.get('/about', (req, res) => {<br /> </i>
-                        <i>    res.send(aboutPage)<br /></i>
-                        <i>})</i>
-                    </p>
-                </div>
-                <div class="infoPicDiv">
-                    <img src="../assets/images/Node/imports.png" alt="." class="infoPic" />
-                </div>
-            </div>
-            <div class="infoDiv">
-                <div class="infoPicDiv">
-                    <img src="../assets/images/Node/commands.png" alt="." class="infoPic" />
-                </div>
-                <div class="infoInnerDiv" id="terminalNode">
-                    <h2 class="infoHeadline">Terminal commands for using Node.js</h2>
-                    <p class="infoParagraph">As mentioned above does ndoe.js transform JavaScript into a server-side language, which accessible through the terminal.</p>
-                    <p class="infoParagraph">
-                        Through the terminal, I can interact with Node.js, executing scripts, managing packages with npm (Node Package Manager),
-                        and starting or managing server processes. This command-line interface (CLI) access is a fundamental part of Node.js,
-                        and gives me a direct way to run JavaScript files, install third-party modules, and manage project dependencies.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        I have inserted a picture to the left of the most standard node terminal commands. <br />
-                        <i>--save-dev</i> and <i>--save</i> are called flags. They specify the type of dependency I am installing. <br />
-                        <i>--save-dev</i> is used to install a package that is only used during development, while <i>--save</i> 
-                        is used to install a package that is used in production. <br />
-                        One of the most common commands I use is <i>nodemon app.js</i> to start the server. 
-                        Nodemon is a package that automatically restarts the server when I make changes to the code. <br /> 
-                         <i>npm install</i> is used install node together with all the dependencies specified in the package.json file or 
-                         <i>npm install package-name</i> to install a specific package.
-                    </p>
-                </div>
+            <div class="infoPicDiv">
+                <img src="../assets/images/Node/whatisnode.png" alt="." class="infoPic" />
             </div>
         </div>
-    </body>
+        <div class="infoDiv">
+            <div class="infoPicDiv">
+                <img src="../assets/images/Node/express.png" alt="." class="infoPic" />
+            </div>
+            <div class="infoInnerDiv" id="express">
+                <h2 class="infoHeadline">What is Express</h2>
+                <p class="infoParagraph">
+                    Express.js, often simply called Express, is a minimalist and flexible Node.js web application
+                    framework,
+                    that provides a set of features to develop web and mobile applications. Express simplifies the
+                    server creation process.
+                </p>
+                <p class="infoParagraph">
+                    The minimalist approach does not lock developers into a specific way of doing things, offering the
+                    freedom to use any
+                    database and templating engine, and to structure the application as they see fit. This flexibility,
+                    however, requires
+                    me to make more decisions about my application architecture and third-party libraries, potentially
+                    leading to a higher
+                    complexity in larger applications.
+                </p>
+                <p class="infoParagraphBottom">
+                    The framework is widely used meaning a wealth of plugins, middleware, and tutorials are
+                    readily available, making it easier to add features or solve common problems.
+                </p>
+            </div>
+        </div>
+        <div class="infoDiv">
+            <div class="infoInnerDiv" id="useexpress">
+                <h2 class="infoHeadline">How to use Express</h2>
+                <p class="infoParagraph">
+                    In Node.js with Express, initializing an app starts with <br />
+                    <i>import express from 'express'; <br /> </i>
+                    <i>const app = express(); <br /> </i>
+                    This is to set up the server. Using <i>app.listen(port);</i> launches the server, while
+                    <i>app.get('/')</i> and <i>app.post('/')</i> manage web
+                    requests.
+                </p>
+                <p class="infoParagraphBottom">
+                    An example of an endpoint I am using for this project looks like this:
+                    <i>router.get('/about', (req, res) => {<br /> </i>
+                    <i> res.send(aboutPage)<br /></i>
+                    <i>})</i>
+                </p>
+            </div>
+            <div class="infoPicDiv">
+                <img src="../assets/images/Node/imports.png" alt="." class="infoPic" />
+            </div>
+        </div>
+        <div class="infoDiv">
+            <div class="infoPicDiv">
+                <img src="../assets/images/Node/commands.png" alt="." class="infoPic" />
+            </div>
+            <div class="infoInnerDiv" id="terminalNode">
+                <h2 class="infoHeadline">Terminal commands for using Node.js</h2>
+                <p class="infoParagraph">As mentioned above does ndoe.js transform JavaScript into a server-side
+                    language, which accessible through the terminal.</p>
+                <p class="infoParagraph">
+                    Through the terminal, I can interact with Node.js, executing scripts, managing packages with npm
+                    (Node Package Manager),
+                    and starting or managing server processes. This command-line interface (CLI) access is a fundamental
+                    part of Node.js,
+                    and gives me a direct way to run JavaScript files, install third-party modules, and manage project
+                    dependencies.
+                </p>
+                <p class="infoParagraphBottom">
+                    I have inserted a picture to the left of the most standard node terminal commands. <br />
+                    <i>--save-dev</i> and <i>--save</i> are called flags. They specify the type of dependency I am
+                    installing. <br />
+                    <i>--save-dev</i> is used to install a package that is only used during development, while
+                    <i>--save</i>
+                    is used to install a package that is used in production. <br />
+                    One of the most common commands I use is <i>nodemon app.js</i> to start the server.
+                    Nodemon is a package that automatically restarts the server when I make changes to the code. <br />
+                    <i>npm install</i> is used install node together with all the dependencies specified in the
+                    package.json file or
+                    <i>npm install package-name</i> to install a specific package.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

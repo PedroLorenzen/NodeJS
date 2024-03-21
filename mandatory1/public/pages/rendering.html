@@ -1,82 +1,100 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../assets/css/output.css" />
-        <title>Rendering Page</title>
-    </head>
-    <body>
-        <div>
-            <div>
-                <p class="p-20 bg-stone-800"></p>
-            </div>
-            <div class="infoDiv">
-                <div class="infoInnerDiv" id="ssr">
-                    <h2 class="infoHeadline">Serverside rendering</h2>
-                    <p class="infoParagraph">
-                        Server-side rendering (SSR) in Node.js is a technique that generates HTML on the server and sends it to the client's browser,
-                        providing a fully rendered page on the initial load. This approach is useful for improving the performance and
-                        SEO of web applications.
-                    </p>
-                    <p class="infoParagraph">
-                        Unlike client-side rendering (this is the standard if nothing is specified), where the browser downloads JavaScript files and then builds the page, SSR executes
-                        the logic of application on the server, creating the HTML of the page and sending it directly to the browser.
-                    </p>
-                    <p class="infoParagraph">
-                        In our previous project we loaded pages from the filesystem and passed it through a templating engine (readPage and renderPage
-                        functions). This process injected dynamic content, like custom titles and CSS links, into the pages. Our templating engine
-                        read HTML files, incorporated global components like headers and footers, and allowed for dynamic placeholders to be filled in. 
-                        Then we had express routes configured to serve the dynamically prepared HTML
-                        content directly, bypassing the need for static file serving for these pages.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        In this project I am using SSR and loading pages from the filesystem and passing it through a templating engine:
-                        <i>export function readPage (path) {<br />
-                            return fs.readFileSync(path).toString()<br />
-                        }<br /></i>
-                        <i>export function renderPage (page, config = {}) {<br />
-                            const header = fs.readFileSync('./public/components/header/header.html').toString()<br />
-                            const footer = fs.readFileSync('./public/components/footer/footer.html').toString()<br />
-                            const menu = fs.readFileSync('./public/components/menu/menu.html').toString()<br />
-                            return header + page + menu + footer<br />
-                        }<br /></i>
-                        Then I am using readPage and renderPage in my routes to serve the dynamically prepared HTML content directly, 
-                        bypassing the need for static file serving for these pages: <br />
-                        <i>const home = readPage('./public/pages/home.html')<br />
-                        export const homePage = renderPage(home)<br /></i>
-                        Finally I am using the routes as specified in the express server - look at the picture on the right ->
 
-                    </p>
-                </div>
-                <div class="infoPicDiv">
-                    <img src="../assets/images/Rendering/ssr.png" alt="." class="infoPic" />
-                </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/css/output.css" />
+    <title>Rendering Page</title>
+</head>
+
+<body>
+    <div>
+        <div>
+            <p class="p-20 bg-stone-800"></p>
+        </div>
+        <div class="infoDiv">
+            <div class="infoInnerDiv" id="ssr">
+                <h2 class="infoHeadline">Serverside rendering</h2>
+                <p class="infoParagraph">
+                    Server-side rendering (SSR) in Node.js is a technique that generates HTML on the server and sends it
+                    to the client's browser,
+                    providing a fully rendered page on the initial load. This approach is useful for improving the
+                    performance and
+                    SEO of web applications.
+                </p>
+                <p class="infoParagraph">
+                    Unlike client-side rendering (this is the standard if nothing is specified), where the browser
+                    downloads JavaScript files and then builds the page, SSR executes
+                    the logic of application on the server, creating the HTML of the page and sending it directly to the
+                    browser.
+                </p>
+                <p class="infoParagraph">
+                    In our previous project we loaded pages from the filesystem and passed it through a templating
+                    engine (readPage and renderPage
+                    functions). This process injected dynamic content, like custom titles and CSS links, into the pages.
+                    Our templating engine
+                    read HTML files, incorporated global components like headers and footers, and allowed for dynamic
+                    placeholders to be filled in.
+                    Then we had express routes configured to serve the dynamically prepared HTML
+                    content directly, bypassing the need for static file serving for these pages.
+                </p>
+                <p class="infoParagraphBottom">
+                    In this project I am using SSR and loading pages from the filesystem and passing it through a
+                    templating engine:
+                    <i>export function readPage (path) {<br />
+                        return fs.readFileSync(path).toString()<br />
+                        }<br /></i>
+                    <i>export function renderPage (page, config = {}) {<br />
+                        const header = fs.readFileSync('./public/components/header/header.html').toString()<br />
+                        const footer = fs.readFileSync('./public/components/footer/footer.html').toString()<br />
+                        const menu = fs.readFileSync('./public/components/menu/menu.html').toString()<br />
+                        return header + page + menu + footer<br />
+                        }<br /></i>
+                    Then I am using readPage and renderPage in my routes to serve the dynamically prepared HTML content
+                    directly,
+                    bypassing the need for static file serving for these pages: <br />
+                    <i>const home = readPage('./public/pages/home.html')<br />
+                        export const homePage = renderPage(home)<br /></i>
+                    Finally I am using the routes as specified in the express server - look at the picture on the right
+                    ->
+
+                </p>
             </div>
-            <div class="infoDiv">
-                <div class="infoPicDiv">
-                    <img src="../assets/images/Rendering/csr.png" alt="." class="infoPic" />
-                </div>
-                <div class="infoInnerDiv" id="csr">
-                    <h2 class="infoHeadline">Clientside rendering</h2>
-                    <p class="infoParagraph">
-                        Client side rendering is on the other hand the standard way of rendering pages in a web application. 
-                        The browser downloads the HTML, CSS and JavaScript files and then builds the page in the browser.
-                    </p>
-                    <p class="infoParagraph">
-                        CSR can be useful for web applications that are highly interactive, because it allows for faster page loads and a more dynamic user experience. 
-                        However, it can also lead to reduced SEO performance and loading the entire page in the browser can be slower than rendering it on the server.
-                        This is because search engines have a harder time indexing client-side rendered pages, 
-                        because CSR rely on JavaScript to build the page content in the webbrowser and is not sent as a fully rendered page from the server.
-                    </p>
-                    <p class="infoParagraphBottom">
-                        CSR don't need a server to render the page, therefore it doesn't need to use a templating engine to inject dynamic content into the page.
-                        So in the end choosing between SSR and CSR depends on the specific requirements of the application. 
-                        If the requirements are better SEO performance and faster initial page loads, SSR is the way to go. 
-                        If the applications needs to be highly interactive and dont need to depend on a server or SEO, CSR is the way to go.
-                    </p>
-                </div>
+            <div class="infoPicDiv">
+                <img src="../assets/images/Rendering/ssr.png" alt="." class="infoPic" />
             </div>
         </div>
-    </body>
+        <div class="infoDiv">
+            <div class="infoPicDiv">
+                <img src="../assets/images/Rendering/csr.png" alt="." class="infoPic" />
+            </div>
+            <div class="infoInnerDiv" id="csr">
+                <h2 class="infoHeadline">Clientside rendering</h2>
+                <p class="infoParagraph">
+                    Client side rendering is on the other hand the standard way of rendering pages in a web application.
+                    The browser downloads the HTML, CSS and JavaScript files and then builds the page in the browser.
+                </p>
+                <p class="infoParagraph">
+                    CSR can be useful for web applications that are highly interactive, because it allows for faster
+                    page loads and a more dynamic user experience.
+                    However, it can also lead to reduced SEO performance and loading the entire page in the browser can
+                    be slower than rendering it on the server.
+                    This is because search engines have a harder time indexing client-side rendered pages,
+                    because CSR rely on JavaScript to build the page content in the webbrowser and is not sent as a
+                    fully rendered page from the server.
+                </p>
+                <p class="infoParagraphBottom">
+                    CSR don't need a server to render the page, therefore it doesn't need to use a templating engine to
+                    inject dynamic content into the page.
+                    So in the end choosing between SSR and CSR depends on the specific requirements of the application.
+                    If the requirements are better SEO performance and faster initial page loads, SSR is the way to go.
+                    If the applications needs to be highly interactive and dont need to depend on a server or SEO, CSR
+                    is the way to go.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

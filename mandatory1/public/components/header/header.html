@@ -1,82 +1,85 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../assets/css/output.css" />
-        <title>Header Component</title>
-    </head>
-    <body>
-        <nav class="fixed top-0 z-20 bg-stone-900 text-white w-full px-4 flex justify-between">
-            <div class="flex space-x-4">
-                <div>
-                    <a href="/" class="flex items-center py-3 text-stone-800 hover:text-gray-900" title="headerLogo">
-                        <img src="../assets/images/logo.png" alt="headerLogo" class="object-cover h-12 w-full rounded-lg" />
-                        <span class="font-bold"></span>
-                    </a>
-                </div>
-            </div>
 
-            <div class="md:flex items-center space-x-1">
-                <div>
-                    <a href="/" class="py-5 px-3 hover:bg-stone-800 hover:text-white hover:rounded-lg"> Home </a>
-                </div>
-                <div>
-                    <a href="/about" class="py-5 px-3 hover:bg-stone-800 hover:text-white hover:rounded-lg"> About </a>
-                </div>
-                <div class="relative group">
-                    <a href="/cleancode">
-                        <button type="button" class="headerRelativeHeadlines">Clean Code</button>
-                    </a>
-                    <div class="headerDropdownDiv">
-                        <a href="/cleancode/#debugging" class="headerDropdownElement"> Debugging </a>
-                        <a href="/cleancode/#promises" class="headerDropdownElement"> Promises </a>
-                        <a href="/cleancode/#arrow" class="headerDropdownElement"> Functions </a>
-                        <a href="/cleancode/#codingStandards" class="headerDropdownElement"> Coding Standards </a>
-                    </div>
-                </div>
-                <div class="relative group">
-                    <a href="/node">
-                        <button type="button" class="headerRelativeHeadlines">Node</button>
-                    </a>
-                    <div class="headerDropdownDiv">
-                        <a href="/node/#node" class="headerDropdownElement"> Node </a>
-                        <a href="/node/#express" class="headerDropdownElement"> Express </a>
-                        <a href="/node/#useexpress" class="headerDropdownElement"> Using Express </a>
-                        <a href="/node/#terminalNode" class="headerDropdownElement"> Terminal </a>
-                    </div>
-                </div>
-                <div class="relative group">
-                    <a href="/rendering">
-                        <button type="button" class="headerRelativeHeadlines">Rendering</button>
-                    </a>
-                    <div class="headerDropdownDiv">
-                        <a href="/rendering/#ssr" class="headerDropdownElement"> Server </a>
-                        <a href="/rendering/#csr" class="headerDropdownElement"> Client </a>
-                    </div>
-                </div>
-                <div class="relative group">
-                    <a href="/vercel">
-                        <button type="button" class="headerRelativeHeadlines">Vercel</button>
-                    </a>
-                    <div class="headerDropdownDiv">
-                        <a href="/vercel/#vercel" class="headerDropdownElement"> Vercel </a>
-                        <a href="/vercel/#deploy" class="headerDropdownElement"> Deploy </a>
-                    </div>
-                </div>
-                <div class="relative group">
-                    <a href="/styling">
-                        <button type="button" class="headerRelativeHeadlines">Styling</button>
-                    </a>
-                    <div class="headerDropdownDiv">
-                        <a href="/styling/#css" class="headerDropdownElement"> CSS </a>
-                        <a href="/styling/#css" class="headerDropdownElement"> Tailwind </a>
-                    </div>
-                </div>
-                <div>
-                    <a href="/contact" class="py-5 px-3 hover:bg-stone-800 hover:text-white hover:rounded-lg"> Contact </a>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/css/output.css" />
+    <title>Header Component</title>
+</head>
+
+<body>
+    <nav class="fixed top-0 z-20 bg-stone-900 text-white w-full px-4 flex justify-between">
+        <div class="flex space-x-4">
+            <div>
+                <a href="/" class="flex items-center py-3 text-stone-800 hover:text-gray-900" title="headerLogo">
+                    <img src="../assets/images/logo.png" alt="headerLogo" class="object-cover h-12 w-full rounded-lg" />
+                    <span class="font-bold"></span>
+                </a>
+            </div>
+        </div>
+
+        <div class="md:flex items-center space-x-1">
+            <div>
+                <a href="/" class="py-5 px-3 hover:bg-stone-800 hover:text-white hover:rounded-lg"> Home </a>
+            </div>
+            <div>
+                <a href="/about" class="py-5 px-3 hover:bg-stone-800 hover:text-white hover:rounded-lg"> About </a>
+            </div>
+            <div class="relative group">
+                <a href="/cleancode">
+                    <button type="button" class="headerRelativeHeadlines">Clean Code</button>
+                </a>
+                <div class="headerDropdownDiv">
+                    <a href="/cleancode/#debugging" class="headerDropdownElement"> Debugging </a>
+                    <a href="/cleancode/#promises" class="headerDropdownElement"> Promises </a>
+                    <a href="/cleancode/#arrow" class="headerDropdownElement"> Functions </a>
+                    <a href="/cleancode/#codingStandards" class="headerDropdownElement"> Coding Standards </a>
                 </div>
             </div>
-        </nav>
-    </body>
+            <div class="relative group">
+                <a href="/node">
+                    <button type="button" class="headerRelativeHeadlines">Node</button>
+                </a>
+                <div class="headerDropdownDiv">
+                    <a href="/node/#node" class="headerDropdownElement"> Node </a>
+                    <a href="/node/#express" class="headerDropdownElement"> Express </a>
+                    <a href="/node/#useexpress" class="headerDropdownElement"> Using Express </a>
+                    <a href="/node/#terminalNode" class="headerDropdownElement"> Terminal </a>
+                </div>
+            </div>
+            <div class="relative group">
+                <a href="/rendering">
+                    <button type="button" class="headerRelativeHeadlines">Rendering</button>
+                </a>
+                <div class="headerDropdownDiv">
+                    <a href="/rendering/#ssr" class="headerDropdownElement"> Server </a>
+                    <a href="/rendering/#csr" class="headerDropdownElement"> Client </a>
+                </div>
+            </div>
+            <div class="relative group">
+                <a href="/vercel">
+                    <button type="button" class="headerRelativeHeadlines">Vercel</button>
+                </a>
+                <div class="headerDropdownDiv">
+                    <a href="/vercel/#vercel" class="headerDropdownElement"> Vercel </a>
+                    <a href="/vercel/#deploy" class="headerDropdownElement"> Deploy </a>
+                </div>
+            </div>
+            <div class="relative group">
+                <a href="/styling">
+                    <button type="button" class="headerRelativeHeadlines">Styling</button>
+                </a>
+                <div class="headerDropdownDiv">
+                    <a href="/styling/#css" class="headerDropdownElement"> CSS </a>
+                    <a href="/styling/#tailwind" class="headerDropdownElement"> Tailwind </a>
+                </div>
+            </div>
+            <div>
+                <a href="/contact" class="py-5 px-3 hover:bg-stone-800 hover:text-white hover:rounded-lg"> Contact </a>
+            </div>
+        </div>
+    </nav>
+</body>
+
 </html>
