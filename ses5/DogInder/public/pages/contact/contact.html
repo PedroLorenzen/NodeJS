@@ -1,1 +1,14 @@
 <h1>Ask the dog of wisdom!</h1>
+
+<form action="/api/contact" method="post">
+    <label for="name">Name:</label>
+    <input type="text" name="name" placeholder="Your name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" name="email" placeholder="Your email" required>
+
+    <label for="message">Message:</label>
+    <textarea name="message" placeholder="Your message" cols="80" rows="20" required></textarea>
+    
+    <button type="submit" aria-label="Submit Form">Send</button>
+</form>

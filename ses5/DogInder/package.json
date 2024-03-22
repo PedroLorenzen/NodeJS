@@ -4,10 +4,12 @@
         "express": "^4.18.3"
     },
     "devDependencies": {
-        "@faker-js/faker": "^8.4.1"
+        "@faker-js/faker": "^8.4.1",
+        "cross-env": "^7.0.3"
     },
-
     "scripts": {
-        "ScriptName": "mkdir hello"
+        "ScriptName": "mkdir hello",
+        "start:dev": "cross-env PORT=8080 nodemon app.js",
+        "start": "cross-env PORT=80 node app.js"
     }
 }
