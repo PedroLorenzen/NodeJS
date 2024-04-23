@@ -1,0 +1,2 @@
+https://fakerjs.dev/guide/usage
+https://tailwindcss.com/docs/using-with-preprocessors
