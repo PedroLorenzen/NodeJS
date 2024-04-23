@@ -4,14 +4,23 @@
     import { BASE_URL } from '../../stores/generalStore';
     import { fetchGet, fetchPost } from '../../util/api';
 
-    onMount(async () => {
-        const customer = {
-            name: 'Gleb',
-        };
-        await fetchPost(`${BASE_URL}/api/customers`, customer);
+    let customer = {
+        name: 'Gleb',
+    };
 
-        const result = await fetchGet(`${BASE_URL}/api/customers`);
-        console.log(result);
+    onMount(async () => {
+        try {
+            const postResponse = await fetchPost(`${BASE_URL}/api/customers`, customer);
+            if (!postResponse) {
+                console.error('Failed to create customer');
+                return;
+            }
+
+            const result = await fetchGet(`${BASE_URL}/api/customers`);
+            console.log(result);
+        } catch (error) {
+            console.error('Error in processing:', error);
+        }
     });
 
     function completeCheckout() {
