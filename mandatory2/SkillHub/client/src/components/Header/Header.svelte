@@ -13,7 +13,7 @@
 <style>
     header {
         background-color: beige;
-        padding: 10px 20px;
+        padding: 20px;
         text-align: center;
         font-size: 20px;
         color: #333;
