@@ -13,8 +13,8 @@
         <p>2. Share your skills or search for a skill you need</p>
     </div>
     <div>
-        <Link to="/login">Login / Create Account</Link>
-        <Link to="/jobs">Jobs</Link>
+        <span><Link to="/login">Login / Create Account</Link></span>
+        <span><Link to="/jobs">Jobs</Link></span>
     </div>
     <div>
         <h2>New jobs</h2>
@@ -31,7 +31,7 @@
         margin-right: 50px;
     }
 
-    a:link {
+    span {
         text-decoration: none;
         color: black;
         background-color: lightgreen;
@@ -41,7 +41,7 @@
         transition: background-color 0.3s;
     }
 
-    a:hover {
+    span:hover {
         background-color: green;
     }
 
