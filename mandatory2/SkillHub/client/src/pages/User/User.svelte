@@ -1,5 +1,5 @@
 <script>
-    let username = sessionStorage.getItem('username'); // Retrieve the username from session storage
+    let username = sessionStorage.getItem('username');
   </script>
   
   <main>

@@ -4,9 +4,8 @@
 <header>
     <nav>
         <a href="/">Home</a>
-        <a href="/about">User</a>
-        <a href="/services">Jobs</a>
-        <a href="/contact">Contact</a>
+        <a href="/User">User</a>
+        <a href="/Jobs">Jobs</a>
     </nav>
 </header>
 
