@@ -1,11 +1,18 @@
 <script>
+  import { Router, Route, Link } from 'svelte-routing';
   import Footer from "./components/Footer/Footer.svelte";
   import Header from "./components/Header/Header.svelte";
-    import Home from "./pages/Home/Home.svelte";
+  import Home from "./pages/Home/Home.svelte";
+  import Auth from "./pages/Login/Login.svelte";
+  import User from "./pages/User/User.svelte";
 </script>
 
 <main>
   <Header />
-  <Home />
+  <Router>
+    <Route path="/" component={Home} />
+    <Route path="/login" component={Auth} />
+    <Route path="/user" component={User} />
+  </Router>
   <Footer />
 </main>

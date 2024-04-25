@@ -1,4 +1,5 @@
 <script>
+    import { Link } from 'svelte-routing';
 </script>
 
 <main>
@@ -12,8 +13,8 @@
         <p>2. Share your skills or search for a skill you need</p>
     </div>
     <div>
-        <a href="/login">Login / Create Account</a>
-        <a href="/jobs">Jobs</a>
+        <Link to="/login">Login / Create Account</Link>
+        <Link to="/jobs">Jobs</Link>
     </div>
     <div>
         <h2>New jobs</h2>
@@ -30,7 +31,7 @@
         margin-right: 50px;
     }
 
-    a {
+    a:link {
         text-decoration: none;
         color: black;
         background-color: lightgreen;
