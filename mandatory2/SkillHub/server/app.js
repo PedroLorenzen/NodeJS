@@ -47,10 +47,10 @@ import userRouter from './routers/userRouter.js';
 app.use('/api/users', userRouter);
 
 import jobsRouter from './routers/jobsRouter.js';
-app.use('/api/jobs', jobsRouter);
+app.use(jobsRouter); // app.use('/api/jobs', jobsRouter);
 
 import authRouter from './routers/authRouter.js';
-app.use('/auth', authRouter);
+app.use(authRouter); //app.use('/auth', authRouter);
 
 import sessionRouter from './routers/sessionRouter.js';
 app.use('/session', sessionRouter);

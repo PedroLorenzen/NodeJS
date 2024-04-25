@@ -46,4 +46,14 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send({ message: "Error logging out" });
+        }
+        res.clearCookie('sid'); // Clear the session cookie. sid is the default name for the session cookie.
+        res.send({ message: "Logged out successfully" });
+    });
+});
+
 export default router;
