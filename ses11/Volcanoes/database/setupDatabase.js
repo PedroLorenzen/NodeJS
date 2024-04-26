@@ -1,6 +1,7 @@
 import db from './connection.js';
 
-const deleteMode = true; 
+const deleteMode = process.argv.includes('--delete');
+console.log(process.argv); 
 
 if (deleteMode) {
     db.exec(`DROP TABLE IF EXISTS Villages`);
