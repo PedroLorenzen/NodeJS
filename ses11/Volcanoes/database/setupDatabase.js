@@ -1,13 +1,12 @@
 import db from './connection.js';
 
-const deleteMode = true;  // Renamed for clarity, set to true if you want to execute insert statements
+const deleteMode = true; 
 
 if (deleteMode) {
     db.exec(`DROP TABLE IF EXISTS Villages`);
     db.exec(`DROP TABLE IF EXISTS Volcanoes`);
 }
 
-// Create the Volcanoes table if it doesn't exist
 db.exec(`
 CREATE TABLE IF NOT EXISTS Volcanoes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,7 +17,6 @@ CREATE TABLE IF NOT EXISTS Volcanoes (
 );
 `);
 
-// Create the Villages table if it doesn't exist
 db.exec(`
 CREATE TABLE IF NOT EXISTS Villages (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
