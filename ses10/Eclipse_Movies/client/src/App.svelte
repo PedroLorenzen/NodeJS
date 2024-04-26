@@ -3,6 +3,7 @@
     import Movies from "./pages/Movies/Movies.svelte";
     import Home from "./pages/Home/Home.svelte";
     import SunglassesShop from "./pages/SunglassesShop/SunglassesShop.svelte";
+
 </script>
 
 

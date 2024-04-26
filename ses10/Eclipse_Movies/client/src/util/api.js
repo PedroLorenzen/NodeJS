@@ -1,25 +1,16 @@
 export async function fetchGet(url) {
-    let data;
+    let data; 
     try {
         const response = await fetch(url,
-            {
+        {
                 credentials: "include"
-            });
+        });
         const result = await response.json();
         data = result.data;
     } catch (error) {
         console.error(error);
     }
     return data;
-
-
-    return fetch(url,
-        {
-            credentials: "include"
-        })
-        .then((response) => response.json())
-        .then((result) => result)
-        .catch((error) => console.error(error));
 }
 
 export function fetchPost(url, body) {
@@ -31,7 +22,7 @@ export function fetchPost(url, body) {
         },
         body: JSON.stringify(body)
     })
-        .then((response) => response.json())
-        .then((result) => result)
-        .catch((error) => console.error(error));
+    .then((response) => response.json())
+    .then((result) => result)
+    .catch((error) => console.error(error));
 }
