@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 const router = Router();
 
+/* Bruges ikke da user allerede er sat i authRouter login
 router.post('/session/setuser', (req, res) => {
     const { user } = req.body;
     if (user) {
@@ -11,7 +12,7 @@ router.post('/session/setuser', (req, res) => {
     } else {
         res.status(400).send({ message: "No user provided." });
     }
-});
+});*/
 
 router.get('/session/getuser', (req, res) => {
     if (req.session.user) {

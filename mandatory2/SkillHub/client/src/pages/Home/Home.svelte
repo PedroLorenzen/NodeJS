@@ -22,7 +22,6 @@
             {
                 throw new Error(result.message || "Failed to login");
             }
-            sessionStorage.setItem("username", email);
             navigate("/User");
         } catch (err) {
             error = err.message;
@@ -72,56 +71,59 @@
         <span><Link to="/jobs">Jobs</Link></span>
         {#if showLogin}
             <form on:submit|preventDefault={handleLogin}>
-                <div>
-                    <p>
-                        <label for="email">Email:</label>
-                        <input type="email" bind:value={email} id="email" />
-                        <label for="password">Password:</label>
-                        <input
-                            type="password"
-                            bind:value={password}
-                            id="password"
-                        />
-                    </p>
-                    <p>
-                        <button type="submit">Login</button>
-                    </p>
-                </div>
-                {#if error}
-                    <p style="color: red;">{error}</p>
-                {/if}
+            <div>
+                <p>
+                <label for="email">Email:</label>
+                <input type="email" bind:value={email} id="email" required/>
+                <label for="password">Password:</label>
+                <input
+                    type="password"
+                    bind:value={password}
+                    id="password"
+                    required
+                />
+                </p>
+                <p>
+                <button type="submit">Login</button>
+                </p>
+            </div>
+            {#if error}
+                <p style="color: red;">{error}</p>
+            {/if}
             </form>
         {/if}
         {#if showRegister}
             <form on:submit|preventDefault={handleRegister}>
-                <div>
-                    <p>
-                        <label for="name">Name:</label>
-                        <input type="text" bind:value={name} id="name" />
-                        <label for="email">Email:</label>
-                        <input type="email" bind:value={email} id="email" />
-                    </p>
-                    <p>
-                        <label for="password">Password:</label>
-                        <input
-                            type="password"
-                            bind:value={password}
-                            id="password"
-                        />
-                        <label for="location">Location:</label>
-                        <input
-                            type="text"
-                            bind:value={location}
-                            id="location"
-                        />
-                    </p>
-                    <p>
-                        <button type="submit">Signup</button>
-                    </p>
-                </div>
-                {#if error}
-                    <p style="color: red;">{error}</p>
-                {/if}
+            <div>
+                <p>
+                <label for="name">Name:</label>
+                <input type="text" bind:value={name} id="name" required/>
+                <label for="email">Email:</label>
+                <input type="email" bind:value={email} id="email" required/>
+                </p>
+                <p>
+                <label for="password">Password:</label>
+                <input
+                    type="password"
+                    bind:value={password}
+                    id="password"
+                    required
+                />
+                <label for="location">Location:</label>
+                <input
+                    type="text"
+                    bind:value={location}
+                    id="location"
+                    required
+                />
+                </p>
+                <p>
+                <button type="submit">Signup</button>
+                </p>
+            </div>
+            {#if error}
+                <p style="color: red;">{error}</p>
+            {/if}
             </form>
         {/if}
     </div>

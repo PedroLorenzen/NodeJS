@@ -14,17 +14,19 @@ router.post('/auth/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, userQuery.password);
         if (isMatch) {
             req.session.userId = userQuery.id;
+            req.session.user = userQuery.email;
             res.send({ message: "Logged in successfully" });
             console.log("User with ID: " + userQuery.id + " has logged in");
         } else {
             res.status(401).send({ message: "Invalid password" });
-            console.log("User with ID: " + userQuery.id + " has entered an invalid password")
+            console.log("User with ID: " + userQuery.id + " has entered an invalid password");
         }
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).send({ message: "Error logging in" });
     }
 });
+
 
 router.get('/auth/logout', (req, res) => {
     req.session.destroy((err) => {
@@ -33,6 +35,7 @@ router.get('/auth/logout', (req, res) => {
         }
         res.clearCookie('sid');
         res.send({ message: "Logged out successfully" });
+        console.log("User has logged out and session destroyed");
     });
 });
 
