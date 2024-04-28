@@ -3,8 +3,31 @@
   import { navigate } from "svelte-routing";
 
   let username;
+  let userID;
+  let email;
+  let city;
   let sessionUser = false;
   let error = "";
+  let name, skill, description, price;
+
+  const skills = [
+    "Painting",
+    "IT-support",
+    "Drywall",
+    "Roofing",
+    "Plumbing",
+    "Electrical",
+    "Carpentry",
+    "Masonry",
+    "Gardening",
+    "Car repair",
+    "Cleaning",
+    "Cooking",
+    "Childcare",
+    "Petcare",
+    "Tutoring",
+    "Personal training",
+  ];
 
   onMount(async () => {
     try {
@@ -19,6 +42,8 @@
         throw new Error(result.message || "No session found");
       }
       username = result.user;
+      console.log(result);
+      console.log(result.user);
       sessionUser = true;
     } catch (err) {
       error = err.message;
@@ -40,6 +65,26 @@
       console.error("Logout Error:", err.message);
     }
   }
+
+  async function handlePostJob() {
+    try {
+      const response = await fetch("http://localhost:8080/api/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, skill, description, price, userID }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to post job");
+      }
+      location.reload();
+      alert("Job posted successfully");
+    } catch (err) {
+      error = err.message;
+    }
+  }
 </script>
 
 <main>
@@ -52,6 +97,33 @@
   <div>
     <button on:click={handleLogout}>Logout</button>
   </div>
+  <form on:submit|preventDefault={handlePostJob}>
+    <div>
+      <p>{error}</p>
+      <p>Here you can post a new job:</p>
+      <p>
+        <label for="name">Name:</label>
+        <input type="text" bind:value={name} id="name" required />
+
+        <select bind:value={skill} id="skill" required>
+          <option value="" disabled selected>Select a skill</option>
+          {#each skills as skillOption}
+            <option value={skillOption}>{skillOption}</option>
+          {/each}
+        </select>
+      </p>
+      <p>
+        <label for="description">Description:</label>
+        <input type="text" bind:value={description} id="description" required />
+
+        <label for="price">Price:</label>
+        <input type="number" bind:value={price} id="price" required />
+      </p>
+      <p>
+        <button type="submit">Post Job</button>
+      </p>
+    </div>
+  </form>
 </main>
 
 <style>

@@ -9,6 +9,7 @@ router.get('/api/users', async (req, res) => {
     console.log(result);
 });
 
+
 router.post('/api/users', async (req, res) => {
     const { name, email, password, location } = req.body;
     if (!name || !email || !password || !location) {
