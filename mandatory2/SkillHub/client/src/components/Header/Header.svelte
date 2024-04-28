@@ -6,6 +6,7 @@
         <a href="/">Home</a>
         <a href="/User">User</a>
         <a href="/Jobs">Jobs</a>
+        <a href="/Contact">Contact</a>
     </nav>
 </header>
 

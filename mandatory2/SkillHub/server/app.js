@@ -55,6 +55,9 @@ app.use(sessionRouter);
 import xssRouter from './routers/xssRouter.js';
 app.use(xssRouter);
 
+import mailRouter from './routers/mailRouter.js';
+app.use(mailRouter);
+
 // 404 for alle andre requests
 app.all("*", (req, res) => {
     res.status(404).send({ message: "Not Found" });

@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { navigate } from "svelte-routing";
+    import { Link } from "svelte-routing";
 
     let error = "";
     let jobs = [];
@@ -58,7 +59,9 @@
                             <p>Skill: {job.skill}</p>
                             <p>Description: {job.description}</p>
                             <p>Price: ${job.price}</p>
-                            <button>Contact User</button>
+                            <Link to="/Contact">
+                                <button>Contact User</button>
+                            </Link>                       
                         </div>
                         {#if jobs[index + 1]}
                             <div class="job">
@@ -68,7 +71,9 @@
                                     Description: {jobs[index + 1].description}
                                 </p>
                                 <p>Price: ${jobs[index + 1].price}</p>
-                                <button>Contact User</button>
+                                <Link to="/Contact">
+                                    <button>Contact User</button>
+                                </Link>
                             </div>
                         {/if}
                     </div>
