@@ -9,7 +9,7 @@ const hashPassword = async (password) => {
     return bcrypt.hash(password, salt);
 };
 
-router.post('/register', async (req, res) => {
+router.post('/auth/register', async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = await hashPassword(password);
 
@@ -29,7 +29,7 @@ router.post('/register', async (req, res) => {
     console.log(newUser);
 });
 
-router.post('/login', async (req, res) => {
+router.post('/auth/login', async (req, res) => {
     const { username, password } = req.body;
     const user = users.find(user => user.username === username);
 
@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/logout', (req, res) => {
+router.get('/auth/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).send({ message: "Error logging out" });

@@ -23,7 +23,6 @@ app.use(session({
     cookie: { secure: false } //  cookie: { secure: process.env.NODE_ENV === 'production' } kan sættes til true hvis man bruger https i production (kræver certifikat)
 }));
 
-// General rate limiter
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutter
     limit: 50, // Begræns antal requests til 50 pr. windowMs
@@ -32,7 +31,6 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Rate limiter for authentication routes
 const authRateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutter
     limit: 5, // Begræns antal requests til 5 pr. windowMs
@@ -40,11 +38,10 @@ const authRateLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
 });
-app.use("/auth", authRateLimiter);
+app.use("/auth", authRateLimiter); 
 
-// Import and use routers
 import userRouter from './routers/userRouter.js';
-app.use('/api/users', userRouter);
+app.use(userRouter);
 
 import jobsRouter from './routers/jobsRouter.js';
 app.use(jobsRouter); // app.use('/api/jobs', jobsRouter);
@@ -53,10 +50,10 @@ import authRouter from './routers/authRouter.js';
 app.use(authRouter); //app.use('/auth', authRouter);
 
 import sessionRouter from './routers/sessionRouter.js';
-app.use('/session', sessionRouter);
+app.use(sessionRouter);
 
 import xssRouter from './routers/xssRouter.js';
-app.use('/xss', xssRouter);
+app.use(xssRouter);
 
 // 404 for alle andre requests
 app.all("*", (req, res) => {

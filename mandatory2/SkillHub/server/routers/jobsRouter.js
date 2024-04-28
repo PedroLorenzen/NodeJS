@@ -1,16 +1,29 @@
-import { Router } from "express";
+import { Router } from 'express';
 const router = Router();
+import db from '../database/connection.js';
 
-const jobsList = [
-    { id: 1, title: "Software Developer", description: "Develop cutting-edge software solutions.", user: "John Doe", location: "New York", price: 100 },
-    { id: 2, title: "Product Manager", description: "Manage product development process.", user: "Jane Doe", location: "San Francisco", price: 200 },
-    { id: 3, title: "Project Manager", description: "Manage project execution.", user: "Alice Doe", location: "Los Angeles", price: 300 },
-    { id: 4, title: "Software Engineer", description: "Develop software applications.", user: "Bob Doe", location: "Chicago", price: 400 },
-    { id: 5, title: "Data Analyst", description: "Analyze data to provide insights.", user: "Eve Doe", location: "Boston", price: 500 }
-];
+router.get('/api/jobs', async (req, res) => {
+    const result = await db.all('SELECT * FROM Jobs');
+    console.log(result);
+    res.send({ data: result })
+});
 
-router.get("/api/jobs", (req, res) => {
-    res.send({ data: jobsList });
+router.post('/api/jobs', async (req, res) => {
+    const { name, skill, description, price } = req.body;
+    if (!name || !skill || !description || !price) {
+        return res.status(400).send({ error: 'Missing required information' });
+    }
+    else {
+        try {
+            // Brug af prepared statements for at undgå SQL injection
+            const sql = 'INSERT INTO Jobs (name, skill, description, price) VALUES (?, ?, ?, ?)';
+            const result = await db.run(sql, [name, skill, description, price]);
+            res.send({ lastID: result.lastID });
+        } catch (error) {
+            console.error('Database error:', error);
+            res.status(500).send({ error: 'Database operation failed' });
+        }
+    }
 });
 
 export default router;

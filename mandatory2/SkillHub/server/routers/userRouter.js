@@ -1,24 +1,29 @@
-import { Router } from "express";
+import { Router } from 'express';
 const router = Router();
+import db from '../database/connection.js';
 
-router.get("/api/users", (req, res) => {
-    res.send({ data: req.session.userName });
+router.get('/api/users', async (req, res) => {
+    const result = await db.all('SELECT * FROM Users');
+    console.log(result);
+    res.send({ data: result })
 });
 
-router.post("/api/users", (req, res) => {
-    req.session.userName = req.body.name;
-    res.send({ data: `Welcome ${req.session.userName}!` });
+router.post('/api/users', async (req, res) => {
+    const { name, email, password, location } = req.body;
+    if (!name || !email || !password || !location) {
+        return res.status(400).send({ error: 'Missing required information' });
+    }
+    else {
+        try {
+            // Brug af prepared statements for at undgå SQL injection
+            const sql = 'INSERT INTO Users (name, email, password, location) VALUES (?, ?, ?, ?)';
+            const result = await db.run(sql, [name, email, password, location]);
+            res.send({ lastID: result.lastID });
+        } catch (error) {
+            console.error('Database error:', error);
+            res.status(500).send({ error: 'Database operation failed' });
+        }
+    }
 });
-
-/*
-router.get("/api/customers", (req, res) => {
-    res.send({ data: req.session.customerName });
-});
-
-router.post("/api/customers", (req, res) => {
-    req.session.customerName = req.body.name;
-    res.send({ data: `Welcome ${req.session.customerName}!` });
-});
-*/
 
 export default router;
