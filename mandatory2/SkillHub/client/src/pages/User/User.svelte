@@ -49,15 +49,16 @@
         console.log("User ID:", userid, "Username:", username);
         sessionUser = true;
       }
-      const getJobs = await fetch(
-        `http://localhost:8080/api/jobs?user_id=${userid}`,
-      );
-      if (getJobs.ok) {
-        const jobData = await getJobs.json();
-        jobs = jobData.data;
+      const jobResponse = await fetch(`http://localhost:8080/api/jobs`);
+      if (jobResponse.ok) {
+        const jobData = await jobResponse.json();
+        jobs = jobData.data.filter((job) => job.user_id === userid);
+      } else {
+        console.error("Failed to fetch jobs:", await jobResponse.text());
       }
     } catch (err) {
       error = err.message;
+      console.error("Error during fetch operations:", err);
     }
   });
 
