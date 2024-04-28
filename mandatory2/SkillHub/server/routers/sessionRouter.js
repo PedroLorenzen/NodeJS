@@ -7,6 +7,7 @@ router.post('/session/setuser', (req, res) => {
     if (user) {
         req.session.user = user;
         res.send({ message: `Session for ${user} initialized.` });
+        console.log(`Session for ${user} initialized.`)
     } else {
         res.status(400).send({ message: "No user provided." });
     }
@@ -15,14 +16,11 @@ router.post('/session/setuser', (req, res) => {
 router.get('/session/getuser', (req, res) => {
     if (req.session.user) {
         res.send({ user: req.session.user });
+        console.log(`Session for ${req.session.user} retrieved.`);
     } else {
         res.status(404).send({ message: "No session found." });
+        console.log("No session found.");
     }
-});
-
-router.delete('/session/logout', (req, res) => {
-    req.session.destroy();
-    res.send({ message: "Session destroyed." });
 });
 
 export default router;

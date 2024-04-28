@@ -1,48 +1,28 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
-
+import db from '../database/connection.js';
 const router = Router();
-const users = [];
-
-const hashPassword = async (password) => {
-    const salt = await bcrypt.genSalt(12);
-    return bcrypt.hash(password, salt);
-};
-
-router.post('/auth/register', async (req, res) => {
-    const { username, password } = req.body;
-    const hashedPassword = await hashPassword(password);
-
-    const existingUser = users.find(user => user.username === username);
-    if (existingUser) {
-        return res.status(409).send({ message: "User already exists" });
-    }
-
-    const newUser = {
-        id: users.length + 1,
-        username,
-        password: hashedPassword
-    };
-
-    users.push(newUser);
-    res.status(201).send({ message: "User registered successfully", userId: newUser.id });
-    console.log(newUser);
-});
 
 router.post('/auth/login', async (req, res) => {
-    const { username, password } = req.body;
-    const user = users.find(user => user.username === username);
+    const { email, password } = req.body;
+    try {
+        const userQuery = await db.get('SELECT * FROM Users WHERE email = ?', [email]);
+        if (!userQuery) {
+            return res.status(404).send({ message: "User not found" });
+        }
 
-    if (!user) {
-        return res.status(404).send({ message: "User not found" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (isMatch) {
-        req.session.userId = user.id;
-        res.send({ message: "Logged in successfully" });
-    } else {
-        res.status(401).send({ message: "Invalid credentials" });
+        const isMatch = await bcrypt.compare(password, userQuery.password);
+        if (isMatch) {
+            req.session.userId = userQuery.id;
+            res.send({ message: "Logged in successfully" });
+            console.log("User with ID: " + userQuery.id + " has logged in");
+        } else {
+            res.status(401).send({ message: "Invalid password" });
+            console.log("User with ID: " + userQuery.id + " has entered an invalid password")
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).send({ message: "Error logging in" });
     }
 });
 
@@ -51,7 +31,7 @@ router.get('/auth/logout', (req, res) => {
         if (err) {
             return res.status(500).send({ message: "Error logging out" });
         }
-        res.clearCookie('sid'); // Clear the session cookie. sid is the default name for the session cookie.
+        res.clearCookie('sid');
         res.send({ message: "Logged out successfully" });
     });
 });

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import bcrypt from 'bcrypt';
 const router = Router();
 import db from '../database/connection.js';
 
@@ -15,9 +16,10 @@ router.post('/api/users', async (req, res) => {
     }
     else {
         try {
-            // Brug af prepared statements for at undgå SQL injection
+            const salt = await bcrypt.genSalt(12);
+            const hashedPassword = await bcrypt.hash(password, salt);
             const sql = 'INSERT INTO Users (name, email, password, location) VALUES (?, ?, ?, ?)';
-            const result = await db.run(sql, [name, email, password, location]);
+            const result = await db.run(sql, [name, email, hashedPassword, location]);
             res.send({ lastID: result.lastID });
             console.log("New user with ID: " + result.lastID + " has been created");
         } catch (error) {

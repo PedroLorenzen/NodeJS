@@ -4,7 +4,6 @@ import escape from 'escape-html';
 const router = Router();
 const messages = [];
 
-// Retrieve messages with XSS protection
 router.get('/xss/messages', (req, res) => {
     res.send({ data: messages.map(message => escape(message)) });
 });
