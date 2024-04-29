@@ -1,6 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
+	import toast, { Toaster } from 'svelte-french-toast';
 
   let username;
   let userid;
@@ -37,10 +38,14 @@
       });
       const result = await response.json();
       if (!response.ok) {
+        toast.error("You are not logged in... Redirecting back to the main page")
         setTimeout(() => {
           navigate("/");
-        }, 1500);
+        }, 2500);
       }
+
+      toast.success("Welcome " + result.user.name + ". You are now logged in!");
+
       if (result.user) {
         username = result.user.name;
         userid = result.user.id;
@@ -98,6 +103,8 @@
     }
   }
 </script>
+
+<Toaster />
 
 <main>
   <div>

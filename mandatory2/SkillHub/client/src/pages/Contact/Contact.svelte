@@ -1,4 +1,6 @@
 <script>
+    import toast, { Toaster } from "svelte-french-toast";
+
     let email = "chri46nj@stud.kea.dk";
     let subject = "About hiring for a job";
     let message = "";
@@ -19,20 +21,21 @@
         if (response.ok) {
             try {
                 const data = await response.json();
-                alert("Email sent successfully: " + data.message);
+                console.log("Email sent successfully: ", data);
             } catch (e) {
-                alert("Email sent, but no response data.");
+                console.error("Error sending email: ", e);
             }
         } else {
             try {
                 const errorData = await response.json();
-                alert("Failed to send email: " + errorData.message);
             } catch (e) {
-                alert("Failed to send email, and no error details available.");
+                console.error("Error sending email: ", e);
             }
         }
     }
 </script>
+
+<Toaster />
 
 <form on:submit|preventDefault={sendEmail}>
     <div>
