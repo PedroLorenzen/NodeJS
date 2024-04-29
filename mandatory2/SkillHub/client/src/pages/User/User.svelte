@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
-	import toast, { Toaster } from 'svelte-french-toast';
+  import toast, { Toaster } from "svelte-french-toast";
 
   let username;
   let userid;
@@ -38,7 +38,8 @@
       });
       const result = await response.json();
       if (!response.ok) {
-        toast.error("You are not logged in... Redirecting back to the main page")
+        toast.error(
+          "You are not logged in... Redirecting back to the main page", { duration: 2000 });
         setTimeout(() => {
           navigate("/");
         }, 2500);

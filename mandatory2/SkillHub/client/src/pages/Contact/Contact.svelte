@@ -17,13 +17,6 @@
                 message: message,
             }),
         });
-
-        toast.promise(postEmail(), {
-            loading: "Sending email...",
-            success: "Email sent successfully",
-            error: "Failed to send email",
-        });
-
         if (response.ok) {
             try {
                 const data = await response.json();
@@ -40,12 +33,17 @@
         }
     }
 
-    function sendEmailWithToast() {
-        toast.promise(postEmail(), {
+    async function sendEmailWithToast() {
+        await toast.promise(postEmail(), {
             loading: "Sending email...",
             success: "Email sent successfully",
             error: "Failed to send email",
-        });
+        },
+        {
+            duration: 2000,
+        }
+    
+    );
     }
 </script>
 

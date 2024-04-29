@@ -22,7 +22,9 @@
         if (!response.ok) {
             throw new Error(result.message || "Failed to login");
         }
-        navigate("/User");
+        setTimeout(() => {
+            navigate("/User");
+        }, 2000);
     }
 
     async function handleLoginWithToast() {
@@ -30,12 +32,12 @@
             postLogin(),
             {
                 loading: "Logging in...",
-                success: "Login successful",
-                error: "Failed to login",
+                success: "Login successful - redirecting...",
+                error: "Failed to login - please check your credentials",
             },
             {
                 duration: 2000,
-            },
+            }
         );
     }
 
@@ -52,11 +54,17 @@
     }
 
     async function handleRegisterWithToast() {
-        await toast.promise(postRegister(), {
-            loading: "Logging in...",
-            success: "You have been registered successfully",
-            error: "Failed to login",
-        });
+        await toast.promise(
+            postRegister(),
+            {
+                loading: "Registering new user...",
+                success: "You have been registered successfully",
+                error: "Failed to register - please try again",
+            },
+            {
+                duration: 2000,
+            }
+        );
     }
 
     function toggleLogin() {
