@@ -1,6 +1,8 @@
 <script>
     import { Link } from "svelte-routing";
     import { navigate } from "svelte-routing";
+    import toast, { Toaster } from "svelte-french-toast";
+
     let showLogin = true;
     let showRegister = false; // Controls visibility of the registration form
     let email = "";
@@ -9,39 +11,52 @@
     let location = "";
     let error = "";
 
-    async function handleLogin() {
-        try {
-            const response = await fetch("http://localhost:8080/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-                credentials: "include"
-            });
-            const result = await response.json();
-            if (!response.ok)
-            {
-                throw new Error(result.message || "Failed to login");
-            }
-            navigate("/User");
-        } catch (err) {
-            error = err.message;
+    async function postLogin() {
+        const response = await fetch("http://localhost:8080/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+            credentials: "include",
+        });
+        const result = await response.json();
+        if (!response.ok) {
+            throw new Error(result.message || "Failed to login");
         }
+        navigate("/User");
     }
 
-    async function handleRegister() {
-        try {
-            const response = await fetch("http://localhost:8080/api/users", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, password, location }),
-            });
-            const result = await response.json();
-            if (!response.ok)
-                throw new Error(result.message || "Failed to register");
-            handleLogin();
-        } catch (err) {
-            error = err.message;
-        }
+    async function handleLoginWithToast() {
+        await toast.promise(
+            postLogin(),
+            {
+                loading: "Logging in...",
+                success: "Login successful",
+                error: "Failed to login",
+            },
+            {
+                duration: 2000,
+            },
+        );
+    }
+
+    async function postRegister() {
+        const response = await fetch("http://localhost:8080/api/users", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, password, location }),
+        });
+        const result = await response.json();
+        if (!response.ok)
+            throw new Error(result.message || "Failed to register");
+        handleLoginWithToast();
+    }
+
+    async function handleRegisterWithToast() {
+        await toast.promise(postRegister(), {
+            loading: "Logging in...",
+            success: "You have been registered successfully",
+            error: "Failed to login",
+        });
     }
 
     function toggleLogin() {
@@ -54,6 +69,8 @@
         showLogin = false;
     }
 </script>
+
+<Toaster />
 
 <main>
     <div>
@@ -70,60 +87,75 @@
         <button on:click={toggleRegister}>Create Account</button>
         <span><Link to="/jobs">Jobs</Link></span>
         {#if showLogin}
-            <form on:submit|preventDefault={handleLogin}>
-            <div>
-                <p>
-                <label for="email">Email:</label>
-                <input type="email" bind:value={email} id="email" required/>
-                <label for="password">Password:</label>
-                <input
-                    type="password"
-                    bind:value={password}
-                    id="password"
-                    required
-                />
-                </p>
-                <p>
-                <button type="submit">Login</button>
-                </p>
-            </div>
-            {#if error}
-                <p style="color: red;">{error}</p>
-            {/if}
+            <form on:submit|preventDefault={handleLoginWithToast}>
+                <div>
+                    <p>
+                        <label for="email">Email:</label>
+                        <input
+                            type="email"
+                            bind:value={email}
+                            id="email"
+                            required
+                        />
+                        <label for="password">Password:</label>
+                        <input
+                            type="password"
+                            bind:value={password}
+                            id="password"
+                            required
+                        />
+                    </p>
+                    <p>
+                        <button type="submit">Login</button>
+                    </p>
+                </div>
+                {#if error}
+                    <p style="color: red;">{error}</p>
+                {/if}
             </form>
         {/if}
         {#if showRegister}
-            <form on:submit|preventDefault={handleRegister}>
-            <div>
-                <p>
-                <label for="name">Name:</label>
-                <input type="text" bind:value={name} id="name" required/>
-                <label for="email">Email:</label>
-                <input type="email" bind:value={email} id="email" required/>
-                </p>
-                <p>
-                <label for="password">Password:</label>
-                <input
-                    type="password"
-                    bind:value={password}
-                    id="password"
-                    required
-                />
-                <label for="location">Location:</label>
-                <input
-                    type="text"
-                    bind:value={location}
-                    id="location"
-                    required
-                />
-                </p>
-                <p>
-                <button type="submit">Signup</button>
-                </p>
-            </div>
-            {#if error}
-                <p style="color: red;">{error}</p>
-            {/if}
+            <form on:submit|preventDefault={handleRegisterWithToast}>
+                <div>
+                    <p>
+                        <label for="name">Name:</label>
+                        <input
+                            type="text"
+                            bind:value={name}
+                            id="name"
+                            required
+                        />
+                        <label for="email">Email:</label>
+                        <input
+                            type="email"
+                            bind:value={email}
+                            id="email"
+                            required
+                        />
+                    </p>
+                    <p>
+                        <label for="password">Password:</label>
+                        <input
+                            type="password"
+                            bind:value={password}
+                            id="password"
+                            required
+                        />
+                        <label for="location">Location:</label>
+                        <input
+                            type="text"
+                            bind:value={location}
+                            id="location"
+                            required
+                        />
+                    </p>
+                    <p>
+                        <button type="submit">Signup</button>
+                    </p>
+                </div>
+                {#if error}
+                    <p style="color: red;">{error}</p>
+                {/if}
             </form>
         {/if}
     </div>

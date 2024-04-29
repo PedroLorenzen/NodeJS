@@ -5,7 +5,7 @@
     let subject = "About hiring for a job";
     let message = "";
 
-    async function sendEmail() {
+    async function postEmail() {
         const response = await fetch("http://localhost:8080/api/mails", {
             method: "POST",
             headers: {
@@ -16,6 +16,12 @@
                 subject: subject,
                 message: message,
             }),
+        });
+
+        toast.promise(postEmail(), {
+            loading: "Sending email...",
+            success: "Email sent successfully",
+            error: "Failed to send email",
         });
 
         if (response.ok) {
@@ -33,11 +39,19 @@
             }
         }
     }
+
+    function sendEmailWithToast() {
+        toast.promise(postEmail(), {
+            loading: "Sending email...",
+            success: "Email sent successfully",
+            error: "Failed to send email",
+        });
+    }
 </script>
 
 <Toaster />
 
-<form on:submit|preventDefault={sendEmail}>
+<form on:submit|preventDefault={sendEmailWithToast}>
     <div>
         <h2>Send Email</h2>
         <p>
