@@ -3,6 +3,10 @@
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
 
+    let email;
+    let subject;
+    let message;
+
     onMount(async () => {
         try {
             const response = await fetch(
@@ -23,18 +27,17 @@
             }
 
             toast.success(
-                "Welcome " + result.user.name + ". Here you can find all jobs",
+                "Welcome " + result.user.name + ". Here you can send an email",
                 { duration: 3000 },
             );
+
+            email = "chri46nj@stud.kea.dk";
+            subject = "What an amazing website";
+            message = "Hi Christian here's your mandatory 2 feedback. It looks nice!";
         } catch (err) {
             console.error("Error during fetch operations:", err);
         }
     });
-
-
-    let email = "chri46nj@stud.kea.dk";
-    let subject = "About hiring for a job";
-    let message = "";
 
     async function postEmail() {
         const response = await fetch("http://localhost:8080/api/mails", {
@@ -61,16 +64,17 @@
     }
 
     async function sendEmailWithToast() {
-        await toast.promise(postEmail(), {
-            loading: "Sending email...",
-            success: "Email sent successfully",
-            error: "Failed to send email",
-        },
-        {
-            duration: 2000,
-        }
-    
-    );
+        await toast.promise(
+            postEmail(),
+            {
+                loading: "Sending email...",
+                success: "Email sent successfully",
+                error: "Failed to send email",
+            },
+            {
+                duration: 2000,
+            },
+        );
     }
 </script>
 
@@ -134,6 +138,10 @@
         margin-top: 5px;
         padding: 5px;
         font-size: 16px;
+    }
+
+    textarea {
+        height: 100px;
     }
 
     button {

@@ -45,22 +45,6 @@
             console.error("Error during fetch operations:", err);
         }
     });
-
-    async function handleLogout() {
-        try {
-            const response = await fetch("http://localhost:8080/auth/logout", {
-                method: "GET",
-                credentials: "include",
-            });
-            const result = await response.json();
-            if (!response.ok) {
-                throw new Error(result.message || "Failed to logout");
-            }
-            navigate("/");
-        } catch (err) {
-            console.error("Logout Error:", err.message);
-        }
-    }
 </script>
 
 <Toaster />
@@ -69,10 +53,8 @@
     <div>
         <h1>Welcome to SKILLHUB jobs</h1>
         <p>Find the job you need help with</p>
-        <button on:click={handleLogout}>Logout</button>
     </div>
     {#if jobs.length > 0}
-        <h1>Here you have your posted jobs</h1>
         <div class="jobs-container">
             {#each jobs as job, index (job.id)}
                 {#if index % 2 === 0}

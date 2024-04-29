@@ -87,7 +87,7 @@
     <div>
         <button on:click={toggleLogin}>Login</button>
         <button on:click={toggleRegister}>Create Account</button>
-        <span><Link to="/jobs">Jobs</Link></span>
+        <span><Link to="/Jobs">Jobs</Link></span>
         {#if showLogin}
             <form on:submit|preventDefault={handleLoginWithToast}>
                 <div>
