@@ -9,7 +9,6 @@
     let password = "";
     let name = "";
     let location = "";
-    let error = "";
 
     async function postLogin() {
         const response = await fetch("http://localhost:8080/auth/login", {
@@ -86,11 +85,6 @@
         <p>Share your skills or find someone who can help you</p>
     </div>
     <div>
-        <h2>How it works</h2>
-        <p>1. Create an account</p>
-        <p>2. Share your skills or find a skill you need</p>
-    </div>
-    <div>
         <button on:click={toggleLogin}>Login</button>
         <button on:click={toggleRegister}>Create Account</button>
         <span><Link to="/jobs">Jobs</Link></span>
@@ -117,9 +111,6 @@
                         <button type="submit">Login</button>
                     </p>
                 </div>
-                {#if error}
-                    <p style="color: red;">{error}</p>
-                {/if}
             </form>
         {/if}
         {#if showRegister}
@@ -161,14 +152,8 @@
                         <button type="submit">Signup</button>
                     </p>
                 </div>
-                {#if error}
-                    <p style="color: red;">{error}</p>
-                {/if}
             </form>
         {/if}
-    </div>
-    <div>
-        <h2>New jobs</h2>
     </div>
 </main>
 

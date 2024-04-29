@@ -1,5 +1,36 @@
 <script>
+    import { onMount } from "svelte";
+    import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
+
+    onMount(async () => {
+        try {
+            const response = await fetch(
+                "http://localhost:8080/session/getuser",
+                {
+                    credentials: "include",
+                },
+            );
+            const result = await response.json();
+            if (!response.ok) {
+                toast.error(
+                    "You are not logged in... Redirecting back to the main page",
+                    { duration: 2000 },
+                );
+                setTimeout(() => {
+                    navigate("/");
+                }, 2500);
+            }
+
+            toast.success(
+                "Welcome " + result.user.name + ". Here you can find all jobs",
+                { duration: 3000 },
+            );
+        } catch (err) {
+            console.error("Error during fetch operations:", err);
+        }
+    });
+
 
     let email = "chri46nj@stud.kea.dk";
     let subject = "About hiring for a job";
@@ -25,11 +56,7 @@
                 console.error("Error sending email: ", e);
             }
         } else {
-            try {
-                const errorData = await response.json();
-            } catch (e) {
-                console.error("Error sending email: ", e);
-            }
+            console.error("Failed to send email: ", await response.text());
         }
     }
 

@@ -45,7 +45,7 @@
         }, 2500);
       }
 
-      toast.success("Welcome " + result.user.name + ". You are now logged in!");
+      toast.success("Welcome to your user page " + result.user.name + "!", { duration: 2000 });
 
       if (result.user) {
         username = result.user.name;

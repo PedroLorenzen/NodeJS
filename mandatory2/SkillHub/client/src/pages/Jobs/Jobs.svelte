@@ -2,16 +2,38 @@
     import { onMount } from "svelte";
     import { navigate } from "svelte-routing";
     import { Link } from "svelte-routing";
+    import toast, { Toaster } from "svelte-french-toast";
 
-    let error = "";
     let jobs = [];
 
     onMount(async () => {
         try {
+            const response = await fetch(
+                "http://localhost:8080/session/getuser",
+                {
+                    credentials: "include",
+                },
+            );
+            const result = await response.json();
+            if (!response.ok) {
+                toast.error(
+                    "You are not logged in... Redirecting back to the main page",
+                    { duration: 2000 },
+                );
+                setTimeout(() => {
+                    navigate("/");
+                }, 2500);
+            }
+
+            toast.success(
+                "Welcome " + result.user.name + ". Here you can find all jobs",
+                { duration: 3000 },
+            );
+
             const jobResponse = await fetch(`http://localhost:8080/api/jobs`);
             if (jobResponse.ok) {
                 const jobData = await jobResponse.json();
-                console.log("Received job data:", jobData); // Add this line to check the structure
+                console.log("Received job data:", jobData);
                 jobs = jobData.data;
             } else {
                 console.error(
@@ -20,7 +42,6 @@
                 );
             }
         } catch (err) {
-            error = err.message;
             console.error("Error during fetch operations:", err);
         }
     });
@@ -42,6 +63,8 @@
     }
 </script>
 
+<Toaster />
+
 <main>
     <div>
         <h1>Welcome to SKILLHUB jobs</h1>
@@ -61,7 +84,7 @@
                             <p>Price: ${job.price}</p>
                             <Link to="/Contact">
                                 <button>Contact User</button>
-                            </Link>                       
+                            </Link>
                         </div>
                         {#if jobs[index + 1]}
                             <div class="job">
