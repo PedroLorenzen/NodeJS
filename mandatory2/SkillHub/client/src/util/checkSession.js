@@ -1,4 +1,4 @@
-import { user, userDetails } from "../stores/user.js";
+import { user } from "../stores/user.js";
 
 export async function checkSession() {
     try {
@@ -8,12 +8,6 @@ export async function checkSession() {
         if (response.ok) {
             const userData = await response.json();
             user.set(userData);
-            userDetails.set({
-                id: userData.id,
-                email: userData.email,
-                name: userData.name,
-                location: userData.location,
-            });
             return userData;
         }
         return null;

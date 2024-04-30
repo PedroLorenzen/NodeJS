@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import toast, { Toaster } from "svelte-french-toast";
-    //import { user } from "../../stores/user.js";
+    import { BASE_URL } from "../../stores/url.js";
 
     let email;
     let subject;
@@ -15,7 +15,7 @@
     });
 
     async function postEmail() {
-        const response = await fetch("http://localhost:8080/api/mails", {
+        const response = await fetch($BASE_URL+"/api/mails", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

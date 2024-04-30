@@ -4,6 +4,7 @@ import db from '../database/connection.js';
 
 router.get('/api/jobs', async (req, res) => {
     const result = await db.all('SELECT * FROM Jobs');
+    console.log("All jobs have been fetched");
     res.send({ data: result })
 });
 

@@ -3,6 +3,7 @@
     import { navigate } from "svelte-routing";
     import { Link } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
+    import { BASE_URL } from "../../stores/url.js";
 
     let jobs = [];
 
@@ -14,7 +15,7 @@
         );
 
         try {
-            const jobResponse = await fetch(`http://localhost:8080/api/jobs`);
+            const jobResponse = await fetch($BASE_URL+"/api/jobs");
             if (jobResponse.ok) {
                 const jobData = await jobResponse.json();
                 console.log("Received job data:", jobData);

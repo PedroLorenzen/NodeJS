@@ -1,7 +1,7 @@
 <script>
   import { Router, Route, Link } from 'svelte-routing';
+  import { get } from "svelte/store";
   import { onMount } from 'svelte';
-  import { user } from './stores/user.js';
   import checkSession from './util/checkSession.js';
   import PrivateRouteGuard from './components/ProtectedRoute/PrivateRouteGuard.svelte';
   import Footer from "./components/Footer/Footer.svelte";
@@ -12,8 +12,7 @@
   import Contact from "./pages/Contact/Contact.svelte";
 
   onMount(async () => {
-    const userData = await checkSession();
-    user.set(userData);
+      await checkSession();
   });
 
 </script>

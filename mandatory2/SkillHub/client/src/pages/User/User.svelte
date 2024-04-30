@@ -1,11 +1,16 @@
 <script>
   import { onMount } from "svelte";
+  import { get } from "svelte/store";
   import { navigate } from "svelte-routing";
   import toast, { Toaster } from "svelte-french-toast";
+  import { user } from "../../stores/user.js";
+  import { BASE_URL } from "../../stores/url.js";
 
-  let username;
-  let userid;
-  let email;
+  $user;
+
+  let userid = $user.user.id;
+  let username = $user.user.name;
+
   let error = "";
   let name, skill, description, price;
   let jobs = [];
@@ -30,11 +35,34 @@
   ];
 
   onMount(async () => {
-    toast.success(
-      "Welcome to your user page. Here you can post a job or see your posted jobs",
-      { duration: 5000, position: "top-right" },
-    );
+    try {
+      const jobResponse = await fetch($BASE_URL+"/api/jobs");
+      toast.success(
+        "Welcome to your user page. Here you can post a job or see your posted jobs",
+        { duration: 5000, position: "top-right" },
+      );
+
+      if (jobResponse.ok) {
+        const jobData = await jobResponse.json();
+        jobs = jobData.data.filter((job) => job.user_id === $user.user.id);
+      } else {
+        console.error("Failed to fetch jobs:", await jobResponse.text());
+      }
+    } catch (error) {
+      console.error("Error during job fetch operations:", error);
+    }
   });
+
+  /*
+  $: if ($user) {
+    console.log("Reactive User Details:", $user);
+    console.log("User ID:", $user.user.id);
+    console.log("User name:", $user.user.name);
+    console.log("User email:", $user.user.email);
+    console.log("User location:", $user.user.location);
+  } else {
+    console.log("User data is not yet available");
+  }*/
 
   async function handleLogout() {
     try {
@@ -169,16 +197,16 @@
     gap: 20px;
   }
   .job-pair {
-    flex: 1 1 100%; /* Make sure each pair takes full width */
+    flex: 1 1 100%;
     display: flex;
     justify-content: space-between;
   }
   .job {
-    flex: 1 1 48%; /* Adjust size to fit two jobs per row */
+    flex: 1 1 48%;
     margin: 0 10px;
     border: 1px solid #ccc;
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    text-align: left; /* Adjust text alignment as needed */
+    text-align: left;
   }
 </style>

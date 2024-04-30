@@ -2,6 +2,7 @@
     import { Link } from "svelte-routing";
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
+    import { BASE_URL } from "../../stores/url.js";
 
     let showLogin = true;
     let showRegister = false; // Controls visibility of the registration form
@@ -11,7 +12,7 @@
     let location = "";
 
     async function postLogin() {
-        const response = await fetch("http://localhost:8080/auth/login", {
+        const response = await fetch($BASE_URL+"/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
@@ -41,7 +42,7 @@
     }
 
     async function postRegister() {
-        const response = await fetch("http://localhost:8080/api/users", {
+        const response = await fetch($BASE_URL+"/api/users", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password, location }),
