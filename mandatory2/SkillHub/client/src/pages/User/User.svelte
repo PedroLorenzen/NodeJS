@@ -36,7 +36,7 @@
 
   onMount(async () => {
     try {
-      const jobResponse = await fetch($BASE_URL+"/api/jobs");
+      const jobResponse = await fetch($BASE_URL + "/api/jobs");
       toast.success(
         "Welcome to your user page. Here you can post a job or see your posted jobs",
         { duration: 5000, position: "top-right" },
@@ -80,8 +80,7 @@
     }
   }
 
-  async function handlePostJob() {
-    try {
+  async function postJob() {
       const response = await fetch("http://localhost:8080/api/jobs", {
         method: "POST",
         headers: {
@@ -93,11 +92,23 @@
       if (!response.ok) {
         throw new Error(result.error || "Failed to post job");
       }
+      setTimeout(() => {
       location.reload();
-      alert("Job posted successfully");
-    } catch (err) {
-      error = err.message;
-    }
+    }, 2000);
+  }
+
+  async function handlePostJobWithToasts() {
+    await toast.promise(
+      postJob(),
+      {
+        loading: "Creating job...",
+        success: "Job created succesfully. Refreshing page...",
+        error: "Failed to create job - please check your input fields",
+      },
+      {
+        duration: 2000,
+      },
+    );
   }
 </script>
 
@@ -110,7 +121,7 @@
   <div>
     <button on:click={handleLogout}>Logout</button>
   </div>
-  <form on:submit|preventDefault={handlePostJob}>
+  <form on:submit|preventDefault={handlePostJobWithToasts}>
     <div>
       <h1>Here you can post a new job:</h1>
       <div>

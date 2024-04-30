@@ -19,7 +19,7 @@
 </script>
 
 {#if $isLoading}
-    <p>Loading...</p>
+    <div>Loading...</div>
 {:else if $user}
     <slot />
 {:else}

@@ -90,7 +90,7 @@
         <button on:click={toggleRegister}>Create Account</button>
         <span><Link to="/Jobs">Jobs</Link></span>
         {#if showLogin}
-            <form on:submit|preventDefault={postLogin}>
+            <form on:submit|preventDefault={handleLoginWithToast}>
                 <div>
                     <p>
                         <label for="email">Email:</label>

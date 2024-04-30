@@ -10,6 +10,7 @@
   import User from "./pages/User/User.svelte";
   import Jobs from "./pages/Jobs/Jobs.svelte";
   import Contact from "./pages/Contact/Contact.svelte";
+  import Unauthorized from './pages/Unauthorized/Unauthorized.svelte';
 
   onMount(async () => {
       await checkSession();
@@ -38,6 +39,7 @@
         <Contact />
       </PrivateRouteGuard>
     </Route>
+    <Route path="/Unauthorized" component={Unauthorized} />
   </Router>
   <Footer />
 </main>
