@@ -9,9 +9,9 @@
 
     onMount(async () => {
         const userData = await checkSession();
-        isLoading.set(false); // Set loading to false once the check is done
+        isLoading.set(false);
         if (!userData) {
-            navigate("/", { replace: true });
+            navigate("/Unauthorized", { replace: true });
         } else {
             user.set(userData);
         }

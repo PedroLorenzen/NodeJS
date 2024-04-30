@@ -2,7 +2,7 @@
     import { navigate } from 'svelte-routing';
   
     function goHome() {
-      navigate('/'); // Or direct to login, if preferred
+      navigate('/');
     }
   </script>
   

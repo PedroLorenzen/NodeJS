@@ -1,6 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import { get } from "svelte/store";
   import { navigate } from "svelte-routing";
   import toast, { Toaster } from "svelte-french-toast";
   import { user } from "../../stores/user.js";
