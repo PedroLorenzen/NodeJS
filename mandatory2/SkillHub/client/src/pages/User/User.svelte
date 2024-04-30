@@ -80,18 +80,18 @@
   }
 
   async function postJob() {
-      const response = await fetch("http://localhost:8080/api/jobs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, skill, description, price, userid }),
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.error || "Failed to post job");
-      }
-      setTimeout(() => {
+    const response = await fetch("http://localhost:8080/api/jobs", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, skill, description, price, userid }),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.error || "Failed to post job");
+    }
+    setTimeout(() => {
       location.reload();
     }, 2000);
   }
@@ -114,41 +114,38 @@
 <Toaster />
 
 <main>
-  <div>
+  <div class="user-header">
     <h1>User: {username || "Not Available"}</h1>
+    <button on:click={handleLogout} class="logout-button">Logout</button>
   </div>
-  <div>
-    <button on:click={handleLogout}>Logout</button>
+  <div class="form-container">
+    <h1>Post a New Job</h1>
+    <form on:submit|preventDefault={handlePostJobWithToasts}>
+      <label for="name">Name:</label>
+      <input type="text" bind:value={name} id="name" required />
+
+      <label for="skill">Skill:</label>
+      <select bind:value={skill} id="skill" required>
+        <option value="" disabled selected>Select a skill</option>
+        {#each skills as skillOption}
+          <option value={skillOption}>{skillOption}</option>
+        {/each}
+      </select>
+
+      <label for="description">Description:</label>
+      <input type="text" bind:value={description} id="description" required />
+
+      <label for="price">Price:</label>
+      <input type="number" bind:value={price} id="price" required />
+
+      <label for="userid">User ID:</label>
+      <input type="text" bind:value={userid} id="userid" required readonly />
+
+      <button type="submit" class="submit-button">Post Job</button>
+    </form>
   </div>
-  <form on:submit|preventDefault={handlePostJobWithToasts}>
-    <div>
-      <h1>Here you can post a new job:</h1>
-      <div>
-        <label for="name">Name:</label>
-        <input type="text" bind:value={name} id="name" required />
-
-        <select bind:value={skill} id="skill" required>
-          <option value="" disabled selected>Select a skill</option>
-          {#each skills as skillOption}
-            <option value={skillOption}>{skillOption}</option>
-          {/each}
-        </select>
-        <label for="description">Description:</label>
-        <input type="text" bind:value={description} id="description" required />
-
-        <label for="price">Price:</label>
-        <input type="number" bind:value={price} id="price" required />
-
-        <label for="userid">User ID:</label>
-        <input type="text" bind:value={userid} id="userid" required readonly />
-        <p>
-          <button type="submit">Post Job</button>
-        </p>
-      </div>
-    </div>
-  </form>
-  <h1>Here you have your posted jobs</h1>
   <div class="jobs-container">
+    <h1>Your Posted Jobs</h1>
     {#each jobs as job, index (job.id)}
       {#if index % 2 === 0}
         <div class="job-pair">
@@ -173,12 +170,6 @@
 </main>
 
 <style>
-  main {
-    background-color: white;
-    width: 100%;
-    padding: 30px;
-    margin-top: 35px;
-  }
   main {
     background-color: white;
     width: 100%;

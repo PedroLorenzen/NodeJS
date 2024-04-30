@@ -12,7 +12,7 @@
     let location = "";
 
     async function postLogin() {
-        const response = await fetch($BASE_URL+"/auth/login", {
+        const response = await fetch($BASE_URL + "/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
@@ -37,12 +37,12 @@
             },
             {
                 duration: 2000,
-            }
+            },
         );
     }
 
     async function postRegister() {
-        const response = await fetch($BASE_URL+"/api/users", {
+        const response = await fetch($BASE_URL + "/api/users", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password, location }),
@@ -63,7 +63,7 @@
             },
             {
                 duration: 2000,
-            }
+            },
         );
     }
 
@@ -85,74 +85,58 @@
         <h1>Welcome to SKILLHUB</h1>
         <p>Share your skills or find someone who can help you</p>
     </div>
-    <div>
-        <button on:click={toggleLogin}>Login</button>
-        <button on:click={toggleRegister}>Create Account</button>
-        <span><Link to="/Jobs">Jobs</Link></span>
+    <div class="auth-container">
+        <div class="button-group">
+            <button on:click={toggleLogin}>Login</button>
+            <button on:click={toggleRegister}>Create Account</button>
+        </div>
         {#if showLogin}
-            <form on:submit|preventDefault={handleLoginWithToast}>
-                <div>
-                    <p>
-                        <label for="email">Email:</label>
-                        <input
-                            type="email"
-                            bind:value={email}
-                            id="email"
-                            required
-                        />
-                        <label for="password">Password:</label>
-                        <input
-                            type="password"
-                            bind:value={password}
-                            id="password"
-                            required
-                        />
-                    </p>
-                    <p>
-                        <button type="submit">Login</button>
-                    </p>
-                </div>
+            <form
+                on:submit|preventDefault={handleLoginWithToast}
+                class="auth-form"
+            >
+                <label for="email">Email:</label>
+                <input type="email" bind:value={email} id="email" required />
+
+                <label for="password">Password:</label>
+                <input
+                    type="password"
+                    bind:value={password}
+                    id="password"
+                    required
+                />
+
+                <button type="submit" class="submit-button">Login</button>
             </form>
         {/if}
         {#if showRegister}
-            <form on:submit|preventDefault={handleRegisterWithToast}>
-                <div>
-                    <p>
-                        <label for="name">Name:</label>
-                        <input
-                            type="text"
-                            bind:value={name}
-                            id="name"
-                            required
-                        />
-                        <label for="email">Email:</label>
-                        <input
-                            type="email"
-                            bind:value={email}
-                            id="email"
-                            required
-                        />
-                    </p>
-                    <p>
-                        <label for="password">Password:</label>
-                        <input
-                            type="password"
-                            bind:value={password}
-                            id="password"
-                            required
-                        />
-                        <label for="location">Location:</label>
-                        <input
-                            type="text"
-                            bind:value={location}
-                            id="location"
-                            required
-                        />
-                    </p>
-                    <p>
-                        <button type="submit">Signup</button>
-                    </p>
-                </div>
+            <form
+                on:submit|preventDefault={handleRegisterWithToast}
+                class="auth-form"
+            >
+                <label for="name">Name:</label>
+                <input type="text" bind:value={name} id="name" required />
+
+                <label for="email">Email:</label>
+                <input type="email" bind:value={email} id="email" required />
+
+                <label for="password">Password:</label>
+                <input
+                    type="password"
+                    bind:value={password}
+                    id="password"
+                    required
+                />
+
+                <label for="location">Location:</label>
+                <input
+                    type="text"
+                    bind:value={location}
+                    id="location"
+                    required
+                />
+
+                <button type="submit" class="submit-button">Signup</button>
             </form>
         {/if}
     </div>
@@ -160,35 +144,72 @@
 
 <style>
     main {
-        background-color: white;
-        width: 100%;
-        padding: 0 30px 0 30px;
-        margin-top: 35px;
-        margin-left: -30px;
-        margin-right: 50px;
+        padding: 30px;
     }
-
-    span {
-        text-decoration: none;
-        color: black;
-        background-color: lightgreen;
-        padding: 10px 20px;
-        border-radius: 5px;
-        margin: 10px;
-        transition: background-color 0.3s;
-    }
-
-    span:hover {
-        background-color: green;
-    }
-
-    div {
-        margin-bottom: 20px;
+    .auth-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
         background: white;
-        padding: 20px 0 40px 0;
         border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        color: black;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 40px auto;
+    }
+
+    .button-group {
+        margin-bottom: 20px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-right: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .auth-form {
+        display: flex;
+        color: white;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .auth-form label {
+        margin-bottom: 5px;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        color: #333;
+        text-align: left;
+    }
+
+    .auth-form input {
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .submit-button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #218838;
     }
 </style>
