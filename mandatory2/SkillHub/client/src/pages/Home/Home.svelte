@@ -33,10 +33,11 @@
             {
                 loading: "Logging in...",
                 success: "Login successful - redirecting...",
-                error: "Failed to login - please check your credentials",
+                error: "Failed to login - please try again",
             },
             {
                 duration: 2000,
+                position: "top-right",
             },
         );
     }
@@ -58,11 +59,12 @@
             postRegister(),
             {
                 loading: "Registering new user...",
-                success: "You have been registered successfully",
+                success: "You have been registered successfully - Redirecting...",
                 error: "Failed to register - please try again",
             },
             {
                 duration: 2000,
+                position: "top-right",
             },
         );
     }

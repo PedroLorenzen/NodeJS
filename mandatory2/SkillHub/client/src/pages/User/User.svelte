@@ -38,7 +38,10 @@
       const jobResponse = await fetch($BASE_URL + "/api/jobs");
       toast.success(
         "Welcome to your user page. Here you can post a job or see your posted jobs",
-        { duration: 5000, position: "top-right" },
+        {
+          duration: 5000,
+          position: "top-right",
+        },
       );
 
       if (jobResponse.ok) {
@@ -63,20 +66,33 @@
     console.log("User data is not yet available");
   }*/
 
-  async function handleLogout() {
-    try {
-      const response = await fetch("http://localhost:8080/auth/logout", {
-        method: "GET",
-        credentials: "include",
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.message || "Failed to logout");
-      }
-      navigate("/");
-    } catch (err) {
-      console.error("Logout Error:", err.message);
+  async function postLogout() {
+    const response = await fetch("http://localhost:8080/auth/logout", {
+      method: "GET",
+      credentials: "include",
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to logout");
     }
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
+  }
+
+  async function handlePostLogoutWithToasts() {
+    await toast.promise(
+      postLogout(),
+      {
+        loading: "Logging out...",
+        success: "Logged out succesfully. Redirecting...",
+        error: "Failed to logout - please try again",
+      },
+      {
+        duration: 2000,
+        position: "top-right",
+      },
+    );
   }
 
   async function postJob() {
@@ -102,10 +118,11 @@
       {
         loading: "Creating job...",
         success: "Job created succesfully. Refreshing page...",
-        error: "Failed to create job - please check your input fields",
+        error: "Failed to create job - please try again",
       },
       {
         duration: 2000,
+        position: "top-right",
       },
     );
   }
@@ -116,7 +133,7 @@
 <main>
   <div>
     <h1>Welcome {username || "Not Available"}</h1>
-    <button on:click={handleLogout}>Logout</button>
+    <button on:click={handlePostLogoutWithToasts} class="logout">Logout</button>
   </div>
   <div class="auth-container">
     <h2>Create a New Job</h2>
@@ -191,7 +208,8 @@
   }
   .auth-form {
     display: flex;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
     color: white;
     flex-direction: column;
     width: 100%;
@@ -245,6 +263,21 @@
     margin-bottom: 40px;
     color: black;
   }
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
   .jobs-container {
     display: flex;
     flex-wrap: wrap;
@@ -257,10 +290,11 @@
   .job {
     flex: 1 1;
     background: lightgrey;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
     margin: 0 40px;
     border: 1px solid #ccc;
-    padding: 10px  0 30px 50px;
+    padding: 10px 0 30px 50px;
     box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.1);
     text-align: left;
   }

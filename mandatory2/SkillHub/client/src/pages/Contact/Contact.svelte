@@ -44,10 +44,11 @@
             {
                 loading: "Sending email...",
                 success: "Email sent successfully",
-                error: "Failed to send email",
+                error: "Failed to send email - please try again",
             },
             {
                 duration: 2000,
+                position: "top-right",
             },
         );
     }
