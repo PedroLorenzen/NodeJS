@@ -115,11 +115,11 @@
 
 <main>
   <div>
-    <h1>User: {username || "Not Available"}</h1>
+    <h1>Welcome {username || "Not Available"}</h1>
     <button on:click={handleLogout}>Logout</button>
   </div>
   <div class="auth-container">
-    <h1>Post a New Job</h1>
+    <h2>Create a New Job</h2>
     <form on:submit|preventDefault={handlePostJobWithToasts} class="auth-form">
       <label for="name">Name:</label>
       <input type="text" bind:value={name} id="name" required />
@@ -141,11 +141,11 @@
       <label for="userid">User ID:</label>
       <input type="text" bind:value={userid} id="userid" required readonly />
 
-      <button type="submit" class="submit-button">Post Job</button>
+      <button type="submit" class="submit-button">Create Job</button>
     </form>
   </div>
+  <h1>Your Posted Jobs</h1>
   <div class="jobs-container">
-    <h1>Your Posted Jobs</h1>
     {#each jobs as job, index (job.id)}
       {#if index % 2 === 0}
         <div class="job-pair">
@@ -173,86 +173,81 @@
   main {
     background-color: white;
     width: 100%;
-    padding: 0 30px 0 30px;
+    padding: 20px 30px 0 30px;
     margin-left: -30px;
     margin-right: 50px;
   }
-
-  main {
-        padding: 30px;
-    }
-    .auth-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 40px;
-        background: lightgrey;
-        border-radius: 8px;
-        box-shadow: 100px 50px 20px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        margin: 40px auto;
-    }
+  .auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: lightgrey;
+    border-radius: 8px;
+    box-shadow: 100px 50px 20px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 40px auto;
+  }
   .auth-form {
-        display: flex;
-        color: white;
-        flex-direction: column;
-        width: 100%;
-    }
+    display: flex;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: white;
+    flex-direction: column;
+    width: 100%;
+  }
 
-    .auth-form label {
-        margin-bottom: 5px;
-        font-family: Georgia, "Times New Roman", Times, serif;
-        color: #333;
-        text-align: left;
-    }
+  .auth-form label {
+    margin-bottom: 5px;
+    color: #333;
+    text-align: left;
+  }
 
-    .auth-form input, select {
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
+  .auth-form input,
+  select {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
 
-    .auth-form select{
-      cursor: pointer;
-    }
+  .auth-form select {
+    cursor: pointer;
+  }
 
-    #userid {
-        cursor:not-allowed
-    }
+  #userid {
+    cursor: not-allowed;
+  }
 
-    .submit-button {
-        background-color: #28a745;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-    }
+  .submit-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
 
-    .submit-button:hover {
-        background-color: #218838;
-    }
+  .submit-button:hover {
+    background-color: #218838;
+  }
 
   div {
-    margin-bottom: 20px;
+    margin: 20px 0 20px 0;
     background: white;
-    padding: 20px 0 40px 0;
+    padding: 0 10px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
     color: black;
   }
   h1 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     color: black;
   }
   .jobs-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
   }
   .job-pair {
     flex: 1 1 100%;
@@ -260,11 +255,16 @@
     justify-content: space-between;
   }
   .job {
-    flex: 1 1 48%;
-    margin: 0 10px;
+    flex: 1 1;
+    background: lightgrey;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 0 40px;
     border: 1px solid #ccc;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px  0 30px 50px;
+    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.1);
     text-align: left;
+  }
+  .job p {
+    margin: 5px;
   }
 </style>

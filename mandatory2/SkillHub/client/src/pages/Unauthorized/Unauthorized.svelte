@@ -42,5 +42,5 @@
   
   <div class="unauthorized-container">
     <div class="message">Oops! You are not authorized to view this page.</div>
-    <button on:click={goHome}>Go to Homepage</button>
+    <button on:click={goHome}>Go Back to Homepage</button>
   </div>  

@@ -7,14 +7,13 @@
     let jobs = [];
 
     onMount(async () => {
-        
         toast.success(
             "Welcome to jobs. Here you can find the job you need help with",
             { duration: 5000, position: "top-right" },
         );
 
         try {
-            const jobResponse = await fetch($BASE_URL+"/api/jobs");
+            const jobResponse = await fetch($BASE_URL + "/api/jobs");
             if (jobResponse.ok) {
                 const jobData = await jobResponse.json();
                 console.log("Received job data:", jobData);
@@ -104,19 +103,36 @@
     .jobs-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 20px;
     }
     .job-pair {
-        flex: 1 1 100%; /* Make sure each pair takes full width */
+        flex: 1 1 100%;
         display: flex;
         justify-content: space-between;
     }
     .job {
-        flex: 1 1 48%; /* Adjust size to fit two jobs per row */
-        margin: 0 10px;
+        flex: 1 1;
+        background: lightgrey;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
+        margin: 0 40px;
         border: 1px solid #ccc;
-        padding: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        text-align: left; /* Adjust text alignment as needed */
+        padding: 10px 0 30px 50px;
+        box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+    .job p {
+        margin: 5px;
+    }
+
+    button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #218838;
     }
 </style>

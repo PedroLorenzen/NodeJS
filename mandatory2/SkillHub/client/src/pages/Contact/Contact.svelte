@@ -8,14 +8,14 @@
     let message;
 
     onMount(async () => {
-        toast.success(
-                "Welcome. Here you can send an email",
-                { duration: 3000, position: "top-right"}
-            );
+        toast.success("Welcome. Here you can send an email", {
+            duration: 3000,
+            position: "top-right",
+        });
     });
 
     async function postEmail() {
-        const response = await fetch($BASE_URL+"/api/mails", {
+        const response = await fetch($BASE_URL + "/api/mails", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -55,10 +55,11 @@
 
 <Toaster />
 
-<form on:submit|preventDefault={sendEmailWithToast} class="auth-container">
-    <div>
-        <h2>Send Email</h2>
-        <p>
+<main>
+    <div class="auth-container">
+        <form on:submit|preventDefault={sendEmailWithToast} class="auth-form">
+            <h2>Send Email</h2>
+
             <label for="email">Email:</label>
             <input
                 id="email"
@@ -67,8 +68,7 @@
                 placeholder="Enter recipient's email"
                 required
             />
-        </p>
-        <p>
+
             <label for="subject">Subject:</label>
             <input
                 id="subject"
@@ -77,8 +77,7 @@
                 placeholder="Enter email subject"
                 required
             />
-        </p>
-        <p>
+
             <label for="message">Message:</label>
             <textarea
                 id="message"
@@ -86,50 +85,77 @@
                 placeholder="Enter your message"
                 required
             ></textarea>
-        </p>
-        <button type="submit">Send Email</button>
+
+            <button type="submit" class="submit-button">Send Email</button>
+        </form>
     </div>
-</form>
+</main>
 
 <style>
-    div {
-        margin: 20px;
-        padding: 40px;
+    main {
+        background-color: white;
+        width: 100%;
+        padding: 50px 30px 50px 30px;
+        margin-left: -30px;
+        margin-right: 50px;
     }
 
-    form {
+    h2 {
+        text-align: center;
+        color: black;
+    }
+    .auth-container {
         display: flex;
         flex-direction: column;
-        width: 50%;
-        margin: 0 auto;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        background: lightgrey;
+        border-radius: 8px;
+        box-shadow: 100px 50px 20px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 40px auto;
     }
-
-    label {
-        margin-top: 10px;
-    }
-
-    input,
-    textarea {
-        margin-top: 5px;
-        padding: 5px;
-        font-size: 16px;
-    }
-
-    textarea {
-        height: 100px;
-    }
-
-    button {
-        margin-top: 10px;
-        padding: 5px;
-        font-size: 16px;
-        background-color: #333;
+    .auth-form {
+        display: flex;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         color: white;
-        border: none;
-        cursor: pointer;
+        flex-direction: column;
+        width: 100%;
     }
 
-    button:hover {
-        background-color: #555;
+    .auth-form label {
+        margin-bottom: 5px;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        color: #333;
+        text-align: left;
+    }
+
+    .auth-form input {
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .auth-form textarea {
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        height: 70px;
+    }
+
+    .submit-button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #218838;
     }
 </style>

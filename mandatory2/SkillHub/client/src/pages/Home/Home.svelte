@@ -191,6 +191,7 @@
     .auth-form {
         display: flex;
         color: white;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         flex-direction: column;
         width: 100%;
     }
