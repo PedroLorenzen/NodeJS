@@ -114,13 +114,13 @@
 <Toaster />
 
 <main>
-  <div class="user-header">
+  <div>
     <h1>User: {username || "Not Available"}</h1>
-    <button on:click={handleLogout} class="logout-button">Logout</button>
+    <button on:click={handleLogout}>Logout</button>
   </div>
-  <div class="form-container">
+  <div class="auth-container">
     <h1>Post a New Job</h1>
-    <form on:submit|preventDefault={handlePostJobWithToasts}>
+    <form on:submit|preventDefault={handlePostJobWithToasts} class="auth-form">
       <label for="name">Name:</label>
       <input type="text" bind:value={name} id="name" required />
 
@@ -174,10 +174,67 @@
     background-color: white;
     width: 100%;
     padding: 0 30px 0 30px;
-    margin-top: 35px;
     margin-left: -30px;
     margin-right: 50px;
   }
+
+  main {
+        padding: 30px;
+    }
+    .auth-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        background: lightgrey;
+        border-radius: 8px;
+        box-shadow: 100px 50px 20px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 40px auto;
+    }
+  .auth-form {
+        display: flex;
+        color: white;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .auth-form label {
+        margin-bottom: 5px;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        color: #333;
+        text-align: left;
+    }
+
+    .auth-form input, select {
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .auth-form select{
+      cursor: pointer;
+    }
+
+    #userid {
+        cursor:not-allowed
+    }
+
+    .submit-button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #218838;
+    }
+
   div {
     margin-bottom: 20px;
     background: white;

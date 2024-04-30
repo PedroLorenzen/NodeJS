@@ -55,7 +55,7 @@
 
 <Toaster />
 
-<form on:submit|preventDefault={sendEmailWithToast}>
+<form on:submit|preventDefault={sendEmailWithToast} class="auth-container">
     <div>
         <h2>Send Email</h2>
         <p>

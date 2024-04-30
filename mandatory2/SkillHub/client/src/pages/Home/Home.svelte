@@ -82,8 +82,8 @@
 
 <main>
     <div>
-        <h1>Welcome to SKILLHUB</h1>
-        <p>Share your skills or find someone who can help you</p>
+        <h1 class="text">Welcome to SKILLHUB</h1>
+        <p class="text">Share your skills or find someone who can help you</p>
     </div>
     <div class="auth-container">
         <div class="button-group">
@@ -144,7 +144,16 @@
 
 <style>
     main {
-        padding: 30px;
+        background-color: white;
+        width: 100%;
+        padding: 10px 30px 50px 30px;
+        margin-top: 35px;
+        margin-left: -30px;
+        margin-right: 50px;
+    }
+    .text{
+        text-align: center;
+        color: black;
     }
     .auth-container {
         display: flex;
@@ -152,9 +161,9 @@
         align-items: center;
         justify-content: center;
         padding: 40px;
-        background: white;
+        background: lightgrey;
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 100px 50px 20px rgba(0, 0, 0, 0.1);
         max-width: 400px;
         margin: 40px auto;
     }
