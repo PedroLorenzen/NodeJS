@@ -1,42 +1,17 @@
 <script>
     import { onMount } from "svelte";
-    import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
+    //import { user } from "../../stores/user.js";
 
     let email;
     let subject;
     let message;
 
     onMount(async () => {
-        try {
-            const response = await fetch(
-                "http://localhost:8080/session/getuser",
-                {
-                    credentials: "include",
-                },
+        toast.success(
+                "Welcome. Here you can send an email",
+                { duration: 3000, position: "top-right"}
             );
-            const result = await response.json();
-            if (!response.ok) {
-                toast.error(
-                    "You are not logged in... Redirecting back to the main page",
-                    { duration: 2000 },
-                );
-                setTimeout(() => {
-                    navigate("/");
-                }, 2500);
-            }
-
-            toast.success(
-                "Welcome " + result.user.name + ". Here you can send an email",
-                { duration: 3000 },
-            );
-
-            email = "chri46nj@stud.kea.dk";
-            subject = "What an amazing website";
-            message = "Hi Christian here's your mandatory 2 feedback. It looks nice!";
-        } catch (err) {
-            console.error("Error during fetch operations:", err);
-        }
     });
 
     async function postEmail() {

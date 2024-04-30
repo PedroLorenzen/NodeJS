@@ -7,29 +7,13 @@
     let jobs = [];
 
     onMount(async () => {
+        
+        toast.success(
+            "Welcome to jobs. Here you can find the job you need help with",
+            { duration: 5000, position: "top-right" },
+        );
+
         try {
-            const response = await fetch(
-                "http://localhost:8080/session/getuser",
-                {
-                    credentials: "include",
-                },
-            );
-            const result = await response.json();
-            if (!response.ok) {
-                toast.error(
-                    "You are not logged in... Redirecting back to the main page",
-                    { duration: 2000 },
-                );
-                setTimeout(() => {
-                    navigate("/");
-                }, 2500);
-            }
-
-            toast.success(
-                "Welcome " + result.user.name + ". Here you can find all jobs",
-                { duration: 3000 },
-            );
-
             const jobResponse = await fetch(`http://localhost:8080/api/jobs`);
             if (jobResponse.ok) {
                 const jobData = await jobResponse.json();

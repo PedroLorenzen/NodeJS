@@ -6,8 +6,6 @@
   let username;
   let userid;
   let email;
-  let city;
-  let sessionUser = false;
   let error = "";
   let name, skill, description, price;
   let jobs = [];
@@ -32,40 +30,10 @@
   ];
 
   onMount(async () => {
-    try {
-      const response = await fetch("http://localhost:8080/session/getuser", {
-        credentials: "include",
-      });
-      const result = await response.json();
-      if (!response.ok) {
-        toast.error(
-          "You are not logged in... Redirecting back to the main page", { duration: 2000 });
-        setTimeout(() => {
-          navigate("/");
-        }, 2500);
-      }
-
-      toast.success("Welcome to your user page " + result.user.name + "!", { duration: 2000 });
-
-      if (result.user) {
-        username = result.user.name;
-        userid = result.user.id;
-        email = result.user.email;
-        city = result.user.location;
-        console.log("User ID:", userid, "Username:", username);
-        sessionUser = true;
-      }
-      const jobResponse = await fetch(`http://localhost:8080/api/jobs`);
-      if (jobResponse.ok) {
-        const jobData = await jobResponse.json();
-        jobs = jobData.data.filter((job) => job.user_id === userid);
-      } else {
-        console.error("Failed to fetch jobs:", await jobResponse.text());
-      }
-    } catch (err) {
-      error = err.message;
-      console.error("Error during fetch operations:", err);
-    }
+    toast.success(
+      "Welcome to your user page. Here you can post a job or see your posted jobs",
+      { duration: 5000, position: "top-right" },
+    );
   });
 
   async function handleLogout() {
@@ -110,9 +78,6 @@
 <main>
   <div>
     <h1>User: {username || "Not Available"}</h1>
-    {#if !sessionUser}
-      <p>You are not logged in... Redirecting back to the main page</p>
-    {/if}
   </div>
   <div>
     <button on:click={handleLogout}>Logout</button>
@@ -144,31 +109,29 @@
       </div>
     </div>
   </form>
-  {#if jobs.length > 0}
-    <h1>Here you have your posted jobs</h1>
-    <div class="jobs-container">
-      {#each jobs as job, index (job.id)}
-        {#if index % 2 === 0}
-          <div class="job-pair">
-            <div class="job">
-              <h2>{job.name}</h2>
-              <p>Skill: {job.skill}</p>
-              <p>Description: {job.description}</p>
-              <p>Price: ${job.price}</p>
-            </div>
-            {#if jobs[index + 1]}
-              <div class="job">
-                <h2>{jobs[index + 1].name}</h2>
-                <p>Skill: {jobs[index + 1].skill}</p>
-                <p>Description: {jobs[index + 1].description}</p>
-                <p>Price: ${jobs[index + 1].price}</p>
-              </div>
-            {/if}
+  <h1>Here you have your posted jobs</h1>
+  <div class="jobs-container">
+    {#each jobs as job, index (job.id)}
+      {#if index % 2 === 0}
+        <div class="job-pair">
+          <div class="job">
+            <h2>{job.name}</h2>
+            <p>Skill: {job.skill}</p>
+            <p>Description: {job.description}</p>
+            <p>Price: ${job.price}</p>
           </div>
-        {/if}
-      {/each}
-    </div>
-  {/if}
+          {#if jobs[index + 1]}
+            <div class="job">
+              <h2>{jobs[index + 1].name}</h2>
+              <p>Skill: {jobs[index + 1].skill}</p>
+              <p>Description: {jobs[index + 1].description}</p>
+              <p>Price: ${jobs[index + 1].price}</p>
+            </div>
+          {/if}
+        </div>
+      {/if}
+    {/each}
+  </div>
 </main>
 
 <style>
