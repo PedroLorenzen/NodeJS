@@ -4,7 +4,7 @@
     import toast, { Toaster } from "svelte-french-toast";
     import { BASE_URL } from "../../stores/url.js";
 
-    let email;
+    let email = "chri46nj@stud.kea.dk";
     let subject;
     let message;
 
@@ -31,6 +31,9 @@
             try {
                 const data = await response.json();
                 console.log("Email sent successfully: ", data);
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
             } catch (e) {
                 console.error("Error sending email: ", e);
             }
@@ -71,6 +74,7 @@
                 bind:value={email}
                 placeholder="Enter recipient's email"
                 required
+                readonly
             />
 
             <label for="subject">Subject:</label>
@@ -141,6 +145,10 @@
         margin-bottom: 20px;
         border: 1px solid #ccc;
         border-radius: 4px;
+    }
+
+    #email {
+        cursor: not-allowed;
     }
 
     .auth-form textarea {
