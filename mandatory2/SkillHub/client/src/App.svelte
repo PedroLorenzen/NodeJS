@@ -11,6 +11,7 @@
   import Jobs from "./pages/Jobs/Jobs.svelte";
   import Contact from "./pages/Contact/Contact.svelte";
   import Unauthorized from './pages/Unauthorized/Unauthorized.svelte';
+  import RateLimitExceeded from './pages/RateLimitExceeded/RateLimitExceeded.svelte';
 
   onMount(async () => {
       await checkSession();
@@ -40,6 +41,7 @@
       </PrivateRouteGuard>
     </Route>
     <Route path="/Unauthorized" component={Unauthorized} />
+    <Route path="/RateLimitExceeded" component={RateLimitExceeded} />
   </Router>
   <Footer />
 </main>

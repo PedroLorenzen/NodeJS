@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
     import { BASE_URL } from "../../stores/url.js";
 
@@ -33,12 +34,14 @@
             } catch (e) {
                 console.error("Error sending email: ", e);
             }
+        } else if (response.status === 429) {
+            navigate("/RateLimitExceeded");
         } else {
             console.error("Failed to send email: ", await response.text());
         }
     }
 
-    async function sendEmailWithToast() {
+    async function handlePostEmail() {
         await toast.promise(
             postEmail(),
             {
@@ -58,7 +61,7 @@
 
 <main>
     <div class="auth-container">
-        <form on:submit|preventDefault={sendEmailWithToast} class="auth-form">
+        <form on:submit|preventDefault={handlePostEmail} class="auth-form">
             <h2>Send Email</h2>
 
             <label for="email">Email:</label>
@@ -119,7 +122,8 @@
     }
     .auth-form {
         display: flex;
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         color: white;
         flex-direction: column;
         width: 100%;

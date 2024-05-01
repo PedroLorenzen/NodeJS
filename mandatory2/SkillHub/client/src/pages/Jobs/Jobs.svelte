@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { navigate } from "svelte-routing";
     import { Link } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
     import { BASE_URL } from "../../stores/url.js";
@@ -21,6 +22,8 @@
                 const jobData = await jobResponse.json();
                 console.log("Received job data:", jobData);
                 jobs = jobData.data;
+            } else if (jobResponse.status === 429) {
+                navigate("/RateLimitExceeded");
             } else {
                 console.error(
                     "Failed to fetch jobs:",

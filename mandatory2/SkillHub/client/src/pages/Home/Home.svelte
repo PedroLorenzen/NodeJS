@@ -1,5 +1,4 @@
 <script>
-    import { Link } from "svelte-routing";
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
     import { BASE_URL } from "../../stores/url.js";
@@ -18,6 +17,10 @@
             body: JSON.stringify({ email, password }),
             credentials: "include",
         });
+        if (response.status === 429) {
+            navigate("/RateLimitExceeded");
+            return;
+        }
         const result = await response.json();
         if (!response.ok) {
             throw new Error(result.message || "Failed to login");
@@ -27,7 +30,7 @@
         }, 2000);
     }
 
-    async function handleLoginWithToast() {
+    async function handlePostLogin() {
         await toast.promise(
             postLogin(),
             {
@@ -48,18 +51,24 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password, location }),
         });
+        if (response.status === 429) {
+            navigate("/RateLimitExceeded");
+            return;
+        }
         const result = await response.json();
-        if (!response.ok)
+        if (!response.ok) {
             throw new Error(result.message || "Failed to register");
-        handleLoginWithToast();
+        }
+        handlePostLogin();
     }
 
-    async function handleRegisterWithToast() {
+    async function handlePostRegister() {
         await toast.promise(
             postRegister(),
             {
                 loading: "Registering new user...",
-                success: "You have been registered successfully - Redirecting...",
+                success:
+                    "You have been registered successfully - Redirecting...",
                 error: "Failed to register - please try again",
             },
             {
@@ -93,10 +102,7 @@
             <button on:click={toggleRegister}>Create Account</button>
         </div>
         {#if showLogin}
-            <form
-                on:submit|preventDefault={handleLoginWithToast}
-                class="auth-form"
-            >
+            <form on:submit|preventDefault={handlePostLogin} class="auth-form">
                 <label for="email">Email:</label>
                 <input type="email" bind:value={email} id="email" required />
 
@@ -113,7 +119,7 @@
         {/if}
         {#if showRegister}
             <form
-                on:submit|preventDefault={handleRegisterWithToast}
+                on:submit|preventDefault={handlePostRegister}
                 class="auth-form"
             >
                 <label for="name">Name:</label>
@@ -153,7 +159,7 @@
         margin-left: -30px;
         margin-right: 50px;
     }
-    .text{
+    .text {
         text-align: center;
         color: black;
     }
@@ -193,7 +199,8 @@
     .auth-form {
         display: flex;
         color: white;
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         flex-direction: column;
         width: 100%;
     }

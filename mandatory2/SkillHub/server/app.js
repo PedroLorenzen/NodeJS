@@ -24,11 +24,16 @@ app.use(session({
 }));
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutter
-    limit: 50, // Begræns antal requests til 50 pr. windowMs
-    standardHeaders: true, // 'draft-7'
-    legacyHeaders: false,
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    limit: 50, // limit each IP to 50 requests per windowMs
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    handler: (req, res, next, options) => {
+        console.log(`Rate limit exceeded for ${req.ip}`);
+        res.status(429).send('Too many requests, please try again later.');
+    }
 });
+
 app.use(limiter);
 
 const authRateLimiter = rateLimit({
@@ -38,7 +43,7 @@ const authRateLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
 });
-app.use("/auth", authRateLimiter); 
+app.use("/auth", authRateLimiter);
 
 import userRouter from './routers/userRouter.js';
 app.use(userRouter);

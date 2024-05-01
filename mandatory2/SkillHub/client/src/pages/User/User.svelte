@@ -47,6 +47,8 @@
       if (jobResponse.ok) {
         const jobData = await jobResponse.json();
         jobs = jobData.data.filter((job) => job.user_id === $user.user.id);
+      } else if (jobResponse.status === 429) {
+        navigate("/RateLimitExceeded");
       } else {
         console.error("Failed to fetch jobs:", await jobResponse.text());
       }
@@ -71,6 +73,10 @@
       method: "GET",
       credentials: "include",
     });
+    if (response.status === 429) {
+      navigate("/RateLimitExceeded");
+      return;
+    }
     const result = await response.json();
     if (!response.ok) {
       throw new Error(result.message || "Failed to logout");
@@ -104,7 +110,9 @@
       body: JSON.stringify({ name, skill, description, price, userid }),
     });
     const result = await response.json();
-    if (!response.ok) {
+    if (response.status === 429) {
+      navigate("/RateLimitExceeded");
+    } else if (!response.ok) {
       throw new Error(result.error || "Failed to post job");
     }
     setTimeout(() => {
