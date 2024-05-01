@@ -63,7 +63,6 @@ app.use(xssRouter);
 import mailRouter from './routers/mailRouter.js';
 app.use(mailRouter);
 
-// 404 for alle andre requests
 app.all("*", (req, res) => {
     res.status(404).send({ message: "Not Found" });
 });
