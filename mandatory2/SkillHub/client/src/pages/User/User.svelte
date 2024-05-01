@@ -4,6 +4,7 @@
   import toast, { Toaster } from "svelte-french-toast";
   import { user } from "../../stores/user.js";
   import { BASE_URL } from "../../stores/url.js";
+  import sanitizeHTML from "../../util/sanitize.js";
 
   $user;
 
@@ -46,7 +47,14 @@
 
       if (jobResponse.ok) {
         const jobData = await jobResponse.json();
-        jobs = jobData.data.filter((job) => job.user_id === $user.user.id);
+        jobs = jobData.data.filter((job) => job.user_id === userid);
+        jobs = jobs.map((job) => ({
+          ...job,
+          name: sanitizeHTML(job.name),
+          skill: sanitizeHTML(job.skill),
+          description: sanitizeHTML(job.description),
+          price: sanitizeHTML(job.price.toString()),
+        }));
       } else if (jobResponse.status === 429) {
         navigate("/RateLimitExceeded");
       } else {
@@ -107,7 +115,13 @@
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, skill, description, price, userid }),
+      body: JSON.stringify({
+        name: sanitizeHTML(name),
+        skill: sanitizeHTML(skill),
+        description: sanitizeHTML(description),
+        price: sanitizeHTML(price.toString()),
+        userid,
+      }),
     });
     const result = await response.json();
     if (response.status === 429) {
@@ -178,14 +192,14 @@
             <h2>{job.name}</h2>
             <p>Skill: {job.skill}</p>
             <p>Description: {job.description}</p>
-            <p>Price: ${job.price}</p>
+            <p>Price: {job.price}</p>
           </div>
           {#if jobs[index + 1]}
             <div class="job">
               <h2>{jobs[index + 1].name}</h2>
               <p>Skill: {jobs[index + 1].skill}</p>
               <p>Description: {jobs[index + 1].description}</p>
-              <p>Price: ${jobs[index + 1].price}</p>
+              <p>Price: {jobs[index + 1].price}</p>
             </div>
           {/if}
         </div>

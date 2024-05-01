@@ -3,10 +3,15 @@
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
     import { BASE_URL } from "../../stores/url.js";
+    import sanitizeHTML from "../../util/sanitize.js";
 
     let email = "chri46nj@stud.kea.dk";
     let subject;
     let message;
+
+    function sanitizeEmail(email) {
+        return email.replace(/[^a-åA-Å0-9@_.-]/g, "");
+    }
 
     onMount(async () => {
         toast.success("Welcome. Here you can send an email", {
@@ -16,15 +21,18 @@
     });
 
     async function postEmail() {
+        const sanitizedEmail = sanitizeEmail(email);
+        const sanitizedSubject = sanitizeHTML(subject);
+        const sanitizedMessage = sanitizeHTML(message);
         const response = await fetch($BASE_URL + "/api/mails", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                to: email,
-                subject: subject,
-                message: message,
+                to: sanitizedEmail,
+                subject: sanitizedSubject,
+                message: sanitizedMessage,
             }),
         });
         if (response.ok) {

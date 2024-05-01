@@ -4,6 +4,7 @@
     import { Link } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
     import { BASE_URL } from "../../stores/url.js";
+    import sanitizeHTML from "../../util/sanitize.js";
 
     let jobs = [];
 
@@ -21,7 +22,13 @@
             if (jobResponse.ok) {
                 const jobData = await jobResponse.json();
                 console.log("Received job data:", jobData);
-                jobs = jobData.data;
+                jobs = jobData.data.map((job) => ({
+                    ...job,
+                    name: sanitizeHTML(job.name),
+                    skill: sanitizeHTML(job.skill),
+                    description: sanitizeHTML(job.description),
+                    price: sanitizeHTML(job.price.toString()),
+                }));
             } else if (jobResponse.status === 429) {
                 navigate("/RateLimitExceeded");
             } else {
@@ -52,7 +59,7 @@
                             <h2>{job.name}</h2>
                             <p>Skill: {job.skill}</p>
                             <p>Description: {job.description}</p>
-                            <p>Price: ${job.price}</p>
+                            <p>Price: {job.price}</p>
                             <Link to="/Contact">
                                 <button>Contact User</button>
                             </Link>
@@ -64,7 +71,7 @@
                                 <p>
                                     Description: {jobs[index + 1].description}
                                 </p>
-                                <p>Price: ${jobs[index + 1].price}</p>
+                                <p>Price: {jobs[index + 1].price}</p>
                                 <Link to="/Contact">
                                     <button>Contact User</button>
                                 </Link>

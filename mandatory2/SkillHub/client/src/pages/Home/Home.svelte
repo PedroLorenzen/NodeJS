@@ -2,6 +2,7 @@
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
     import { BASE_URL } from "../../stores/url.js";
+    import sanitizeHTML from "../../util/sanitize.js";
 
     let showLogin = true;
     let showRegister = false;
@@ -11,10 +12,15 @@
     let location = "";
 
     async function postLogin() {
+        const sanitizedEmail = sanitizeHTML(email);
+        const sanitizedPassword = sanitizeHTML(password);
         const response = await fetch($BASE_URL + "/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({
+                email: sanitizedEmail,
+                password: sanitizedPassword,
+            }),
             credentials: "include",
         });
         if (response.status === 429) {
@@ -46,10 +52,19 @@
     }
 
     async function postRegister() {
+        const sanitizedEmail = sanitizeHTML(email);
+        const sanitizedPassword = sanitizeHTML(password);
+        const sanitizedName = sanitizeHTML(name);
+        const sanitizedLocation = sanitizeHTML(location);
         const response = await fetch($BASE_URL + "/api/users", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, password, location }),
+            body: JSON.stringify({
+                name: sanitizedName,
+                email: sanitizedEmail,
+                password: sanitizedPassword,
+                location: sanitizedLocation,
+            }),
         });
         if (response.status === 429) {
             navigate("/RateLimitExceeded");
