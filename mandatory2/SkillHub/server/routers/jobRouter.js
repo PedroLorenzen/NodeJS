@@ -15,7 +15,6 @@ router.post('/api/jobs', async (req, res) => {
     }
     else {
         try {
-            // Brug af prepared statements for at undgå SQL injection
             const sql = 'INSERT INTO Jobs (name, skill, description, price, user_id) VALUES (?, ?, ?, ?, ?)';
             const result = await db.run(sql, [name, skill, description, price, userid]);
             res.send({ lastID: result.lastID });

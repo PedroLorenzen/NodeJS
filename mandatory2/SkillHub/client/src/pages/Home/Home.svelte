@@ -4,7 +4,7 @@
     import { BASE_URL } from "../../stores/url.js";
 
     let showLogin = true;
-    let showRegister = false; // Controls visibility of the registration form
+    let showRegister = false;
     let email = "";
     let password = "";
     let name = "";

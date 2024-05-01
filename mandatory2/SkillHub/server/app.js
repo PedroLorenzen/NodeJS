@@ -24,10 +24,10 @@ app.use(session({
 }));
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    limit: 50, // limit each IP to 50 requests per windowMs
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    windowMs: 15 * 60 * 1000,
+    limit: 50,
+    standardHeaders: true,
+    legacyHeaders: false,
     handler: (req, res, next, options) => {
         console.log(`Rate limit exceeded for ${req.ip}`);
         res.status(429).send('Too many requests, please try again later.');
@@ -37,8 +37,8 @@ const limiter = rateLimit({
 app.use(limiter);
 
 const authRateLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutter
-    limit: 10, // Begræns antal requests til 5 pr. windowMs
+    windowMs: 15 * 60 * 1000, 
+    limit: 10, 
     message: "Too many attempts from this IP, please try again after 15 minutes",
     standardHeaders: true,
     legacyHeaders: false,

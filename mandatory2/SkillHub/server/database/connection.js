@@ -3,7 +3,7 @@ import { open } from 'sqlite';
 
 const connection = await open({
     filename: './skillhub.db',
-    driver: sqlite3.Database // 
+    driver: sqlite3.Database
 });
 
 export default connection;

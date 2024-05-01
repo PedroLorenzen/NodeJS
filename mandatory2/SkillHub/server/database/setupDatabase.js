@@ -33,7 +33,7 @@ async function setupDatabase() {
         `);
 
         if (deleteMode) {
-            // All dummy user passwords are 123
+            // Alle dummy user passwords er 123
             await db.run(`INSERT INTO Users (name, email, password, location) VALUES ('John Doe', 'john@doe.dk', '$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO', 'Vejle')`);
             await db.run(`INSERT INTO Users (name, email, password, location) VALUES ('Jane Doe', 'jane@doe.dk', '$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO', 'Vejle')`);
             await db.run(`INSERT INTO Users (name, email, password, location) VALUES ('Alice Doe', 'alice@doe.dk', '$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO', 'Vejle')`);
