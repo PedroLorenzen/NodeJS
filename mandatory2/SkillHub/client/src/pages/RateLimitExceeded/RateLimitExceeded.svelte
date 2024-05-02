@@ -7,7 +7,7 @@
   </script>
   
   <style>
-    .unauthorized-container {
+    .ratelimit-container {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -40,7 +40,7 @@
     }
   </style>
   
-  <div class="unauthorized-container">
+  <div class="ratelimit-container">
     <div class="message">Oops! You have exceeded the ratelimit for using this website please try again later.</div>
     <button on:click={goHome}>Go Back to Homepage</button>
   </div>  

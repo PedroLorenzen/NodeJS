@@ -131,13 +131,13 @@
         <h1 class="text">Welcome to SKILLHUB</h1>
         <p class="text">Share your skills or find someone who can help you</p>
     </div>
-    <div class="auth-container">
+    <div class="container">
         <div class="button-group">
             <button on:click={toggleLogin}>Login</button>
             <button on:click={toggleRegister}>Create Account</button>
         </div>
         {#if showLogin}
-            <form on:submit|preventDefault={handlePostLogin} class="auth-form">
+            <form on:submit|preventDefault={handlePostLogin} class="form">
                 <label for="email">Email:</label>
                 <input type="email" bind:value={email} id="email" required />
 
@@ -155,7 +155,7 @@
         {#if showRegister}
             <form
                 on:submit|preventDefault={handlePostRegister}
-                class="auth-form"
+                class="form"
             >
                 <label for="name">Name:</label>
                 <input type="text" bind:value={name} id="name" required />
@@ -198,7 +198,7 @@
         text-align: center;
         color: black;
     }
-    .auth-container {
+    .container {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -231,7 +231,7 @@
         background-color: #0056b3;
     }
 
-    .auth-form {
+    .form {
         display: flex;
         color: white;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
@@ -240,14 +240,14 @@
         width: 100%;
     }
 
-    .auth-form label {
+    .form label {
         margin-bottom: 5px;
         font-family: Georgia, "Times New Roman", Times, serif;
         color: #333;
         text-align: left;
     }
 
-    .auth-form input {
+    .form input {
         padding: 10px;
         margin-bottom: 20px;
         border: 1px solid #ccc;

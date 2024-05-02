@@ -166,9 +166,9 @@
     <h1>Welcome {username || "Not Available"}</h1>
     <button on:click={handlePostLogoutWithToasts} class="logout">Logout</button>
   </div>
-  <div class="auth-container">
+  <div class="container">
     <h2>Create a New Job</h2>
-    <form on:submit|preventDefault={handlePostJobWithToasts} class="auth-form">
+    <form on:submit|preventDefault={handlePostJobWithToasts} class="form">
       <label for="name">Name:</label>
       <input type="text" bind:value={name} id="name" required />
 
@@ -225,7 +225,7 @@
     margin-left: -30px;
     margin-right: 50px;
   }
-  .auth-container {
+  .container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -237,7 +237,7 @@
     max-width: 400px;
     margin: 40px auto;
   }
-  .auth-form {
+  .form {
     display: flex;
     font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
       "Lucida Sans", Arial, sans-serif;
@@ -246,13 +246,13 @@
     width: 100%;
   }
 
-  .auth-form label {
+  .form label {
     margin-bottom: 5px;
     color: #333;
     text-align: left;
   }
 
-  .auth-form input,
+  .form input,
   select {
     padding: 10px;
     margin-bottom: 20px;
@@ -260,7 +260,7 @@
     border-radius: 4px;
   }
 
-  .auth-form select {
+  .form select {
     cursor: pointer;
   }
 

@@ -87,12 +87,6 @@
     main {
         background-color: white;
         width: 100%;
-        padding: 30px;
-        margin-top: 35px;
-    }
-    main {
-        background-color: white;
-        width: 100%;
         padding: 0 30px 0 30px;
         margin-top: 35px;
         margin-left: -30px;

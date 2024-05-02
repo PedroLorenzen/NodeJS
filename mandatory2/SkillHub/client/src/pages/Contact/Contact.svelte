@@ -68,8 +68,8 @@
 <Toaster />
 
 <main>
-    <div class="auth-container">
-        <form on:submit|preventDefault={handlePostEmail} class="auth-form">
+    <div class="container">
+        <form on:submit|preventDefault={handlePostEmail} class="form">
             <h2>Send Email</h2>
 
             <label for="email">Email:</label>
@@ -117,7 +117,7 @@
         text-align: center;
         color: black;
     }
-    .auth-container {
+    .container {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -129,7 +129,7 @@
         max-width: 400px;
         margin: 40px auto;
     }
-    .auth-form {
+    .form {
         display: flex;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
@@ -138,14 +138,14 @@
         width: 100%;
     }
 
-    .auth-form label {
+    .form label {
         margin-bottom: 5px;
         font-family: Georgia, "Times New Roman", Times, serif;
         color: #333;
         text-align: left;
     }
 
-    .auth-form input {
+    .form input {
         padding: 10px;
         margin-bottom: 20px;
         border: 1px solid #ccc;
@@ -156,7 +156,7 @@
         cursor: not-allowed;
     }
 
-    .auth-form textarea {
+    .form textarea {
         padding: 10px;
         margin-bottom: 20px;
         border: 1px solid #ccc;
