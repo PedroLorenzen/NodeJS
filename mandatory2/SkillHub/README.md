@@ -5,13 +5,13 @@
 
 # svelte SKILLHUB
 
-> Midway Svelte project in my 4. semester studying Computer Science at KEA.
+> I am currently halfway through a Svelte project in my fourth semester of Computer Science studies at KEA.
 
-SKILLHUB is a simple job portal to post jobs you want to offer others or find help with a job. 
+> SKILLHUB is an easy-to-use job portal where you can post job opportunities or seek assistance with tasks. 
 
 ## Installation
 
-1. CD into client and install the package with your favorite package manager:
+1. CD into client and install the package:
 
 ```
 npm install
