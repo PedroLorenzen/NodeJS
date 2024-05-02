@@ -31,5 +31,5 @@ npm run database-create
 ```
 5. start the server:
 ```
-npm run dev
+node app.js
 ```
