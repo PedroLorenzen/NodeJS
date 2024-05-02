@@ -4,7 +4,7 @@
   import toast, { Toaster } from "svelte-french-toast";
   import { user } from "../../stores/user.js";
   import { BASE_URL } from "../../stores/url.js";
-  import sanitizeHTML from "../../util/sanitize.js";
+  import { sanitizeHTML } from "../../util/sanitize.js";
 
   $user;
 
@@ -53,10 +53,19 @@
           name: sanitizeHTML(job.name),
           skill: sanitizeHTML(job.skill),
           description: sanitizeHTML(job.description),
-          price: sanitizeHTML(job.price.toString()),
+          price: job.price,
         }));
       } else if (jobResponse.status === 429) {
         navigate("/RateLimitExceeded");
+      } else if (jobResponse.status === 400) {
+        const errorData = await jobResponse.json();
+        toast.error(
+          errorData.error || "Price and User ID needs to be a number",
+          {
+            duration: 2000,
+            position: "top-right",
+          },
+        );
       } else {
         console.error("Failed to fetch jobs:", await jobResponse.text());
       }
@@ -119,7 +128,7 @@
         name: sanitizeHTML(name),
         skill: sanitizeHTML(skill),
         description: sanitizeHTML(description),
-        price: sanitizeHTML(price.toString()),
+        price: price,
         userid,
       }),
     });

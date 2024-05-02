@@ -1,10 +1,13 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import db from '../database/connection.js';
+import { sanitizeEmail } from '../util/sanitize.js';
+
 const router = Router();
 
 router.post('/auth/login', async (req, res) => {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+    email = sanitizeEmail(email);
     try {
         const userQuery = await db.get('SELECT * FROM Users WHERE email = ?', [email]);
         if (!userQuery) {

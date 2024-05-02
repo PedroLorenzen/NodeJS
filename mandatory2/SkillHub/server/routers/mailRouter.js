@@ -1,12 +1,17 @@
 import "dotenv/config";
 import { Resend } from 'resend';
 import { Router } from 'express';
+import { sanitizeHTML, sanitizeEmail } from '../util/sanitize.js';
 
 const router = Router();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 router.post('/api/mails', async (req, res) => {
-  const { to, subject, message } = req.body;
+  let { to, subject, message } = req.body;
+
+  to = sanitizeEmail(to);
+  subject = sanitizeHTML(subject);
+  message = sanitizeHTML(message);
 
   try {
     const data = await resend.emails.send({

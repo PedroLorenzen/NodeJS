@@ -2,7 +2,8 @@
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
     import { BASE_URL } from "../../stores/url.js";
-    import sanitizeHTML from "../../util/sanitize.js";
+    import { sanitizeHTML } from "../../util/sanitize.js";
+    import { sanitizeEmail } from "../../util/sanitize.js";
 
     let showLogin = true;
     let showRegister = false;
@@ -12,7 +13,7 @@
     let location = "";
 
     async function postLogin() {
-        const sanitizedEmail = sanitizeHTML(email);
+        const sanitizedEmail = sanitizeEmail(email);
         const sanitizedPassword = sanitizeHTML(password);
         const response = await fetch($BASE_URL + "/auth/login", {
             method: "POST",
@@ -52,7 +53,7 @@
     }
 
     async function postRegister() {
-        const sanitizedEmail = sanitizeHTML(email);
+        const sanitizedEmail = sanitizeEmail(email);
         const sanitizedPassword = sanitizeHTML(password);
         const sanitizedName = sanitizeHTML(name);
         const sanitizedLocation = sanitizeHTML(location);
@@ -72,6 +73,16 @@
         }
         const result = await response.json();
         if (!response.ok) {
+            if (response.status === 400) {
+                toast.error(
+                    result.error ||
+                        "Password must be at least 6 characters long, include at least one uppercase letter, and one special character",
+                    {
+                        duration: 2000,
+                        position: "top-right",
+                    },
+                );
+            }
             throw new Error(result.message || "Failed to register");
         }
         handlePostLogin();

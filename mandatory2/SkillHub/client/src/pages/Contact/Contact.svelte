@@ -3,15 +3,12 @@
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
     import { BASE_URL } from "../../stores/url.js";
-    import sanitizeHTML from "../../util/sanitize.js";
+    import { sanitizeHTML } from "../../util/sanitize.js";
+    import { sanitizeEmail } from "../../util/sanitize.js";
 
     let email = "chri46nj@stud.kea.dk";
     let subject;
     let message;
-
-    function sanitizeEmail(email) {
-        return email.replace(/[^a-åA-Å0-9@_.-]/g, "");
-    }
 
     onMount(async () => {
         toast.success("Welcome. Here you can send an email", {

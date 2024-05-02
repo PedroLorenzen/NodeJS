@@ -28,7 +28,12 @@ const limiter = rateLimit({
     limit: 50,
     standardHeaders: true,
     legacyHeaders: false,
-    handler: (req, res, next, options) => {
+    cookie: { 
+        secure: false,
+        httpOnly: true,
+        sameSite: 'strict'
+    },
+    handler: (req, res) => {
         console.log(`Rate limit exceeded for ${req.ip}`);
         res.status(429).send('Too many requests, please try again later.');
     }
@@ -42,6 +47,15 @@ const authRateLimiter = rateLimit({
     message: "Too many attempts from this IP, please try again after 15 minutes",
     standardHeaders: true,
     legacyHeaders: false,
+    cookie: { 
+        secure: false,
+        httpOnly: true,
+        sameSite: 'strict'
+    },
+    handler: (req, res) => {
+        console.log(`Authentication rate limit has been exceeded for ${req.ip}`);
+        res.status(429).send('Too many login/signout requests, please try again later.');
+    }
 });
 app.use("/auth", authRateLimiter);
 
@@ -56,9 +70,6 @@ app.use(authRouter); //app.use('/auth', authRouter);
 
 import sessionRouter from './routers/sessionRouter.js';
 app.use(sessionRouter);
-
-import xssRouter from './routers/xssRouter.js';
-app.use(xssRouter);
 
 import mailRouter from './routers/mailRouter.js';
 app.use(mailRouter);

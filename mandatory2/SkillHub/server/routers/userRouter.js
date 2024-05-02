@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
-const router = Router();
 import db from '../database/connection.js';
+import { sanitizeHTML, sanitizeEmail } from '../util/sanitize.js';
+
+const router = Router();
+
 
 router.get('/api/users', async (req, res) => {
     const result = await db.all('SELECT * FROM Users');
@@ -11,11 +14,21 @@ router.get('/api/users', async (req, res) => {
 
 
 router.post('/api/users', async (req, res) => {
-    const { name, email, password, location } = req.body;
+    let { name, email, password, location } = req.body;
     if (!name || !email || !password || !location) {
         return res.status(400).send({ error: 'Missing required information' });
     }
+
+    if (password.length < 6 || !password.match(/[A-Z]/) || !password.match(/[^\w\s]/)) {
+        return res.status(400).send({
+            error: 'Password must be at least 6 characters long, include at least one uppercase letter, and one special character.'
+        });
+    }
+
     else {
+        name = sanitizeHTML(name);
+        email = sanitizeEmail(email);
+        location = sanitizeHTML(location);
         try {
             const salt = await bcrypt.genSalt(12);
             const hashedPassword = await bcrypt.hash(password, salt);

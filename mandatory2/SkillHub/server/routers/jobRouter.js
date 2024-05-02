@@ -1,6 +1,9 @@
 import { Router } from 'express';
-const router = Router();
 import db from '../database/connection.js';
+import { sanitizeHTML } from '../util/sanitize.js';
+
+const router = Router();
+
 
 router.get('/api/jobs', async (req, res) => {
     const result = await db.all('SELECT * FROM Jobs');
@@ -9,7 +12,19 @@ router.get('/api/jobs', async (req, res) => {
 });
 
 router.post('/api/jobs', async (req, res) => {
-    const { name, skill, description, price, userid } = req.body;
+    let { name, skill, description, price, userid } = req.body;
+
+    if (!Number.isFinite(price)) {
+        return res.status(400).send({ error: 'Price must be numbers' });
+    }
+    if (!Number.isFinite(userid)){
+        return res.status(400).send({ error: 'User ID must be a number' });
+    }
+
+    name = sanitizeHTML(name);
+    skill = sanitizeHTML(skill);
+    description = sanitizeHTML(description);
+
     if (!name || !skill || !description || !price || !userid) {
         return res.status(400).send({ error: 'Missing required information' });
     }
