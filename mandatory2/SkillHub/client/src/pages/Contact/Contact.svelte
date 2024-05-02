@@ -87,7 +87,7 @@
                 id="subject"
                 type="text"
                 bind:value={subject}
-                placeholder="Enter email subject"
+                placeholder="Enter email subject - feedback is welcome"
                 required
             />
 
@@ -95,7 +95,7 @@
             <textarea
                 id="message"
                 bind:value={message}
-                placeholder="Enter your message"
+                placeholder="Enter your message - you are welcome to give me the feedback for this project here"
                 required
             ></textarea>
 

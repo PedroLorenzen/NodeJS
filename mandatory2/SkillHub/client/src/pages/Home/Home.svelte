@@ -73,12 +73,21 @@
         }
         const result = await response.json();
         if (!response.ok) {
-            if (response.status === 400) {
+            if (response.status === 409) {
+                toast.error(
+                    result.error || "User with this email already exists",
+                    {
+                        duration: 3000,
+                        position: "top-right",
+                    },
+                );
+            }
+            else if (response.status === 400) {
                 toast.error(
                     result.error ||
                         "Password must be at least 6 characters long, include at least one uppercase letter, and one special character",
                     {
-                        duration: 2000,
+                        duration: 3000,
                         position: "top-right",
                     },
                 );
