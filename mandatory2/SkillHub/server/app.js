@@ -60,19 +60,19 @@ const authRateLimiter = rateLimit({
 app.use("/auth", authRateLimiter);
 
 import userRouter from './routers/userRouter.js';
-app.use(userRouter);
+app.use("/api", userRouter);
 
-import jobsRouter from './routers/jobRouter.js';
-app.use(jobsRouter); // app.use('/api/jobs', jobsRouter);
+import jobRouter from './routers/jobRouter.js';
+app.use("/api", jobRouter); // app.use('/api/jobs', jobsRouter);
 
 import authRouter from './routers/authRouter.js';
-app.use(authRouter); //app.use('/auth', authRouter);
+app.use("/auth", authRouter); //app.use('/auth', authRouter);
 
 import sessionRouter from './routers/sessionRouter.js';
-app.use(sessionRouter);
+app.use("/session", sessionRouter);
 
 import mailRouter from './routers/mailRouter.js';
-app.use(mailRouter);
+app.use("/api", mailRouter);
 
 app.all("*", (req, res) => {
     res.status(404).send({ message: "Not Found" });

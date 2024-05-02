@@ -5,13 +5,13 @@ import { sanitizeHTML } from '../util/sanitize.js';
 const router = Router();
 
 
-router.get('/api/jobs', async (req, res) => {
+router.get('/jobs', async (req, res) => {
     const result = await db.all('SELECT * FROM Jobs');
     console.log("All jobs have been fetched");
     res.send({ data: result })
 });
 
-router.post('/api/jobs', async (req, res) => {
+router.post('/jobs', async (req, res) => {
     let { name, skill, description, price, userid } = req.body;
 
     if (!Number.isFinite(price)) {

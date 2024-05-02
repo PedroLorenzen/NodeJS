@@ -5,7 +5,7 @@ import { sanitizeEmail } from '../util/sanitize.js';
 
 const router = Router();
 
-router.post('/auth/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     let { email, password } = req.body;
     email = sanitizeEmail(email);
     try {
@@ -35,7 +35,7 @@ router.post('/auth/login', async (req, res) => {
 });
 
 
-router.get('/auth/logout', (req, res) => {
+router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).send({ message: "Error logging out" });

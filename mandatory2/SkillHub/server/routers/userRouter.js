@@ -6,14 +6,14 @@ import { sanitizeHTML, sanitizeEmail } from '../util/sanitize.js';
 const router = Router();
 
 
-router.get('/api/users', async (req, res) => {
+router.get('/users', async (req, res) => {
     const result = await db.all('SELECT * FROM Users');
     res.send({ data: result })
     console.log(result);
 });
 
 
-router.post('/api/users', async (req, res) => {
+router.post('/users', async (req, res) => {
     let { name, email, password, location } = req.body;
 
     try{

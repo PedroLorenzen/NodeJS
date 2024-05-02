@@ -6,7 +6,7 @@ import { sanitizeHTML, sanitizeEmail } from '../util/sanitize.js';
 const router = Router();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-router.post('/api/mails', async (req, res) => {
+router.post('/mails', async (req, res) => {
   let { to, subject, message } = req.body;
 
   to = sanitizeEmail(to);

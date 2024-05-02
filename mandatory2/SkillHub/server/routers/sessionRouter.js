@@ -14,7 +14,7 @@ router.post('/session/setuser', (req, res) => {
     }
 });*/
 
-router.get('/session/getuser', (req, res) => {
+router.get('/getuser', (req, res) => {
     if (req.session.user) {
         res.send({ user: req.session.user });
         console.log(`Session for userID ${req.session.user.id} retrieved.`);
