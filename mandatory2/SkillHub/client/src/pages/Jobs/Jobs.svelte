@@ -8,14 +8,6 @@
     let jobs = [];
 
     onMount(async () => {
-        toast.success(
-            "Welcome to jobs. Here you can find the job you need help with",
-            {
-                duration: 5000,
-                position: "top-right",
-            },
-        );
-
         try {
             const jobResponse = await fetch($BASE_URL + "/api/jobs");
             if (jobResponse.ok) {

@@ -10,13 +10,6 @@
     let subject;
     let message;
 
-    onMount(async () => {
-        toast.success("Welcome. Here you can send an email", {
-            duration: 3000,
-            position: "top-right",
-        });
-    });
-
     async function postEmail() {
         const sanitizedEmail = sanitizeEmail(email);
         const sanitizedSubject = sanitizeHTML(subject);

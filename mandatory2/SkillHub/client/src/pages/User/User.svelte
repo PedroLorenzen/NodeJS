@@ -37,13 +37,6 @@
   onMount(async () => {
     try {
       const jobResponse = await fetch($BASE_URL + "/api/jobs");
-      toast.success(
-        "Welcome to your user page. Here you can post a job or see your posted jobs",
-        {
-          duration: 5000,
-          position: "top-right",
-        },
-      );
 
       if (jobResponse.ok) {
         const jobData = await jobResponse.json();
