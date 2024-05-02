@@ -5,7 +5,7 @@
 
 # svelte SKILLHUB
 
-> I am currently halfway through a Svelte project in my fourth semester of Computer Science studies at KEA.
+> I am currently halfway through a Svelte course in my fourth semester of Computer Science at KEA.
 
 > SKILLHUB is an easy-to-use job portal where you can post job opportunities or seek assistance with tasks. 
 
