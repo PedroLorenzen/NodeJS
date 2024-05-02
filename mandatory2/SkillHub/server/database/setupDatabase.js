@@ -38,8 +38,15 @@ async function setupDatabase() {
             await db.run(`INSERT INTO Users (name, email, password, location) VALUES ('Jane Doe', 'jane@doe.dk', '$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO', 'Vejle')`);
             await db.run(`INSERT INTO Users (name, email, password, location) VALUES ('Alice Doe', 'alice@doe.dk', '$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO', 'Vejle')`);
             await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in painting houses', 'Painting', 'If you want a person with 10 years of painting experience then I will be the right fit for you', 30, 1)`);
-            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in IT-support', 'IT-support', 'If you need help with your computer, I am the right person to help you', 50, 2)`);
-            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in roofing', 'Roofing', 'If you need help with your roof, please contact me I am very good', 70, 3)`);
+            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in IT-support', 'IT-support', 'If you need help with your computer, I am the right person to help you', 50, 1)`);
+            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in roofing', 'Roofing', 'If you need help with your roof, please contact me I am very good', 70, 1)`);
+            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in plumbing', 'Plumbing', 'If you need help with your plumbing, I am the right person to help you', 60, 2)`);
+            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in electrical', 'Electrical', 'If you need help with your electrical installations, I am the right person to help you', 80, 2)`);
+            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in carpentry', 'Carpentry', 'If you need help with your carpentry, I am the right person to help you', 90, 2)`);
+            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in masonry', 'Masonry', 'If you need help with your masonry, I am the right person to help you', 100, 3)`);
+            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in gardening', 'Gardening', 'If you need help with your gardening, I am the right person to help you', 110, 3)`);
+            await db.run(`INSERT INTO Jobs (name, skill, description, price, user_id) VALUES ('Expert in car repair', 'Car repair', 'If you need help with your car repair, I am the right person to help you', 120, 3)`);
+            
         }
     }
     catch (error) {

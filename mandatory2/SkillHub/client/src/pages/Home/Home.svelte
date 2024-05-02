@@ -139,13 +139,14 @@
         {#if showLogin}
             <form on:submit|preventDefault={handlePostLogin} class="form">
                 <label for="email">Email:</label>
-                <input type="email" bind:value={email} id="email" required />
+                <input type="email" bind:value={email} id="email" placeholder="dummy: john@doe.dk" required />
 
                 <label for="password">Password:</label>
                 <input
                     type="password"
                     bind:value={password}
                     id="password"
+                    placeholder="dummy: 123"
                     required
                 />
 

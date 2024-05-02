@@ -20,7 +20,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false } //  cookie: { secure: process.env.NODE_ENV === 'production' } kan sættes til true hvis man bruger https i production (kræver certifikat)
+    cookie: { secure: false }
 }));
 
 const limiter = rateLimit({
