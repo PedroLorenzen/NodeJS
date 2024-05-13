@@ -1,0 +1,7 @@
+.env
+skillhub.db
+node_modules/
+npm-debug.log
+.npm/
+.cache/
+*.log
