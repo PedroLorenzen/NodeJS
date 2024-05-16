@@ -5,16 +5,21 @@ import { sanitizeHTML } from '../util/sanitize.js';
 const router = Router();
 
 router.get('/jobs', async (req, res) => {
-    if (req.session.user) {
-        try {
-            const db = await connect();
-            const result = await db.collection('jobs').find().toArray();
-            console.log("All jobs have been fetched");
-            res.send({ data: result });
-        } catch (error) {
-            console.error('Error fetching jobs:', error);
-            res.status(500).send({ error: 'Error fetching jobs' });
+    try {
+        const db = await connect();
+        const query = {};
+
+        if (req.session.user && req.query.filterByUser === 'true') {
+            query.user_id = req.session.user.id;  // assuming user id is stored in session under user.id
+            console.log("Fetching jobs for user ID:", req.session.user.id);
         }
+
+        const jobs = await db.collection('jobs').find(query).toArray();
+        res.send({ data: jobs });
+        
+    } catch (error) {
+        console.error('Error fetching jobs:', error);
+        res.status(500).send({ error: 'Error fetching jobs' });
     }
 });
 

@@ -9,11 +9,17 @@
   $user;
 
   let userid = $user.user._id;
-  console.log("User ID:", userid);
   let username = $user.user.name;
-  console.log("Username:", username);
+  let email = $user.user.email;
 
-  let error = "";
+  let oldPassword, newPassword, confirmPassword
+
+  let activeForm = 'createJob';
+
+  function switchForm(form) {
+    activeForm = form;
+  }
+
   let name, skill, description, price;
   let jobs = [];
 
@@ -37,15 +43,21 @@
   ];
 
   onMount(async () => {
+    let url = $BASE_URL + "/api/jobs";
+    const shouldFilterByUser = true;
+
+    if (shouldFilterByUser) {
+      url += "?filterByUser=true";
+    }
+
     try {
-      const jobResponse = await fetch($BASE_URL + "/api/jobs", {
+      const jobResponse = await fetch(url, {
         credentials: "include",
       });
 
       if (jobResponse.ok) {
         const jobData = await jobResponse.json();
-        jobs = jobData.data.filter((job) => job.user_id === userid);
-        jobs = jobs.map((job) => ({
+        jobs = jobData.data.map((job) => ({
           ...job,
           id: job._id,
           name: sanitizeHTML(job.name),
@@ -53,18 +65,15 @@
           description: sanitizeHTML(job.description),
           price: job.price,
         }));
-        console.log("Received job data:", jobs);
+        console.log("Received user jobs:", jobs);
       } else if (jobResponse.status === 429) {
         navigate("/RateLimitExceeded");
       } else if (jobResponse.status === 400) {
         const errorData = await jobResponse.json();
-        toast.error(
-          errorData.error || "Price and User ID needs to be a number",
-          {
-            duration: 2000,
-            position: "top-right",
-          },
-        );
+        toast.error(errorData.error || "Server error", {
+          duration: 2000,
+          position: "top-right",
+        });
       } else {
         console.error("Failed to fetch jobs:", await jobResponse.text());
       }
@@ -78,14 +87,17 @@
       method: "GET",
       credentials: "include",
     });
+
     if (response.status === 429) {
       navigate("/RateLimitExceeded");
       return;
     }
     const result = await response.json();
+
     if (!response.ok) {
       throw new Error(result.message || "Failed to logout");
     }
+
     setTimeout(() => {
       navigate("/");
     }, 2000);
@@ -123,11 +135,15 @@
     });
     console.log("Userid: " + userid);
     const result = await response.json();
+
     if (response.status === 429) {
       navigate("/RateLimitExceeded");
-    } else if (!response.ok) {
+    } 
+    
+    else if (!response.ok) {
       throw new Error(result.error || "Failed to post job");
     }
+
     setTimeout(() => {
       location.reload();
     }, 2000);
@@ -147,6 +163,7 @@
       },
     );
   }
+  
 </script>
 
 <Toaster />
@@ -157,30 +174,62 @@
     <button on:click={handlePostLogoutWithToasts} class="logout">Logout</button>
   </div>
   <div class="container">
-    <h2>Create a New Job</h2>
-    <form on:submit|preventDefault={handlePostJobWithToasts} class="form">
-      <label for="name">Name:</label>
-      <input type="text" bind:value={name} id="name" required />
+    <div class="formButtons">
+    <button on:click={() => switchForm('createJob')} class="toggle-button">Create Job</button>
+    <button on:click={() => switchForm('editUser')} class="toggle-button">Edit User</button>
+  </div>
+    
+    {#if activeForm === 'createJob'}
+      <h2>Create a New Job</h2>
+      <form on:submit|preventDefault={handlePostJobWithToasts} class="form">
+        <label for="name">Name:</label>
+        <input type="text" bind:value={name} id="name" required />
 
-      <label for="skill">Skill:</label>
-      <select bind:value={skill} id="skill" required>
-        <option value="" disabled selected>Select a skill</option>
-        {#each skills as skillOption}
-          <option value={skillOption}>{skillOption}</option>
-        {/each}
-      </select>
+        <label for="skill">Skill:</label>
+        <select bind:value={skill} id="skill" required>
+          <option value="" disabled selected>Select a skill</option>
+          {#each skills as skillOption}
+            <option value={skillOption}>{skillOption}</option>
+          {/each}
+        </select>
 
-      <label for="description">Description:</label>
-      <input type="text" bind:value={description} id="description" required />
+        <label for="description">Description:</label>
+        <input type="text" bind:value={description} id="description" required />
 
-      <label for="price">Price:</label>
-      <input type="number" bind:value={price} id="price" required />
+        <label for="price">Price:</label>
+        <input type="number" bind:value={price} id="price" required />
 
-      <label for="userid">User ID:</label>
-      <input type="number" bind:value={userid} id="userid" required readonly />
+        <label for="userid">User ID:</label>
+        <input type="number" bind:value={userid} id="userid" required readonly />
 
-      <button type="submit" class="submit-button">Create Job</button>
-    </form>
+        <button type="submit" class="submit-button">Create Job</button>
+      </form>
+    {/if}
+
+    {#if activeForm === 'editUser'}
+      <h2>Edit User</h2>
+      <form on:submit|preventDefault={handlePostJobWithToasts} class="form">
+        <label for="userid">User ID:</label>
+        <input type="text" bind:value={userid} id="userid" readonly />
+
+        <label for="username">Username:</label>
+        <input type="text" bind:value={username} id="username" required />
+
+        <label for="email">Email:</label>
+        <input type="email" bind:value={email} id="email" required />
+
+        <label for="oldPassword">Old Password:</label>
+        <input type="password" bind:value={oldPassword} id="oldPassword" />
+
+        <label for="newPassword">New Password:</label>
+        <input type="password" bind:value={newPassword} id="newPassword" />
+
+        <label for="confirmPassword">Confirm New Password:</label>
+        <input type="password" bind:value={confirmPassword} id="confirmPassword" />
+
+        <button type="submit" class="submit-button">Update User</button>
+      </form>
+    {/if}
   </div>
   <h1>Your Posted Jobs</h1>
   <div class="jobs-container">
@@ -299,6 +348,9 @@
 
   button:hover {
     background-color: #0056b3;
+  }
+  .formButtons{
+    background-color: lightgrey;
   }
   .jobs-container {
     display: flex;
