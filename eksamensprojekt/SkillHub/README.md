@@ -24,7 +24,12 @@ npm run dev
 
 3. CD into server and install the packages aswell.
 
-4. run this script to create the local sqlite database
+4. Create a .env file (you can copy the .env.example file) and fill out the necessary values.
+```
+cp .env.example .env
+```
+
+4. run this script to create the local mongoDB database
 
 ```
 npm run database-create
