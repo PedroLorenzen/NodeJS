@@ -191,7 +191,7 @@
         background-color: white;
         width: 100%;
         padding: 10px 30px 50px 30px;
-        margin-top: 35px;
+        margin-top: 25px;
         margin-left: -30px;
         margin-right: 50px;
     }

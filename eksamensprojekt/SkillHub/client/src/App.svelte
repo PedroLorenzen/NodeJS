@@ -1,6 +1,5 @@
 <script>
   import { Router, Route, Link } from 'svelte-routing';
-  import { get } from "svelte/store";
   import { onMount } from 'svelte';
   import checkSession from './util/checkSession.js';
   import PrivateRouteGuard from './components/ProtectedRoute/PrivateRouteGuard.svelte';

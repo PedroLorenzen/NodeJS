@@ -9,7 +9,7 @@ let client;
 
 const connect = async () => {
   if (!client) {
-    client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(uri);
     await client.connect();
     console.log('Connected to MongoDB');
   }

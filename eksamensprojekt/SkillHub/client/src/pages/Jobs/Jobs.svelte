@@ -15,10 +15,12 @@
                 console.log("Received job data:", jobData);
                 jobs = jobData.data.map((job) => ({
                     ...job,
+                    id: job._id,
                     name: job.name,
                     skill: job.skill,
                     description: job.description,
                     price: job.price,
+                    user_id: job.user_id,
                 }));
             } else if (jobResponse.status === 429) {
                 navigate("/RateLimitExceeded");
@@ -80,7 +82,7 @@
         background-color: white;
         width: 100%;
         padding: 0 30px 0 30px;
-        margin-top: 35px;
+        margin-top: 25px;
         margin-left: -30px;
         margin-right: 50px;
     }

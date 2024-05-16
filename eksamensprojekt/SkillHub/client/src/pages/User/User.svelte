@@ -8,8 +8,10 @@
 
   $user;
 
-  let userid = $user.user.id;
+  let userid = $user.user._id;
+  console.log("User ID:", userid);
   let username = $user.user.name;
+  console.log("Username:", username);
 
   let error = "";
   let name, skill, description, price;
@@ -43,11 +45,13 @@
         jobs = jobData.data.filter((job) => job.user_id === userid);
         jobs = jobs.map((job) => ({
           ...job,
+          id: job._id,
           name: sanitizeHTML(job.name),
           skill: sanitizeHTML(job.skill),
           description: sanitizeHTML(job.description),
           price: job.price,
         }));
+        console.log("Received job data:", jobs);
       } else if (jobResponse.status === 429) {
         navigate("/RateLimitExceeded");
       } else if (jobResponse.status === 400) {
@@ -66,17 +70,6 @@
       console.error("Error during job fetch operations:", error);
     }
   });
-
-  /*
-  $: if ($user) {
-    console.log("Reactive User Details:", $user);
-    console.log("User ID:", $user.user.id);
-    console.log("User name:", $user.user.name);
-    console.log("User email:", $user.user.email);
-    console.log("User location:", $user.user.location);
-  } else {
-    console.log("User data is not yet available");
-  }*/
 
   async function postLogout() {
     const response = await fetch("http://localhost:8080/auth/logout", {
@@ -122,9 +115,10 @@
         skill: sanitizeHTML(skill),
         description: sanitizeHTML(description),
         price: price,
-        userid,
+        user_id: userid,
       }),
     });
+    console.log("Userid: " + userid);
     const result = await response.json();
     if (response.status === 429) {
       navigate("/RateLimitExceeded");
@@ -180,7 +174,7 @@
       <input type="number" bind:value={price} id="price" required />
 
       <label for="userid">User ID:</label>
-      <input type="text" bind:value={userid} id="userid" required readonly />
+      <input type="number" bind:value={userid} id="userid" required readonly />
 
       <button type="submit" class="submit-button">Create Job</button>
     </form>
@@ -215,6 +209,7 @@
     background-color: white;
     width: 100%;
     padding: 20px 30px 0 30px;
+    margin-top: 25px;
     margin-left: -30px;
     margin-right: 50px;
   }
