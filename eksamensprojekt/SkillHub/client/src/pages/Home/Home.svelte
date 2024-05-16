@@ -17,12 +17,12 @@
         const sanitizedPassword = sanitizeHTML(password);
         const response = await fetch($BASE_URL + "/auth/login", {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 email: sanitizedEmail,
                 password: sanitizedPassword,
-            }),
-            credentials: "include",
+            })
         });
         if (response.status === 429) {
             navigate("/RateLimitExceeded");
@@ -59,13 +59,14 @@
         const sanitizedLocation = sanitizeHTML(location);
         const response = await fetch($BASE_URL + "/api/users", {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 name: sanitizedName,
                 email: sanitizedEmail,
                 password: sanitizedPassword,
                 location: sanitizedLocation,
-            }),
+            })
         });
         if (response.status === 429) {
             navigate("/RateLimitExceeded");

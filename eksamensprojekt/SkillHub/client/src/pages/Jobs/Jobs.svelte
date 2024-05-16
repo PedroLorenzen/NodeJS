@@ -9,7 +9,9 @@
 
     onMount(async () => {
         try {
-            const jobResponse = await fetch($BASE_URL + "/api/jobs");
+            const jobResponse = await fetch($BASE_URL + "/api/jobs", {
+                credentials: "include",
+            });
             if (jobResponse.ok) {
                 const jobData = await jobResponse.json();
                 console.log("Received job data:", jobData);

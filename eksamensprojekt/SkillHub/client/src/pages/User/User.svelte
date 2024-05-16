@@ -38,7 +38,9 @@
 
   onMount(async () => {
     try {
-      const jobResponse = await fetch($BASE_URL + "/api/jobs");
+      const jobResponse = await fetch($BASE_URL + "/api/jobs", {
+        credentials: "include",
+      });
 
       if (jobResponse.ok) {
         const jobData = await jobResponse.json();
@@ -107,6 +109,7 @@
   async function postJob() {
     const response = await fetch("http://localhost:8080/api/jobs", {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

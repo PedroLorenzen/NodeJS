@@ -16,6 +16,7 @@
         const sanitizedMessage = sanitizeHTML(message);
         const response = await fetch($BASE_URL + "/api/mails", {
             method: "POST",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
@@ -23,7 +24,7 @@
                 to: sanitizedEmail,
                 subject: sanitizedSubject,
                 message: sanitizedMessage,
-            }),
+            })
         });
         if (response.ok) {
             try {
