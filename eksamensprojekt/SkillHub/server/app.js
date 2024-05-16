@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import express from 'express';
-import session from 'express-session';
 import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
 import cors from "cors";
+import sessionMiddleware from './middleware/sessionMiddleware.js';
 
 const app = express();
 
@@ -12,16 +12,11 @@ app.use(cors({
     origin: true
 }));
 
+app.use(sessionMiddleware);
+
 app.use(express.static('public'));
 app.use(express.json());
 app.use(helmet());
-
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }
-}));
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
