@@ -5,16 +5,6 @@ import { sanitizeHTML, sanitizeEmail } from '../util/sanitize.js';
 
 const router = Router();
 
-async function getNextUserId() {
-    const db = await connect();
-    const result = await db.collection('counters').findOneAndUpdate(
-        { _id: 'userId' },
-        { $inc: { sequence_value: 1 } },
-        { returnOriginal: false, upsert: true }
-    );
-    return result.value.sequence_value;
-}
-
 router.get('/users', async (req, res) => {
     if (req.session.user) {
         try {
@@ -65,7 +55,14 @@ router.post('/users', async (req, res) => {
         }
         const salt = await bcrypt.genSalt(12);
         const hashedPassword = await bcrypt.hash(password, salt);
-        const userId = await getNextUserId();
+
+        const generateUserId = await db.collection('counters').findOneAndUpdate(
+            { _id: 'userId' },
+            { $inc: { sequence_value: 1 } },
+            { returnDocument: 'after', upsert: true }
+        );
+
+        const userId = generateUserId.sequence_value;
 
         const newUser = {
             _id: userId,

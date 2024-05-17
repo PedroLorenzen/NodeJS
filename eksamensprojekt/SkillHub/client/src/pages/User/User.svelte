@@ -79,7 +79,7 @@
   });
 
   async function postLogout() {
-    const response = await fetch("http://localhost:8080/auth/logout", {
+    const response = await fetch("http://localhost:8080/logout", {
       method: "GET",
       credentials: "include",
     });

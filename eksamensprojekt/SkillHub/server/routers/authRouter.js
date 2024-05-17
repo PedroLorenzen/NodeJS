@@ -2,19 +2,23 @@ import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import { connect } from '../database/connection.js';
 import { sanitizeEmail } from '../util/sanitize.js';
+import authRateLimiter from '../middleware/authRateLimiterMiddleware.js';
 
 const router = Router();
 
-router.post('/login', async (req, res) => {
+router.post('/login', authRateLimiter, async (req, res) => {
     let { email, password } = req.body;
     email = sanitizeEmail(email);
+    console.log(email, password);
 
     try {
         const db = await connect();
         const userQuery = await db.collection('users').findOne({ email });
+        console.log(userQuery)
 
         if (!userQuery) {
-            return res.status(404).send({ message: "User not found" });
+            console.log(`User with email: ${email} does not exist in the database`);
+            return res.status(404).send({ message: "Invalid username" });  // Return immediately after response
         }
 
         const isMatch = await bcrypt.compare(password, userQuery.password);
@@ -25,19 +29,19 @@ router.post('/login', async (req, res) => {
                 name: userQuery.name,
                 location: userQuery.location
             };
-            res.send({ message: "Logged in successfully" });
             console.log(`User with ID: ${userQuery._id} has logged in`);
+            return res.send({ message: "Logged in successfully" });  // Return immediately after response
         } else {
-            res.status(401).send({ message: "Invalid password" });
             console.log(`User with ID: ${userQuery._id} has entered an invalid password`);
+            return res.status(401).send({ message: "Invalid password" });  // Return immediately after response
         }
     } catch (error) {
         console.error('Login error:', error);
-        res.status(500).send({ message: "Error logging in" });
+        return res.status(500).send({ message: "Error logging in" });  // Return immediately after response
     }
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', authRateLimiter, (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).send({ message: "Error logging out" });

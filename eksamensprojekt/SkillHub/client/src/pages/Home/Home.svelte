@@ -15,15 +15,16 @@
     async function postLogin() {
         const sanitizedEmail = sanitizeEmail(email);
         const sanitizedPassword = sanitizeHTML(password);
-        const response = await fetch($BASE_URL + "/auth/login", {
+        const response = await fetch($BASE_URL + "/login", {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 email: sanitizedEmail,
                 password: sanitizedPassword,
-            })
+            }),
         });
+        console.log("Response: ", response);
         if (response.status === 429) {
             navigate("/RateLimitExceeded");
             return;
@@ -66,7 +67,7 @@
                 email: sanitizedEmail,
                 password: sanitizedPassword,
                 location: sanitizedLocation,
-            })
+            }),
         });
         if (response.status === 429) {
             navigate("/RateLimitExceeded");
@@ -82,8 +83,7 @@
                         position: "top-right",
                     },
                 );
-            }
-            else if (response.status === 400) {
+            } else if (response.status === 400) {
                 toast.error(
                     result.error ||
                         "Password must be at least 6 characters long, include at least one uppercase letter, and one special character",
@@ -140,7 +140,13 @@
         {#if showLogin}
             <form on:submit|preventDefault={handlePostLogin} class="form">
                 <label for="email">Email:</label>
-                <input type="email" bind:value={email} id="email" placeholder="dummy: john@doe.dk" required />
+                <input
+                    type="email"
+                    bind:value={email}
+                    id="email"
+                    placeholder="dummy: john@doe.dk"
+                    required
+                />
 
                 <label for="password">Password:</label>
                 <input
@@ -155,10 +161,7 @@
             </form>
         {/if}
         {#if showRegister}
-            <form
-                on:submit|preventDefault={handlePostRegister}
-                class="form"
-            >
+            <form on:submit|preventDefault={handlePostRegister} class="form">
                 <label for="name">Name:</label>
                 <input type="text" bind:value={name} id="name" required />
 

@@ -1,6 +1,9 @@
 import { connect, disconnect } from './connection.js';
 
-const setupDatabase = async (deleteMode = false) => {
+const deleteMode = process.argv.includes('--delete');
+console.log(process.argv);
+
+async function setupDatabase() {
     try {
         const db = await connect();
 
