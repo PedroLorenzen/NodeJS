@@ -99,7 +99,7 @@
     }, 2000);
   }
 
-  async function handlePostLogoutWithToasts() {
+  async function handlePostLogout() {
     await toast.promise(
       postLogout(),
       {
@@ -143,7 +143,7 @@
     }, 2000);
   }
 
-  async function handlePostJobWithToasts() {
+  async function handlePostJob() {
     await toast.promise(
       postJob(),
       {
@@ -164,7 +164,7 @@
 <main>
   <div>
     <h1>Welcome {username || "Not Available"}</h1>
-    <button on:click={handlePostLogoutWithToasts} class="logout">Logout</button>
+    <button on:click={handlePostLogout} class="logout">Logout</button>
   </div>
   <div class="container">
     <div class="formButtons">
@@ -178,7 +178,7 @@
 
     {#if activeForm === "createJob"}
       <h2>Create a New Job</h2>
-      <form on:submit|preventDefault={handlePostJobWithToasts} class="form">
+      <form on:submit|preventDefault={handlePostJob} class="form">
         <label for="name">Name:</label>
         <input type="text" bind:value={name} id="name" required />
 
@@ -211,7 +211,7 @@
 
     {#if activeForm === "editUser"}
       <h2>Edit User</h2>
-      <form on:submit|preventDefault={handlePostJobWithToasts} class="form">
+      <form on:submit|preventDefault={handlePostJob} class="form">
         <label for="userid">User ID:</label>
         <input type="text" bind:value={userid} id="userid" readonly />
 
