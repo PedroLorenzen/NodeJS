@@ -8,7 +8,7 @@ import sessionMiddleware from './middleware/sessionMiddleware.js';
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: true,
     credentials: true
 }));
 
@@ -55,19 +55,16 @@ const authRateLimiter = rateLimit({
 app.use("/auth", authRateLimiter);
 
 import authRouter from './routers/authRouter.js';
-app.use("/auth", authRouter); //app.use('/auth', authRouter);
+app.use("/auth", authRouter);
 
-import sessionRouter from './routers/sessionRouter.js';
-app.use("/session", sessionRouter);
+import usersRouter from './routers/usersRouter.js';
+app.use(usersRouter);
 
-import userRouter from './routers/userRouter.js';
-app.use("/api", userRouter);
+import jobsRouter from './routers/jobsRouter.js';
+app.use(jobsRouter);
 
-import jobRouter from './routers/jobRouter.js';
-app.use("/api", jobRouter); // app.use('/api/jobs', jobsRouter);
-
-import mailRouter from './routers/mailRouter.js';
-app.use("/api", mailRouter);
+import mailsRouter from './routers/mailsRouter.js';
+app.use(mailsRouter);
 
 app.all("*", (req, res) => {
     res.status(404).send({ message: "Not Found" });

@@ -1,8 +1,12 @@
 import { user } from "../stores/user.js";
+import { BASE_URL } from "../stores/url.js";
 
 export async function checkSession() {
+    let url = "http://localhost:8080/users";
+    url += "?getUser=true";
+    
     try {
-        const response = await fetch("http://localhost:8080/session/getuser", {
+        const response = await fetch(url, {
             credentials: "include",
         });
         if (response.ok) {

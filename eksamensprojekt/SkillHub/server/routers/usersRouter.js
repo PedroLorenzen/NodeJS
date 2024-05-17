@@ -16,14 +16,31 @@ async function getNextUserId() {
 }
 
 router.get('/users', async (req, res) => {
-    try {
-        const db = await connect();
-        const result = await db.collection('users').find().toArray();
-        res.send({ data: result });
-        console.log("All user have been fetched");
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        res.status(500).send({ error: 'Error fetching users' });
+    if (req.session.user) {
+        try {
+            const db = await connect();
+            if (req.query.getUser === "true") {
+                const user = await db.collection('users').findOne({ _id: req.session.user.id });
+                if (user) {
+                    res.send({ user });
+                    console.log(`Session for userID ${req.session.user.id} retrieved.`);
+                } else {
+                    res.status(404).send({ message: "User not found." });
+                    console.log(`User with ID ${req.session.user.id} not found.`);
+                }
+            }
+            else {
+                const result = await db.collection('users').find().toArray();
+                res.send({ data: result });
+                console.log("All user have been fetched");
+            }
+        } catch (error) {
+            console.error('Error fetching users:', error);
+            res.status(500).send({ error: 'Error fetching users' });
+        }
+    } else {
+        res.status(404).send({ message: "No session found." });
+        console.log("No session found.");
     }
 });
 

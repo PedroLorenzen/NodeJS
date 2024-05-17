@@ -12,9 +12,9 @@
   let username = $user.user.name;
   let email = $user.user.email;
 
-  let oldPassword, newPassword, confirmPassword
+  let oldPassword, newPassword, confirmPassword;
 
-  let activeForm = 'createJob';
+  let activeForm = "createJob";
 
   function switchForm(form) {
     activeForm = form;
@@ -43,12 +43,8 @@
   ];
 
   onMount(async () => {
-    let url = $BASE_URL + "/api/jobs";
-    const shouldFilterByUser = true;
-
-    if (shouldFilterByUser) {
-      url += "?filterByUser=true";
-    }
+    let url = $BASE_URL + "/jobs";
+    url += "?filterByUser=true";
 
     try {
       const jobResponse = await fetch(url, {
@@ -119,7 +115,7 @@
   }
 
   async function postJob() {
-    const response = await fetch("http://localhost:8080/api/jobs", {
+    const response = await fetch("http://localhost:8080/jobs", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -138,9 +134,7 @@
 
     if (response.status === 429) {
       navigate("/RateLimitExceeded");
-    } 
-    
-    else if (!response.ok) {
+    } else if (!response.ok) {
       throw new Error(result.error || "Failed to post job");
     }
 
@@ -163,7 +157,6 @@
       },
     );
   }
-  
 </script>
 
 <Toaster />
@@ -175,11 +168,15 @@
   </div>
   <div class="container">
     <div class="formButtons">
-    <button on:click={() => switchForm('createJob')} class="toggle-button">Create Job</button>
-    <button on:click={() => switchForm('editUser')} class="toggle-button">Edit User</button>
-  </div>
-    
-    {#if activeForm === 'createJob'}
+      <button on:click={() => switchForm("createJob")} class="toggle-button"
+        >Create Job</button
+      >
+      <button on:click={() => switchForm("editUser")} class="toggle-button"
+        >Edit User</button
+      >
+    </div>
+
+    {#if activeForm === "createJob"}
       <h2>Create a New Job</h2>
       <form on:submit|preventDefault={handlePostJobWithToasts} class="form">
         <label for="name">Name:</label>
@@ -200,13 +197,19 @@
         <input type="number" bind:value={price} id="price" required />
 
         <label for="userid">User ID:</label>
-        <input type="number" bind:value={userid} id="userid" required readonly />
+        <input
+          type="number"
+          bind:value={userid}
+          id="userid"
+          required
+          readonly
+        />
 
         <button type="submit" class="submit-button">Create Job</button>
       </form>
     {/if}
 
-    {#if activeForm === 'editUser'}
+    {#if activeForm === "editUser"}
       <h2>Edit User</h2>
       <form on:submit|preventDefault={handlePostJobWithToasts} class="form">
         <label for="userid">User ID:</label>
@@ -225,7 +228,11 @@
         <input type="password" bind:value={newPassword} id="newPassword" />
 
         <label for="confirmPassword">Confirm New Password:</label>
-        <input type="password" bind:value={confirmPassword} id="confirmPassword" />
+        <input
+          type="password"
+          bind:value={confirmPassword}
+          id="confirmPassword"
+        />
 
         <button type="submit" class="submit-button">Update User</button>
       </form>
@@ -349,7 +356,7 @@
   button:hover {
     background-color: #0056b3;
   }
-  .formButtons{
+  .formButtons {
     background-color: lightgrey;
   }
   .jobs-container {

@@ -9,7 +9,7 @@
 
     onMount(async () => {
         try {
-            const jobResponse = await fetch($BASE_URL + "/api/jobs", {
+            const jobResponse = await fetch($BASE_URL + "/jobs", {
                 credentials: "include",
             });
             if (jobResponse.ok) {

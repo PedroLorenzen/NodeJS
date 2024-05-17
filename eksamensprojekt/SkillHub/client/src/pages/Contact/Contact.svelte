@@ -14,7 +14,7 @@
         const sanitizedEmail = sanitizeEmail(email);
         const sanitizedSubject = sanitizeHTML(subject);
         const sanitizedMessage = sanitizeHTML(message);
-        const response = await fetch($BASE_URL + "/api/mails", {
+        const response = await fetch($BASE_URL + "/mails", {
             method: "POST",
             credentials: "include",
             headers: {

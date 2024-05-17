@@ -57,7 +57,7 @@
         const sanitizedPassword = sanitizeHTML(password);
         const sanitizedName = sanitizeHTML(name);
         const sanitizedLocation = sanitizeHTML(location);
-        const response = await fetch($BASE_URL + "/api/users", {
+        const response = await fetch($BASE_URL + "/users", {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
