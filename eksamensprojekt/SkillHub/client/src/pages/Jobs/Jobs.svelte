@@ -83,7 +83,7 @@
     main {
         background-color: white;
         width: 100%;
-        padding: 0 30px 0 30px;
+        padding: 0 30px 50px 30px;
         margin-top: 25px;
         margin-left: -30px;
         margin-right: 50px;
