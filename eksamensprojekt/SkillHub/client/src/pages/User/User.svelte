@@ -211,9 +211,8 @@
     } else if (!response.ok) {
       throw new Error(result.error || "Failed to update user");
     }
-    return 
     setTimeout(() => {
-      location.reload();
+      window.location.reload();
     }, 2000);
   }
 
