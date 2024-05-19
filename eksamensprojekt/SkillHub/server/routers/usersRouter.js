@@ -87,8 +87,8 @@ router.put("/users", async (req, res) => {
                 if (!name || !email || !location) {
                     return res.status(400).send({ error: "Missing required information" });
                 }
-                if (oldPassword && newPassword) {
-                    if (newPassword.length < 6 || !newPassword.match(/[A-Z]/) || !newPassword.match(/[^\w\s]/)) {
+                if (oldPassword) {
+                    if (newPassword.length < 6 || !newPassword.match(/[A-Z]/) || !newPassword.match(/[^\w\s]/) || newPassword === oldPassword || newPassword === undefined) {
                         return res.status(400).send({
                             error: "Password must be at least 6 characters long, include at least one uppercase letter, and one special character."
                         });
@@ -113,7 +113,18 @@ router.put("/users", async (req, res) => {
                     }
                     return res.status(401).send({ error: "Incorrect old password" });
                 }
-                return res.status(400).send({ error: "Missing old or new password" });
+                await db.collection("users").updateOne(
+                    { _id: req.session.user.id },
+                    {
+                        $set: {
+                            name: sanitizeHTML(name),
+                            email: sanitizeEmail(email),
+                            location: sanitizeHTML(location),
+                        }
+                    },
+                    { returnDocument: "after" }
+                );
+                return res.send({ message: "User updated successfully", user });
             }
             return res.status(404).send({ message: "User not found." });
         } catch (error) {

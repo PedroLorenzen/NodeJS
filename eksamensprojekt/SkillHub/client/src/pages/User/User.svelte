@@ -10,6 +10,7 @@
   let userid = $user.user._id;
   let username = $user.user.name;
   let email = $user.user.email;
+  let location = $user.user.location;
 
   let oldPassword, newPassword, confirmPassword;
 
@@ -35,7 +36,7 @@
       if (skillsResponse.ok) {
         const skillsData = await skillsResponse.json();
         skills = skillsData || [];
-        skills.forEach(skill => {
+        skills.forEach((skill) => {
           skillName[skill._id] = skill.name;
         });
         console.log("Fetched skills:", skills);
@@ -62,7 +63,7 @@
           ...job,
           id: job._id,
           name: sanitizeHTML(job.name),
-          skill_name: skillName[job.skill_id], 
+          skill_name: skillName[job.skill_id],
           description: sanitizeHTML(job.description),
           price: job.price,
         }));
@@ -171,6 +172,65 @@
       },
     );
   }
+
+  async function putUser() {
+    if (newPassword !== confirmPassword) {
+      toast.error("New password and confirm password do not match", {
+        duration: 3000,
+        position: "top-right",
+      });
+      throw new Error("New password and confirm password do not match");
+    }
+    const response = await fetch(`http://localhost:8080/users`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: sanitizeHTML(username),
+        email: sanitizeHTML(email),
+        location: sanitizeHTML(location),
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      }),
+    });
+    const result = await response.json();
+    if (response.status === 429) {
+      navigate("/RateLimitExceeded");
+      throw new Error("Rate limit exceeded");
+    } else if (response.status === 400) {
+      toast.error(
+        result.error || "The user is missing some required information",
+        {
+          duration: 3000,
+          position: "top-right",
+        },
+      );
+      throw new Error(result.error || "Failed to update user");
+    } else if (!response.ok) {
+      throw new Error(result.error || "Failed to update user");
+    }
+    return 
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
+  }
+
+  async function handlePutUser() {
+    await toast.promise(
+      putUser(),
+      {
+        loading: "Updating user...",
+        success: "User updated successfully. Refreshing page...",
+        error: "Failed to update user - please try again",
+      },
+      {
+        duration: 2000,
+        position: "top-right",
+      },
+    );
+  }
 </script>
 
 <Toaster />
@@ -219,7 +279,7 @@
 
     {#if activeForm === "editUser"}
       <h2>Edit User</h2>
-      <form on:submit|preventDefault={handlePostJob} class="form">
+      <form on:submit|preventDefault={handlePutUser} class="form">
         <label for="userid">User ID:</label>
         <input type="text" bind:value={userid} id="userid" readonly />
 
@@ -228,6 +288,9 @@
 
         <label for="email">Email:</label>
         <input type="email" bind:value={email} id="email" required />
+
+        <label for="location">Location:</label>
+        <input type="text" bind:value={location} id="location" />
 
         <label for="oldPassword">Old Password:</label>
         <input type="password" bind:value={oldPassword} id="oldPassword" />
@@ -270,7 +333,6 @@
     {/each}
   </div>
 </main>
-
 
 <style>
   main {
