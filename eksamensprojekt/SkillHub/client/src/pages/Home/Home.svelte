@@ -140,7 +140,7 @@
                     type="email"
                     bind:value={email}
                     id="email"
-                    placeholder="dummy: john@doe.dk"
+                    placeholder="dummy: chris@johnson.dk"
                     required
                 />
 

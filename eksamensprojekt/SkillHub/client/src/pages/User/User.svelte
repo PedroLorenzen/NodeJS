@@ -139,6 +139,7 @@
           position: "top-right",
         },
       );
+      throw new Error(result.error || "Failed to post job");
     } else if (response.status === 429) {
       navigate("/RateLimitExceeded");
     } else if (!response.ok) {

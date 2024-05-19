@@ -24,7 +24,7 @@
                 to: sanitizedEmail,
                 subject: sanitizedSubject,
                 message: sanitizedMessage,
-            })
+            }),
         });
         if (response.ok) {
             try {
@@ -36,6 +36,8 @@
             } catch (e) {
                 console.error("Error sending email: ", e);
             }
+        } else if (response.status === 400) {
+            
         } else if (response.status === 429) {
             navigate("/RateLimitExceeded");
         } else {

@@ -31,10 +31,11 @@ router.post('/login', authRateLimiter, async (req, res) => {
             };
             console.log(`User with ID: ${userQuery._id} has logged in`);
             return res.send({ message: "Logged in successfully" });  // Return immediately after response
-        } else {
-            console.log(`User with ID: ${userQuery._id} has entered an invalid password`);
-            return res.status(401).send({ message: "Invalid password" });  // Return immediately after response
         }
+
+        console.log(`User with ID: ${userQuery._id} has entered an invalid password`);
+        return res.status(401).send({ message: "Invalid password" });  // Return immediately after response
+
     } catch (error) {
         console.error('Login error:', error);
         return res.status(500).send({ message: "Error logging in" });  // Return immediately after response

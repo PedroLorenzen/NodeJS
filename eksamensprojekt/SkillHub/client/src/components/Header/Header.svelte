@@ -13,7 +13,7 @@
         navigate("/RateLimitExceeded");
       }
     } catch (error) {
-      console.error("Navigation error:", error);
+      throw new Error("Navigation error: " + error.message);
     }
   }
 </script>

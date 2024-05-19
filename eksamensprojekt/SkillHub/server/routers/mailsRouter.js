@@ -7,27 +7,32 @@ const router = Router();
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 router.post('/mails', async (req, res) => {
-    let { to, subject, message } = req.body;
-
-    to = sanitizeEmail(to);
-    subject = sanitizeHTML(subject);
-    message = sanitizeHTML(message);
-
+  if (req.session.user) {
     try {
+      let { to, subject, message } = req.body;
+
+      to = sanitizeEmail('chri46nj@stud.kea.dk');
+      subject = sanitizeHTML(subject);
+      message = sanitizeHTML(message);
+
+      if (!to || !subject || !message) {
+        return res.status(400).json({ error: 'Please make sure Email, Subject and Message is filled out' });
+      }
+
       const data = await resend.emails.send({
         from: 'Acme <onboarding@resend.dev>',
-        to: [to],
-        subject: subject,
-        html: `<strong>${message}</strong>`
+        to: sanitizeEmail('chri46nj@stud.kea.dk'),
+        subject: sanitizeHTML(subject),
+        html: sanitizeHTML(message)
       });
 
       console.log('Email sent:', data);
-      res.status(200).json({ message: 'Email sent successfully' });
+      res.status(200).send({ message: 'Email sent successfully' });
     } catch (error) {
       console.error('Error sending email:', error);
-      res.status(500).json({ message: 'Failed to send email' });
+      res.status(500).send({ error: 'Failed to send email' });
     }
   }
-);
+});
 
 export default router;
