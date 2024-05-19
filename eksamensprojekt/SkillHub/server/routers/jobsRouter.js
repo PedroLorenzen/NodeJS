@@ -64,9 +64,11 @@ router.get("/jobs", async (req, res) => {
 
             if (req.query.filterJobsByUser) {
                 query.user_id = req.session.user.id;
+            } else if (req.query.skillId) {
+                const skillId = parseInt(req.query.skillId);
+                query.skill_id = skillId;
             } else if (req.query.jobId) {
                 const jobId = parseInt(req.query.jobId);
-                console.log("ID: ", jobId);
                 const job = await db.collection("jobs").findOne({ _id: jobId });
                 if (job) {
                     return res.send({ job });
@@ -74,7 +76,7 @@ router.get("/jobs", async (req, res) => {
                 res.status(404).send({ message: "Job not found." });
                 return;
             } else if (req.query.jobSkills) {
-                
+
             }
             const jobs = await db.collection("jobs").find(query).toArray();
             res.send({ data: jobs });
@@ -126,7 +128,7 @@ router.put("/jobs", async (req, res) => {
                 { $set: sanitizedData },
                 { returnDocument: "after" }
             );
-            
+
             res.send({ message: "Job updated successfully: ", job: updatedJob });
         } catch (error) {
             console.error("Database error:", error);
