@@ -131,13 +131,19 @@
     });
     console.log("Userid: " + userid);
     const result = await response.json();
-
-    if (response.status === 429) {
+    if (response.status === 400) {
+      toast.error(
+        result.error || "The job is missing some required information",
+        {
+          duration: 3000,
+          position: "top-right",
+        },
+      );
+    } else if (response.status === 429) {
       navigate("/RateLimitExceeded");
     } else if (!response.ok) {
       throw new Error(result.error || "Failed to post job");
     }
-
     setTimeout(() => {
       location.reload();
     }, 2000);

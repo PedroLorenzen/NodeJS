@@ -16,7 +16,7 @@ router.get('/jobs', async (req, res) => {
 
         const jobs = await db.collection('jobs').find(query).toArray();
         res.send({ data: jobs });
-        
+
     } catch (error) {
         console.error('Error fetching jobs:', error);
         res.status(500).send({ error: 'Error fetching jobs' });
@@ -34,19 +34,36 @@ router.post('/jobs', async (req, res) => {
             return res.status(400).send({ error: 'User ID must be a number' });
         }
 
-        name = sanitizeHTML(name);
-        skill = sanitizeHTML(skill);
-        description = sanitizeHTML(description);
-
         if (!name || !skill || !description || !price || !user_id) {
             return res.status(400).send({ error: 'Missing required information' });
         } else {
             try {
+                name = sanitizeHTML(name);
+                skill = sanitizeHTML(skill);
+                description = sanitizeHTML(description);
+
                 const db = await connect();
-                const job = { name, skill, description, price, user_id };
-                const result = await db.collection('jobs').insertOne(job);
-                res.send({ insertedId: result.insertedId });
-                console.log("New job with ID: " + result.insertedId + " has been created");
+
+                const generateJobId = await db.collection('counters').findOneAndUpdate(
+                    { _id: 'jobId' },
+                    { $inc: { sequence_value: 1 } },
+                    { returnDocument: 'after', upsert: true }
+                );
+
+                const jobId = generateJobId.sequence_value;
+
+                const newJob = {
+                    _id: jobId,
+                    name,
+                    skill,
+                    description,
+                    price,
+                    user_id
+                };
+
+                await db.collection('jobs').insertOne(newJob);
+                res.send({ message: 'Job created successfully' });
+                console.log("New user with ID: " + newJob._id + " has been created");
                 console.log("Name: " + name + " Skill: " + skill + " Description: " + description + " Price: " + price + " User ID: " + user_id);
             } catch (error) {
                 console.error('Database error:', error);

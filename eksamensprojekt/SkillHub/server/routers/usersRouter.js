@@ -72,9 +72,9 @@ router.post('/users', async (req, res) => {
             location
         };
 
-        const result = await db.collection('users').insertOne(newUser);
-        res.send({ insertedId: result.insertedId });
-        console.log("New user with ID: " + result.insertedId + " has been created");
+        await db.collection('users').insertOne(newUser);
+        res.send({ message: 'User registered successfully' });
+        console.log("New user with ID: " + newUser._id + " has been created");
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).send({ error: 'Error registering user' });

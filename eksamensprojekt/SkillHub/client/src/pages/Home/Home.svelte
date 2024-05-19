@@ -54,19 +54,15 @@
     }
 
     async function postRegister() {
-        const sanitizedEmail = sanitizeEmail(email);
-        const sanitizedPassword = sanitizeHTML(password);
-        const sanitizedName = sanitizeHTML(name);
-        const sanitizedLocation = sanitizeHTML(location);
         const response = await fetch($BASE_URL + "/users", {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                name: sanitizedName,
-                email: sanitizedEmail,
-                password: sanitizedPassword,
-                location: sanitizedLocation,
+                name: sanitizeHTML(name),
+                email: sanitizeEmail(email),
+                password: sanitizeHTML(password),
+                location: sanitizeHTML(location),
             }),
         });
         if (response.status === 429) {
