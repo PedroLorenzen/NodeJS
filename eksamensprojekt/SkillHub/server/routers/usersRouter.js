@@ -5,31 +5,6 @@ import { sanitizeHTML, sanitizeEmail } from "../util/sanitize.js";
 
 const router = Router();
 
-router.get("/users", async (req, res) => {
-    if (req.session.user) {
-        try {
-            const db = await connect();
-            if (req.query.getUser === "true") {
-                const user = await db.collection("users").findOne({ _id: req.session.user.id });
-                if (user) {
-                    console.log(`Session for userID ${req.session.user.id} retrieved.`);
-                    return res.send({ user });
-                }
-                console.log(`User with ID ${req.session.user.id} not found.`);
-                return res.status(404).send({ message: "User not found." });
-            }
-            const result = await db.collection("users").find().toArray();
-            res.send({ data: result });
-            console.log("All users have been fetched");
-        } catch (error) {
-            console.error("Error fetching users:", error);
-            res.status(500).send({ error: "Error fetching users" });
-        }
-    } else {
-        res.status(401).send({ error: "Unauthorized" });
-    }
-});
-
 router.post("/users", async (req, res) => {
     try {
         let { name, email, password, location } = req.body;
@@ -77,6 +52,95 @@ router.post("/users", async (req, res) => {
     }
 });
 
+router.get("/users", async (req, res) => {
+    if (req.session.user) {
+        try {
+            const db = await connect();
+            if (req.query.getUser === "true") {
+                const user = await db.collection("users").findOne({ _id: req.session.user.id });
+                if (user) {
+                    console.log(`Session for userID ${req.session.user.id} retrieved.`);
+                    return res.send({ user });
+                }
+                console.log(`User with ID ${req.session.user.id} not found.`);
+                return res.status(404).send({ message: "User not found." });
+            }
+            const result = await db.collection("users").find().toArray();
+            res.send({ data: result });
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            res.status(500).send({ error: "Error fetching users" });
+        }
+    } else {
+        res.status(401).send({ error: "Unauthorized" });
+    }
+});
 
+router.put("/users", async (req, res) => {
+    if (req.session.user) {
+        try {
+            const { name, email, location, oldPassword, newPassword } = req.body;
+            let user = {};
+            const db = await connect();
+            user = await db.collection("users").findOne({ _id: req.session.user.id });
+            if (user) {
+                if (!name || !email || !location) {
+                    return res.status(400).send({ error: "Missing required information" });
+                }
+                if (oldPassword && newPassword) {
+                    if (newPassword.length < 6 || !newPassword.match(/[A-Z]/) || !newPassword.match(/[^\w\s]/)) {
+                        return res.status(400).send({
+                            error: "Password must be at least 6 characters long, include at least one uppercase letter, and one special character."
+                        });
+                    }
+                    const isMatch = await bcrypt.compare(oldPassword, user.password);
+                    if (isMatch) {
+                        const salt = await bcrypt.genSalt(12);
+                        const hashedPassword = await bcrypt.hash(newPassword, salt);
+                        await db.collection("users").updateOne(
+                            { _id: req.session.user.id },
+                            {
+                                $set: {
+                                    name: sanitizeHTML(name),
+                                    email: sanitizeEmail(email),
+                                    location: sanitizeHTML(location),
+                                    password: hashedPassword
+                                }
+                            },
+                            { returnDocument: "after" }
+                        );
+                        return res.send({ message: "User updated successfully", user });
+                    }
+                    return res.status(401).send({ error: "Incorrect old password" });
+                }
+                return res.status(400).send({ error: "Missing old or new password" });
+            }
+            return res.status(404).send({ message: "User not found." });
+        } catch (error) {
+            console.error("Error updating user:", error);
+            res.status(500).send({ error: "Error updating user" });
+        }
+    }
+});
+
+router.delete("/users", async (req, res) => {
+    if (req.session.user) {
+        try {
+            const db = await connect();
+            const user = await db.collection("users").findOne({ _id: req.session.user.id });
+            if (user) {
+                await db.collection("jobs").deleteMany({ user_id: req.session.user.id });
+                await db.collection("users").deleteOne({ _id: req.session.user.id });
+                return res.send({ message: "User deleted successfully" });
+            }
+            return res.status(404).send({ message: "User not found." });
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            res.status(500).send({ error: "Error deleting user" });
+        }
+    } else {
+        res.status(401).send({ error: "Unauthorized" });
+    }
+});
 
 export default router;

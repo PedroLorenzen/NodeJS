@@ -13,7 +13,7 @@ router.post("/jobs", async (req, res) => {
             if (!Number.isFinite(price) || price <= 0) {
                 return res.status(400).send({ error: "Price must be a number and over 0" });
             }
-            if(!Number.isFinite(skill_id)) {
+            if (!Number.isFinite(skill_id)) {
                 return res.status(400).send({ error: "Skill ID must be a number" });
             }
             if (!Number.isFinite(user_id)) {
@@ -114,25 +114,22 @@ router.put("/jobs", async (req, res) => {
                 return res.status(400).send({ error: "Missing required information" });
             }
 
-            const sanitizedData = {
-                _id: jobId,
-                name: sanitizeHTML(name),
-                skill_id,
-                description: sanitizeHTML(description),
-                price,
-                user_id
-            };
-
             const db = await connect();
             const updatedJob = await db.collection("jobs").findOneAndUpdate(
                 { _id: jobId },
-                { $set: sanitizedData },
+                {
+                    $set: {
+                        name: sanitizeHTML(name),
+                        skill_id,
+                        description: sanitizeHTML(description),
+                        price: price,
+                        user_id: user_id
+                    }
+                },
                 { returnDocument: "after" }
             );
-
             res.send({ message: "Job updated successfully: ", job: updatedJob });
         } catch (error) {
-            console.error("Database error:", error);
             res.status(500).send({ error: "Database operation failed" });
         }
     } else {
