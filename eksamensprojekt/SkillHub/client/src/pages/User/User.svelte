@@ -61,9 +61,9 @@
           description: sanitizeHTML(job.description),
           price: job.price,
         }));
-        console.log("Received user jobs:", jobs);
       } else if (jobResponse.status === 429) {
         navigate("/RateLimitExceeded");
+        throw new Error("Rate limit exceeded");
       } else if (jobResponse.status === 400) {
         const errorData = await jobResponse.json();
         toast.error(errorData.error || "Server error", {
@@ -86,6 +86,7 @@
 
     if (response.status === 429) {
       navigate("/RateLimitExceeded");
+      throw new Error("Rate limit exceeded");
       return;
     }
     const result = await response.json();
@@ -129,9 +130,11 @@
         user_id: userid,
       }),
     });
-    console.log("Userid: " + userid);
     const result = await response.json();
-    if (response.status === 400) {
+    if (response.status === 429) {
+      navigate("/RateLimitExceeded");
+      throw new Error("Rate limit exceeded");
+    } else if (response.status === 400) {
       toast.error(
         result.error || "The job is missing some required information",
         {
@@ -140,8 +143,6 @@
         },
       );
       throw new Error(result.error || "Failed to post job");
-    } else if (response.status === 429) {
-      navigate("/RateLimitExceeded");
     } else if (!response.ok) {
       throw new Error(result.error || "Failed to post job");
     }

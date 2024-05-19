@@ -26,12 +26,13 @@ router.post('/mails', async (req, res) => {
         html: sanitizeHTML(message)
       });
 
-      console.log('Email sent:', data);
       res.status(200).send({ message: 'Email sent successfully' });
     } catch (error) {
       console.error('Error sending email:', error);
       res.status(500).send({ error: 'Failed to send email' });
     }
+  } else {
+    res.status(401).send({ error: 'Unauthorized' });
   }
 });
 

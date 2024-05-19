@@ -28,7 +28,7 @@ const limiter = rateLimit({
         httpOnly: true,
         sameSite: 'strict'
     },
-    handler: (req, res) => {
+    handler: (req, res) => {        
         console.log(`Rate limit exceeded for ${req.ip}`);
         res.status(429).send('Too many requests, please try again later.');
     }

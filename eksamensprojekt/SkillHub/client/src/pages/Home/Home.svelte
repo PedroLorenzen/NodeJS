@@ -24,10 +24,9 @@
                 password: sanitizedPassword,
             }),
         });
-        console.log("Response: ", response);
         if (response.status === 429) {
             navigate("/RateLimitExceeded");
-            return;
+            throw new Error("Rate limit exceeded");
         }
         const result = await response.json();
         if (!response.ok) {
@@ -67,7 +66,7 @@
         });
         if (response.status === 429) {
             navigate("/RateLimitExceeded");
-            return;
+            throw new Error("Rate limit exceeded");
         }
         const result = await response.json();
         if (!response.ok) {

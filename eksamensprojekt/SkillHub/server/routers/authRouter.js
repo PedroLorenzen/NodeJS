@@ -9,12 +9,9 @@ const router = Router();
 router.post('/login', authRateLimiter, async (req, res) => {
     let { email, password } = req.body;
     email = sanitizeEmail(email);
-    console.log(email, password);
-
     try {
         const db = await connect();
         const userQuery = await db.collection('users').findOne({ email });
-        console.log(userQuery)
 
         if (!userQuery) {
             console.log(`User with email: ${email} does not exist in the database`);

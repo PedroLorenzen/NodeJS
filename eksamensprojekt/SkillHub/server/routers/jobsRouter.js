@@ -13,14 +13,13 @@ router.get('/jobs', async (req, res) => {
 
             if (req.query.filterByUser) {
                 query.user_id = req.session.user.id;
-                console.log("Fetching jobs for user ID:", req.session.user.id);
             }
             else if (req.query.getJobId) {
                 const _id = parseInt(req.query.getJobId);
                 console.log("ID: ", _id);
                 const job = await db.collection('jobs').findOne({ _id });
                 if (job) {
-                    console.log(`Session for userID ${job._id} retrieved.`);
+                    console.log(`The job with ${job._id} retrieved.`);
                     return res.send({ job });
                 }
                 res.status(404).send({ message: "Job not found." });
@@ -34,6 +33,8 @@ router.get('/jobs', async (req, res) => {
             console.error('Error fetching jobs:', error);
             res.status(500).send({ error: 'Error fetching jobs' });
         }
+    } else {
+        res.status(401).send({ error: 'Unauthorized' });
     }
 });
 
@@ -77,14 +78,15 @@ router.post('/jobs', async (req, res) => {
 
             await db.collection('jobs').insertOne(newJob);
             res.send({ message: 'Job created successfully' });
-            console.log("New user with ID: " + newJob._id + " has been created");
-            console.log("Name: " + name + " Skill: " + skill + " Description: " + description + " Price: " + price + " User ID: " + user_id);
 
         } catch (error) {
             console.error('Database error:', error);
             res.status(500).send({ error: 'Database operation failed' });
         }
+    } else {
+        res.status(401).send({ error: 'Unauthorized' });
     }
+
 });
 
 export default router;

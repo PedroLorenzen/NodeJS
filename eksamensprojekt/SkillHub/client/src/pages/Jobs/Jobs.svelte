@@ -12,26 +12,25 @@
             const jobResponse = await fetch($BASE_URL + "/jobs", {
                 credentials: "include",
             });
-            if (jobResponse.ok) {
-                const jobData = await jobResponse.json();
-                console.log("Received job data:", jobData);
-                jobs = jobData.data.map((job) => ({
-                    ...job,
-                    id: job._id,
-                    name: job.name,
-                    skill: job.skill,
-                    description: job.description,
-                    price: job.price,
-                    user_id: job.user_id,
-                }));
-            } else if (jobResponse.status === 429) {
+            if (jobResponse.status === 429) {
                 navigate("/RateLimitExceeded");
-            } else {
-                console.error(
-                    "Failed to fetch jobs:",
-                    await jobResponse.text(),
+                throw new Error("Rate limit exceeded");
+            } 
+            else if (!jobResponse.ok) {
+                throw new Error(
+                    "Failed to fetch jobs: " + (await jobResponse.text()),
                 );
             }
+            const jobData = await jobResponse.json();
+            jobs = jobData.data.map((job) => ({
+                ...job,
+                id: job._id,
+                name: job.name,
+                skill: job.skill,
+                description: job.description,
+                price: job.price,
+                user_id: job.user_id,
+            }));
         } catch (err) {
             console.error("Error during fetch operations:", err);
         }

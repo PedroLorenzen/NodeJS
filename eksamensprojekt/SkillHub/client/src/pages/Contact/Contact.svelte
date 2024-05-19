@@ -11,9 +11,6 @@
     let message;
 
     async function postEmail() {
-        const sanitizedEmail = sanitizeEmail(email);
-        const sanitizedSubject = sanitizeHTML(subject);
-        const sanitizedMessage = sanitizeHTML(message);
         const response = await fetch($BASE_URL + "/mails", {
             method: "POST",
             credentials: "include",
@@ -21,28 +18,24 @@
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                to: sanitizedEmail,
-                subject: sanitizedSubject,
-                message: sanitizedMessage,
+                to: sanitizeEmail(email),
+                subject: sanitizeHTML(subject),
+                message: sanitizeHTML(message),
             }),
         });
-        if (response.ok) {
-            try {
-                const data = await response.json();
-                console.log("Email sent successfully: ", data);
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
-            } catch (e) {
-                console.error("Error sending email: ", e);
-            }
-        } else if (response.status === 400) {
-            
-        } else if (response.status === 429) {
+
+        await response.json();
+
+        if (response.status === 429) {
             navigate("/RateLimitExceeded");
-        } else {
-            console.error("Failed to send email: ", await response.text());
+            throw new Error("Rate limit exceeded");
+        } else if (!response.ok) {
+            throw new Error("Failed to send email: " + (await response.text()));
         }
+        
+        setTimeout(() => {
+            location.reload();
+        }, 2000);
     }
 
     async function handlePostEmail() {
