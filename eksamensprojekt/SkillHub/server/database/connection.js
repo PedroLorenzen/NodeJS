@@ -1,5 +1,5 @@
-import { MongoClient } from 'mongodb';
-import dotenv from 'dotenv';
+import { MongoClient } from "mongodb";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ const connect = async () => {
   if (!client) {
     client = new MongoClient(uri);
     await client.connect();
-    console.log('Connected to MongoDB');
+    console.log("Connected to MongoDB");
   }
   return client.db(process.env.DB_NAME);
 };
@@ -20,7 +20,7 @@ const disconnect = async () => {
   if (client) {
     await client.close();
     client = null;
-    console.log('Disconnected from MongoDB');
+    console.log("Disconnected from MongoDB");
   }
 };
 

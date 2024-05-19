@@ -1,16 +1,16 @@
 <script>
-  import { Router, Route, Link } from 'svelte-routing';
-  import { onMount } from 'svelte';
-  import checkSession from './util/checkSession.js';
-  import PrivateRouteGuard from './components/ProtectedRoute/PrivateRouteGuard.svelte';
+  import { Router, Route, Link } from "svelte-routing";
+  import { onMount } from "svelte";
+  import checkSession from "./util/checkSession.js";
+  import PrivateRouteGuard from "./components/ProtectedRoute/PrivateRouteGuard.svelte";
   import Footer from "./components/Footer/Footer.svelte";
   import Header from "./components/Header/Header.svelte";
   import Home from "./pages/Home/Home.svelte";
   import User from "./pages/User/User.svelte";
   import Jobs from "./pages/Jobs/Jobs.svelte";
   import Contact from "./pages/Contact/Contact.svelte";
-  import Unauthorized from './pages/Unauthorized/Unauthorized.svelte';
-  import RateLimitExceeded from './pages/RateLimitExceeded/RateLimitExceeded.svelte';
+  import Unauthorized from "./pages/Unauthorized/Unauthorized.svelte";
+  import RateLimitExceeded from "./pages/RateLimitExceeded/RateLimitExceeded.svelte";
 
   onMount(async () => {
       await checkSession();

@@ -1,7 +1,7 @@
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
-import { MongoClient } from 'mongodb';
-import dotenv from 'dotenv';
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import { MongoClient } from "mongodb";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ const connect = async () => {
     if (!client) {
       client = new MongoClient(uri);
       await client.connect();
-      console.log('Connected to MongoDB');
+      console.log("Connected to MongoDB");
     }
     return client;
   };
@@ -26,9 +26,9 @@ const sessionMiddleware = session({
     dbName: process.env.DB_NAME
   }),
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === "production",
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 // e.g., 1 day
+    maxAge: 1000 * 60 * 60 * 24 // 1 dag
   }
 });
 

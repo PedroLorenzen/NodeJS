@@ -16,7 +16,7 @@ export async function checkSession() {
         }
         return null;
     } catch (error) {
-        console.error('Error checking session:', error);
+        console.error("Error checking session:", error);
         return null;
     }
 }

@@ -1,9 +1,9 @@
-import 'dotenv/config';
-import express from 'express';
-import { rateLimit } from 'express-rate-limit';
-import helmet from 'helmet';
+import "dotenv/config";
+import express from "express";
+import { rateLimit } from "express-rate-limit";
+import helmet from "helmet";
 import cors from "cors";
-import sessionMiddleware from './middleware/sessionMiddleware.js';
+import sessionMiddleware from "./middleware/sessionMiddleware.js";
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(cors({
 
 app.use(sessionMiddleware);
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 app.use(express.json());
 app.use(helmet());
 
@@ -26,26 +26,26 @@ const limiter = rateLimit({
     cookie: { 
         secure: false,
         httpOnly: true,
-        sameSite: 'strict'
+        sameSite: "strict"
     },
     handler: (req, res) => {        
         console.log(`Rate limit exceeded for ${req.ip}`);
-        res.status(429).send('Too many requests, please try again later.');
+        res.status(429).send("Too many requests, please try again later.");
     }
 });
 
 app.use(limiter);
 
-import authRouter from './routers/authRouter.js';
+import authRouter from "./routers/authRouter.js";
 app.use(authRouter);
 
-import usersRouter from './routers/usersRouter.js';
+import usersRouter from "./routers/usersRouter.js";
 app.use(usersRouter);
 
-import jobsRouter from './routers/jobsRouter.js';
+import jobsRouter from "./routers/jobsRouter.js";
 app.use(jobsRouter);
 
-import mailsRouter from './routers/mailsRouter.js';
+import mailsRouter from "./routers/mailsRouter.js";
 app.use(mailsRouter);
 
 app.all("*", (req, res) => {

@@ -1,11 +1,11 @@
-import { Router } from 'express';
-import { connect } from '../database/connection.js';
-import { sanitizeHTML } from '../util/sanitize.js';
-import { parse } from 'dotenv';
+import { Router } from "express";
+import { connect } from "../database/connection.js";
+import { sanitizeHTML } from "../util/sanitize.js";
+import { parse } from "dotenv";
 
 const router = Router();
 
-router.get('/jobs', async (req, res) => {
+router.get("/jobs", async (req, res) => {
     if (req.session.user) {
         try {
             const db = await connect();
@@ -17,7 +17,7 @@ router.get('/jobs', async (req, res) => {
             else if (req.query.getJobId) {
                 const _id = parseInt(req.query.getJobId);
                 console.log("ID: ", _id);
-                const job = await db.collection('jobs').findOne({ _id });
+                const job = await db.collection("jobs").findOne({ _id });
                 if (job) {
                     console.log(`The job with ${job._id} retrieved.`);
                     return res.send({ job });
@@ -26,32 +26,32 @@ router.get('/jobs', async (req, res) => {
                 console.log(`Job with ID ${_id} not found.`);
                 return;
             }
-            const jobs = await db.collection('jobs').find(query).toArray();
+            const jobs = await db.collection("jobs").find(query).toArray();
             res.send({ data: jobs });
 
         } catch (error) {
-            console.error('Error fetching jobs:', error);
-            res.status(500).send({ error: 'Error fetching jobs' });
+            console.error("Error fetching jobs:", error);
+            res.status(500).send({ error: "Error fetching jobs" });
         }
     } else {
-        res.status(401).send({ error: 'Unauthorized' });
+        res.status(401).send({ error: "Unauthorized" });
     }
 });
 
-router.post('/jobs', async (req, res) => {
+router.post("/jobs", async (req, res) => {
     if (req.session.user) {
         try {
             let { name, skill, description, price, user_id } = req.body;
 
             if (!Number.isFinite(price) || price <= 0) {
-                return res.status(400).send({ error: 'Price must be a number and over 0' });
+                return res.status(400).send({ error: "Price must be a number and over 0" });
             }
             if (!Number.isFinite(user_id)) {
-                return res.status(400).send({ error: 'User ID must be a number' });
+                return res.status(400).send({ error: "User ID must be a number" });
             }
 
             if (!name || !skill || !description || !price || !user_id) {
-                return res.status(400).send({ error: 'Missing required information' });
+                return res.status(400).send({ error: "Missing required information" });
             }
             name = sanitizeHTML(name);
             skill = sanitizeHTML(skill);
@@ -59,10 +59,10 @@ router.post('/jobs', async (req, res) => {
 
             const db = await connect();
 
-            const generateJobId = await db.collection('counters').findOneAndUpdate(
-                { _id: 'jobId' },
+            const generateJobId = await db.collection("counters").findOneAndUpdate(
+                { _id: "jobId" },
                 { $inc: { sequence_value: 1 } },
-                { returnDocument: 'after', upsert: true }
+                { returnDocument: "after", upsert: true }
             );
 
             const jobId = generateJobId.sequence_value;
@@ -76,15 +76,15 @@ router.post('/jobs', async (req, res) => {
                 user_id
             };
 
-            await db.collection('jobs').insertOne(newJob);
-            res.send({ message: 'Job created successfully' });
+            await db.collection("jobs").insertOne(newJob);
+            res.send({ message: "Job created successfully" });
 
         } catch (error) {
-            console.error('Database error:', error);
-            res.status(500).send({ error: 'Database operation failed' });
+            console.error("Database error:", error);
+            res.status(500).send({ error: "Database operation failed" });
         }
     } else {
-        res.status(401).send({ error: 'Unauthorized' });
+        res.status(401).send({ error: "Unauthorized" });
     }
 
 });

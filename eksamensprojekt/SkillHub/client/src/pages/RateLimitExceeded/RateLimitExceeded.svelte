@@ -1,8 +1,8 @@
 <script>
-    import { navigate } from 'svelte-routing';
+    import { navigate } from "svelte-routing";
   
     function goHome() {
-      navigate('/');
+      navigate("/");
     }
   </script>
   
@@ -17,7 +17,7 @@
       background-color: #232323;
       color: white;
       text-align: center;
-      font-family: 'Arial', sans-serif;
+      font-family: "Arial", sans-serif;
     }
   
     .message {
