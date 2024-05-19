@@ -66,7 +66,6 @@
           description: sanitizeHTML(job.description),
           price: job.price,
         }));
-        console.log(jobs.skille_name);
         console.log("Fetched jobs:", jobs); // Log fetched jobs
       } else if (jobResponse.status === 429) {
         navigate("/RateLimitExceeded");
