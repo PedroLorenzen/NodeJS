@@ -44,7 +44,7 @@
 
   onMount(async () => {
     let url = $BASE_URL + "/jobs";
-    url += "?filterByUser=true";
+    url += "?filterJobsByUser=true";
 
     try {
       const jobResponse = await fetch(url, {
