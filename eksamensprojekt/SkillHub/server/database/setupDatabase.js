@@ -21,7 +21,7 @@ async function setupDatabase() {
         const initialCounters = [
         { _id: "userId", sequence_value: 3 },
         { _id: "jobId", sequence_value: 9 },
-        { _id: "skillId", sequence_value: 9}
+        { _id: "skillId", sequence_value: 15}
         ];
 
         await countersCollection.insertMany(initialCounters);

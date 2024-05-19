@@ -3,7 +3,6 @@
   import { navigate } from "svelte-routing";
   import toast, { Toaster } from "svelte-french-toast";
   import { user } from "../../stores/user.js";
-  import { BASE_URL } from "../../stores/url.js";
   import { sanitizeHTML } from "../../util/sanitize.js";
 
   $user;
@@ -20,31 +19,37 @@
     activeForm = form;
   }
 
-  let name, skill, description, price;
-  let jobs = [];
+  let name, skill_id, description, price;
 
-  const skills = [
-    "Painting",
-    "IT-support",
-    "Drywall",
-    "Roofing",
-    "Plumbing",
-    "Electrical",
-    "Carpentry",
-    "Masonry",
-    "Gardening",
-    "Car repair",
-    "Cleaning",
-    "Cooking",
-    "Childcare",
-    "Petcare",
-    "Tutoring",
-    "Personal training",
-  ];
+  let jobs = [];
+  let skills = [];
+  let skillName = {};
 
   onMount(async () => {
-    let url = $BASE_URL + "/jobs";
-    url += "?filterJobsByUser=true";
+    let skillsUrl = "http://localhost:8080/skills";
+    try {
+      const skillsResponse = await fetch(skillsUrl, {
+        credentials: "include",
+      });
+
+      if (skillsResponse.ok) {
+        const skillsData = await skillsResponse.json();
+        skills = skillsData || [];
+        skills.forEach(skill => {
+          skillName[skill._id] = skill.name;
+        });
+        console.log("Fetched skills:", skills);
+      } else if (skillsResponse.status === 429) {
+        navigate("/RateLimitExceeded");
+        throw new Error("Rate limit exceeded");
+      } else {
+        console.error("Failed to fetch skills:", await skillsResponse.text());
+      }
+    } catch (error) {
+      console.error("Error during skill fetch operations:", error);
+    }
+
+    let url = "http://localhost:8080/jobs?filterJobsByUser=true";
 
     try {
       const jobResponse = await fetch(url, {
@@ -57,10 +62,12 @@
           ...job,
           id: job._id,
           name: sanitizeHTML(job.name),
-          skill: sanitizeHTML(job.skill),
+          skill_name: skillName[job.skill_id], 
           description: sanitizeHTML(job.description),
           price: job.price,
         }));
+        console.log(jobs.skille_name);
+        console.log("Fetched jobs:", jobs); // Log fetched jobs
       } else if (jobResponse.status === 429) {
         navigate("/RateLimitExceeded");
         throw new Error("Rate limit exceeded");
@@ -105,7 +112,7 @@
       postLogout(),
       {
         loading: "Logging out...",
-        success: "Logged out succesfully. Redirecting...",
+        success: "Logged out successfully. Redirecting...",
         error: "Failed to logout - please try again",
       },
       {
@@ -124,7 +131,7 @@
       },
       body: JSON.stringify({
         name: sanitizeHTML(name),
-        skill: sanitizeHTML(skill),
+        skill_id: skill_id,
         description: sanitizeHTML(description),
         price: price,
         user_id: userid,
@@ -156,7 +163,7 @@
       postJob(),
       {
         loading: "Creating job...",
-        success: "Job created succesfully. Refreshing page...",
+        success: "Job created successfully. Refreshing page...",
         error: "Failed to create job - please try again",
       },
       {
@@ -190,11 +197,11 @@
         <label for="name">Name:</label>
         <input type="text" bind:value={name} id="name" required />
 
-        <label for="skill">Skill:</label>
-        <select bind:value={skill} id="skill" required>
+        <label for="skill_id">Skill:</label>
+        <select bind:value={skill_id} id="skill_id" required>
           <option value="" disabled selected>Select a skill</option>
-          {#each skills as skillOption}
-            <option value={skillOption}>{skillOption}</option>
+          {#each skills as skill}
+            <option value={skill._id}>{skill.name}</option>
           {/each}
         </select>
 
@@ -205,13 +212,7 @@
         <input type="number" bind:value={price} id="price" required />
 
         <label for="userid">User ID:</label>
-        <input
-          type="number"
-          bind:value={userid}
-          id="userid"
-          required
-          readonly
-        />
+        <input type="text" bind:value={userid} id="userid" readonly />
 
         <button type="submit" class="submit-button">Create Job</button>
       </form>
@@ -253,14 +254,14 @@
         <div class="job-pair">
           <div class="job">
             <h2>{job.name}</h2>
-            <p>Skill: {job.skill}</p>
+            <p>Skill: {job.skill_name}</p>
             <p>Description: {job.description}</p>
             <p>Price: {job.price}</p>
           </div>
           {#if jobs[index + 1]}
             <div class="job">
               <h2>{jobs[index + 1].name}</h2>
-              <p>Skill: {jobs[index + 1].skill}</p>
+              <p>Skill: {jobs[index + 1].skill_name}</p>
               <p>Description: {jobs[index + 1].description}</p>
               <p>Price: {jobs[index + 1].price}</p>
             </div>
@@ -270,6 +271,7 @@
     {/each}
   </div>
 </main>
+
 
 <style>
   main {

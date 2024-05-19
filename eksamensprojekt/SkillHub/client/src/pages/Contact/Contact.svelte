@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
-    import { BASE_URL } from "../../stores/url.js";
     import { sanitizeHTML } from "../../util/sanitize.js";
     import { sanitizeEmail } from "../../util/sanitize.js";
 
@@ -11,7 +10,7 @@
     let message;
 
     async function postEmail() {
-        const response = await fetch($BASE_URL + "/mails", {
+        const response = await fetch("http://localhost:8080/mails", {
             method: "POST",
             credentials: "include",
             headers: {

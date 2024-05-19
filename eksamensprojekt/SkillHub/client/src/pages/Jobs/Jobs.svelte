@@ -3,20 +3,46 @@
     import { navigate } from "svelte-routing";
     import { Link } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
-    import { BASE_URL } from "../../stores/url.js";
 
     let jobs = [];
+    let skills = [];
+    let skillName = {};
 
     onMount(async () => {
+        let skillsUrl = "http://localhost:8080/skills";
         try {
-            const jobResponse = await fetch($BASE_URL + "/jobs", {
+            const skillsResponse = await fetch(skillsUrl, {
+                credentials: "include",
+            });
+
+            if (skillsResponse.ok) {
+                const skillsData = await skillsResponse.json();
+                skills = skillsData || [];
+                skills.forEach((skill) => {
+                    skillName[skill._id] = skill.name;
+                });
+                console.log("Fetched skills:", skills);
+            } else if (skillsResponse.status === 429) {
+                navigate("/RateLimitExceeded");
+                throw new Error("Rate limit exceeded");
+            } else {
+                console.error(
+                    "Failed to fetch skills:",
+                    await skillsResponse.text(),
+                );
+            }
+        } catch (error) {
+            console.error("Error during skill fetch operations:", error);
+        }
+
+        try {
+            const jobResponse = await fetch("http://localhost:8080/jobs", {
                 credentials: "include",
             });
             if (jobResponse.status === 429) {
                 navigate("/RateLimitExceeded");
                 throw new Error("Rate limit exceeded");
-            } 
-            else if (!jobResponse.ok) {
+            } else if (!jobResponse.ok) {
                 throw new Error(
                     "Failed to fetch jobs: " + (await jobResponse.text()),
                 );
@@ -26,7 +52,7 @@
                 ...job,
                 id: job._id,
                 name: job.name,
-                skill: job.skill,
+                skill_name: skillName[job.skill_id],
                 description: job.description,
                 price: job.price,
                 user_id: job.user_id,
@@ -51,7 +77,7 @@
                     <div class="job-pair">
                         <div class="job">
                             <h2>{job.name}</h2>
-                            <p>Skill: {job.skill}</p>
+                            <p>Skill: {job.skill_name}</p>
                             <p>Description: {job.description}</p>
                             <p>Price: {job.price}</p>
                             <Link to="/Contact">
@@ -61,7 +87,7 @@
                         {#if jobs[index + 1]}
                             <div class="job">
                                 <h2>{jobs[index + 1].name}</h2>
-                                <p>Skill: {jobs[index + 1].skill}</p>
+                                <p>Skill: {jobs[index + 1].skill_name}</p>
                                 <p>
                                     Description: {jobs[index + 1].description}
                                 </p>

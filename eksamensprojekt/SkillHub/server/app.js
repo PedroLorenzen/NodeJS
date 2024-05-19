@@ -48,6 +48,9 @@ app.use(jobsRouter);
 import mailsRouter from "./routers/mailsRouter.js";
 app.use(mailsRouter);
 
+import skillsRouter from "./routers/skillsRouter.js";
+app.use(skillsRouter);
+
 app.all("*", (req, res) => {
     res.status(404).send({ message: "Not Found" });
 });

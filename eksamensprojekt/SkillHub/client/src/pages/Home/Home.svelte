@@ -1,7 +1,6 @@
 <script>
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
-    import { BASE_URL } from "../../stores/url.js";
     import { sanitizeHTML } from "../../util/sanitize.js";
     import { sanitizeEmail } from "../../util/sanitize.js";
 
@@ -15,7 +14,7 @@
     async function postLogin() {
         const sanitizedEmail = sanitizeEmail(email);
         const sanitizedPassword = sanitizeHTML(password);
-        const response = await fetch($BASE_URL + "/login", {
+        const response = await fetch("http://localhost:8080/login", {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
@@ -53,7 +52,7 @@
     }
 
     async function postRegister() {
-        const response = await fetch($BASE_URL + "/users", {
+        const response = await fetch("http://localhost:8080/users", {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },

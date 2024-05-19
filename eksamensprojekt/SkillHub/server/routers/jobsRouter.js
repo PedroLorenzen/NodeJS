@@ -8,37 +8,35 @@ const router = Router();
 router.post("/jobs", async (req, res) => {
     if (req.session.user) {
         try {
-            let { name, skill, description, price, user_id } = req.body;
+            let { name, skill_id, description, price, user_id } = req.body;
 
             if (!Number.isFinite(price) || price <= 0) {
                 return res.status(400).send({ error: "Price must be a number and over 0" });
+            }
+            if(!Number.isFinite(skill_id)) {
+                return res.status(400).send({ error: "Skill ID must be a number" });
             }
             if (!Number.isFinite(user_id)) {
                 return res.status(400).send({ error: "User ID must be a number" });
             }
 
-            if (!name || !skill || !description || !price || !user_id) {
+            if (!name || !description) {
                 return res.status(400).send({ error: "Missing required information" });
             }
-            name = sanitizeHTML(name);
-            skill = sanitizeHTML(skill);
-            description = sanitizeHTML(description);
 
             const db = await connect();
-
             const generateJobId = await db.collection("counters").findOneAndUpdate(
                 { _id: "jobId" },
                 { $inc: { sequence_value: 1 } },
                 { returnDocument: "after", upsert: true }
             );
-
             const jobId = generateJobId.sequence_value;
 
             const newJob = {
                 _id: jobId,
-                name,
-                skill,
-                description,
+                name: sanitizeHTML(name),
+                skill_id,
+                description: sanitizeHTML(description),
                 price,
                 user_id
             };
@@ -98,10 +96,13 @@ router.put("/jobs", async (req, res) => {
             return res.status(400).send({ error: "Job ID must be provided as a query parameter" });
         }
         try {
-            const { name, skill, description, price, user_id } = req.body;
+            const { name, skill_id, description, price, user_id } = req.body;
 
-            if (!Number.isFinite(jobId) && jobId <= 0) {
+            if (!Number.isFinite(jobId) || jobId <= 0) {
                 return res.status(400).send({ error: "Job ID must be a number and over 0" });
+            }
+            if (!Number.isFinite(skill_id) || skill_id <= 0) {
+                return res.status(400).send({ error: "Skill ID must be a number and over 0" });
             }
             if (!Number.isFinite(price) || price <= 0) {
                 return res.status(400).send({ error: "Price must be a number and over 0" });
@@ -109,14 +110,14 @@ router.put("/jobs", async (req, res) => {
             if (!Number.isFinite(user_id)) {
                 return res.status(400).send({ error: "User ID must be a number" });
             }
-            if (!name || !skill || !description || !price || !user_id) {
+            if (!name || !description) {
                 return res.status(400).send({ error: "Missing required information" });
             }
 
             const sanitizedData = {
                 _id: jobId,
                 name: sanitizeHTML(name),
-                skill: sanitizeHTML(skill),
+                skill_id,
                 description: sanitizeHTML(description),
                 price,
                 user_id
