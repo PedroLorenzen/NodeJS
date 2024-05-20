@@ -15,7 +15,7 @@ router.post("/login", authRateLimiter, async (req, res) => {
 
         if (!userQuery) {
             console.log(`User with email: ${email} does not exist in the database`);
-            return res.status(404).send({ message: "Invalid username" });  // Return immediately after response
+            return res.status(404).send({ message: "Invalid email" });
         }
 
         const isMatch = await bcrypt.compare(password, userQuery.password);

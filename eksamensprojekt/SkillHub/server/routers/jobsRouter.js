@@ -68,16 +68,22 @@ router.get("/jobs", async (req, res) => {
             } else if (req.query.jobId) {
                 const jobId = parseInt(req.query.jobId);
                 const job = await db.collection("jobs").findOne({ _id: jobId });
-                if (job) {
+                if (job && job._id === jobId) {
                     return res.send({ job });
                 }
-                res.status(404).send({ message: "Job not found." });
-                return;
-            } else if (req.query.jobSkills) {
-
+                return res.status(404).send({ message: "Job not found." });
+            } else if (req.query.sortBySkills) {
+                const jobs = await db.collection('jobs').find().sort({ skillId: 1 }).toArray();
+                if (jobs && jobs.length > 0) {
+                    return res.send({ data: jobs });
+                }
+                return res.status(404).send({ message: "Jobs sorted by skill not found." });
             }
             const jobs = await db.collection("jobs").find(query).toArray();
-            res.send({ data: jobs });
+            if (jobs && jobs.length > 0) {
+                return res.send({ data: jobs });
+            }
+            return res.status(404).send({ message: "Jobs sorted by " + query + " not found."});
 
         } catch (error) {
             console.error("Error fetching jobs:", error);

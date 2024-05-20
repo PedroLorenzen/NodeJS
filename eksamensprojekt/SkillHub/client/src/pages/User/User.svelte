@@ -12,13 +12,15 @@
   let email = $user.user.email;
   let location = $user.user.location;
 
-  let oldPassword, newPassword, confirmPassword;
-
   let activeForm = "createJob";
 
   function switchForm(form) {
     activeForm = form;
   }
+
+  let oldPassword, newPassword, confirmPassword;
+
+  let emailToDelete;
 
   let name, skill_id, description, price;
 
@@ -154,7 +156,7 @@
       throw new Error(result.error || "Failed to post job");
     }
     setTimeout(() => {
-      location.reload();
+      window.location.reload();
     }, 2000);
   }
 
@@ -256,6 +258,16 @@
   }
 
   async function handleDeleteUser() {
+    if (emailToDelete !== email) {
+      toast.error(
+        "Please enter your email to delete your user Profile and all associated jobs",
+        {
+          duration: 3000,
+          position: "top-right",
+        },
+      );
+      throw new Error("Email does not match");
+    }
     await toast.promise(
       deleteUser(),
       {
@@ -284,7 +296,7 @@
         >Create Job</button
       >
       <button on:click={() => switchForm("editUser")} class="toggle-button"
-        >Edit User</button
+        >Update / Delete User</button
       >
     </div>
 
@@ -328,13 +340,20 @@
         <input type="email" bind:value={email} id="email" required />
 
         <label for="location">Location:</label>
-        <input type="text" bind:value={location} id="location" />
+        <input type="text" bind:value={location} id="location" required />
 
         <label for="oldPassword">Old Password:</label>
         <input type="password" bind:value={oldPassword} id="oldPassword" />
 
-        <label for="newPassword">New Password:</label>
-        <input type="password" bind:value={newPassword} id="newPassword" />
+        <div id="passwordDiv">
+          <label for="newPassword">New Password:</label>
+          <input type="password" bind:value={newPassword} id="newPassword" />
+          <label for="newPassword" class="passwordRequirements"
+            >Password must be at least 6 characters long, include at least one
+            uppercase letter, one special character and not match the old
+            password</label
+          >
+        </div>
 
         <label for="confirmPassword">Confirm New Password:</label>
         <input
@@ -344,9 +363,16 @@
         />
 
         <button type="submit" class="submit-button">Update User</button>
-        <button type="submit" on:click={handleDeleteUser} class="delete-button"
-          >Delete User And Associated Jobs</button
-        >
+        <button type="button" on:click={handleDeleteUser} class="delete-button">
+          Delete User And Associated Jobs
+        </button>
+        <label for="userEmailToDelete">Delete User:</label>
+        <input
+          type="email"
+          bind:value={emailToDelete}
+          id="userEmailToDelete"
+          placeholder="To delete user, type your email address"
+        />
       </form>
     {/if}
   </div>
@@ -423,6 +449,19 @@
     cursor: pointer;
   }
 
+  #passwordDiv {
+    display: flex;
+    margin: 0 -10px 15px -10px;
+    flex-direction: column;
+    background-color: lightgrey;
+  }
+
+  .passwordRequirements {
+    margin: -15px 10px 0 10px;
+    font-size: 11px;
+    font-weight: bold;
+  }
+
   #userid {
     cursor: not-allowed;
   }
@@ -440,7 +479,7 @@
     background-color: #dc3545;
     color: white;
     padding: 10px 20px;
-    margin-top: 20px;
+    margin-top: 100px;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;

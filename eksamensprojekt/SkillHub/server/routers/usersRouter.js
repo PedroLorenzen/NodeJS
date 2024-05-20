@@ -90,7 +90,7 @@ router.put("/users", async (req, res) => {
                 if (oldPassword) {
                     if (newPassword.length < 6 || !newPassword.match(/[A-Z]/) || !newPassword.match(/[^\w\s]/) || newPassword === oldPassword || newPassword === undefined) {
                         return res.status(400).send({
-                            error: "Password must be at least 6 characters long, include at least one uppercase letter, and one special character."
+                            error: "Password must be at least 6 characters long, include at least one uppercase letter, one special character and not match the old password."
                         });
                     }
                     const isMatch = await bcrypt.compare(oldPassword, user.password);
