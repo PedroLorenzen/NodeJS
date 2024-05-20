@@ -99,6 +99,7 @@ router.put("/jobs", async (req, res) => {
         const jobId = parseInt(req.query.jobId);
         console.log("ID: ", jobId);
         if (!jobId) {
+            console.log("error the job id is not provided" + jobId)
             return res.status(400).send({ error: "Job ID must be provided as a query parameter" });
         }
         try {

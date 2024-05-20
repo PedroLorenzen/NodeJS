@@ -7,7 +7,7 @@
 
   $user;
 
-  let userid = $user.user._id;
+  let userId = $user.user._id;
   let username = $user.user.name;
   let email = $user.user.email;
   let location = $user.user.location;
@@ -22,7 +22,19 @@
 
   let emailToDelete;
 
-  let name, skill_id, description, price;
+  let jobId, name, skill_id, description, price;
+
+  function handleEditJob(job) {
+    jobId = job.id;
+    name = job.name;
+    skill_id = job.skill_id;
+    description = job.description;
+    price = job.price;
+  }
+
+  function closeUpdateJob() {
+    jobId = null;
+  }
 
   let jobs = [];
   let skills = [];
@@ -69,7 +81,7 @@
           description: sanitizeHTML(job.description),
           price: job.price,
         }));
-        console.log("Fetched jobs:", jobs); // Log fetched jobs
+        console.log("Fetched jobs:", jobs);
       } else if (jobResponse.status === 429) {
         navigate("/RateLimitExceeded");
         throw new Error("Rate limit exceeded");
@@ -136,7 +148,7 @@
         skill_id: skill_id,
         description: sanitizeHTML(description),
         price: price,
-        user_id: userid,
+        user_id: userId,
       }),
     });
     const result = await response.json();
@@ -167,6 +179,58 @@
         loading: "Creating job...",
         success: "Job created successfully. Refreshing page...",
         error: "Failed to create job - please try again",
+      },
+      {
+        duration: 2000,
+        position: "top-right",
+      },
+    );
+  }
+
+  async function putJob() {
+    const response = await fetch(`http://localhost:8080/jobs?jobId=${jobId}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: sanitizeHTML(name),
+        skill_id: skill_id,
+        description: sanitizeHTML(description),
+        price: price,
+        user_id: userId,
+      }),
+    });
+    const result = await response.json();
+    if (response.status === 429) {
+      navigate("/RateLimitExceeded");
+      throw new Error("Rate limit exceeded");
+    } else if (response.status === 400) {
+      toast.error(
+        result.error || "The job is missing some required information",
+        {
+          duration: 3000,
+          position: "top-right",
+        },
+      );
+      throw new Error(result.error || "Failed to update job");
+    } else if (!response.ok) {
+      throw new Error(result.error || "Failed to update job");
+    }
+    setTimeout(() => {
+      closeUpdateJob();
+      window.location.reload();
+    }, 2000);
+  }
+
+  async function handlePutJob() {
+    await toast.promise(
+      putJob(),
+      {
+        loading: "Updating job...",
+        success: "Job updated successfully. Refreshing page...",
+        error: "Failed to update job - please try again",
       },
       {
         duration: 2000,
@@ -320,8 +384,8 @@
         <label for="price">Price:</label>
         <input type="number" bind:value={price} id="price" required />
 
-        <label for="userid">User ID:</label>
-        <input type="text" bind:value={userid} id="userid" readonly />
+        <label for="userId">User ID:</label>
+        <input type="text" bind:value={userId} id="userId" readonly />
 
         <button type="submit" class="submit-button">Create Job</button>
       </form>
@@ -330,8 +394,8 @@
     {#if activeForm === "editUser"}
       <h2>Edit User</h2>
       <form on:submit|preventDefault={handlePutUser} class="form">
-        <label for="userid">User ID:</label>
-        <input type="text" bind:value={userid} id="userid" readonly />
+        <label for="userId">User ID:</label>
+        <input type="text" bind:value={userId} id="userId" readonly />
 
         <label for="username">Username:</label>
         <input type="text" bind:value={username} id="username" required />
@@ -366,7 +430,7 @@
         <button type="button" on:click={handleDeleteUser} class="delete-button">
           Delete User And Associated Jobs
         </button>
-        <label for="userEmailToDelete">Delete User:</label>
+        <label for="userEmailToDelete">Confirm Delete User:</label>
         <input
           type="email"
           bind:value={emailToDelete}
@@ -379,22 +443,47 @@
   <h1>Your Posted Jobs</h1>
   <div class="jobs-container">
     {#each jobs as job, index (job.id)}
-      {#if index % 2 === 0}
-        <div class="job-pair">
-          <div class="job">
-            <h2>{job.name}</h2>
-            <p>Skill: {job.skill_name}</p>
-            <p>Description: {job.description}</p>
-            <p>Price: {job.price}</p>
-          </div>
-          {#if jobs[index + 1]}
-            <div class="job">
-              <h2>{jobs[index + 1].name}</h2>
-              <p>Skill: {jobs[index + 1].skill_name}</p>
-              <p>Description: {jobs[index + 1].description}</p>
-              <p>Price: {jobs[index + 1].price}</p>
+      {#if job.id === jobId}
+        <div class="edit-job-form">
+          <h2>Edit Job</h2>
+          <form on:submit|preventDefault={handlePutJob} class="form">
+            <label for="jobName">Job Name:</label>
+            <input type="text" bind:value={name} id="jobName" required />
+
+            <select bind:value={skill_id} id="skill_id" required>
+              <option value="" disabled selected>Select a skill</option>
+              {#each skills as skill}
+                <option value={skill._id}>{skill.name}</option>
+              {/each}
+            </select>
+
+            <label for="jobDescription">Description:</label>
+            <textarea bind:value={description} id="jobDescription" required />
+
+            <label for="jobPrice">Price:</label>
+            <input type="number" bind:value={price} id="jobPrice" required />
+
+            <label for="jobUserId" hidden>User ID:</label>
+            <input type="text" bind:value={userId} id="jobUserId" hidden />
+
+            <div class="edit-job-buttons">
+              <button type="submit" class="submit-button">Update Job</button
+              >
+              <button
+                type="button"
+                on:click={closeUpdateJob}
+                class="cancel-button">Cancel</button
+              >
             </div>
-          {/if}
+          </form>
+        </div>
+      {:else}
+        <div class="job">
+          <h2>{job.name}</h2>
+          <p>Skill: {job.skill_name}</p>
+          <p>Description: {job.description}</p>
+          <p>Price: {job.price}</p>
+          <button on:click={() => handleEditJob(job)}>Edit</button>
         </div>
       {/if}
     {/each}
@@ -462,7 +551,7 @@
     font-weight: bold;
   }
 
-  #userid {
+  #userId {
     cursor: not-allowed;
   }
 
@@ -479,7 +568,7 @@
     background-color: #dc3545;
     color: white;
     padding: 10px 20px;
-    margin-top: 100px;
+    margin: 50px 0 20px 0;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
@@ -526,19 +615,14 @@
   }
   .jobs-container {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
   }
-  .job-pair {
-    flex: 1 1 100%;
-    display: flex;
-    justify-content: space-between;
-  }
   .job {
-    flex: 1 1;
     background: lightgrey;
     font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
       "Lucida Sans", Arial, sans-serif;
-    margin: 0 40px;
+    margin: 40px;
     border: 1px solid #ccc;
     padding: 10px 0 30px 50px;
     box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.1);
@@ -546,5 +630,37 @@
   }
   .job p {
     margin: 5px;
+  }
+  .edit-job-form {
+    display: flex;
+    flex-direction: column;
+    background: lightgrey;
+    border-radius: 8px;
+    box-shadow: 100px 50px 20px rgba(0, 0, 0, 0.1);
+    width: 450px;
+    padding: 40px;
+    margin: 40px auto;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
+    color: white;
+  }
+  .edit-job-form h2 {
+    color: black;
+  }
+
+  textarea {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
+  }
+
+  .edit-job-buttons {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    background-color: lightgrey;
   }
 </style>
