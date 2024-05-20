@@ -11,8 +11,7 @@
         navigate(`/${route}`);
       } else if (response.status === 429) {
         navigate("/RateLimitExceeded");
-throw new Error("Rate limit exceeded");
-                throw new Error("Rate limit exceeded");
+        throw new Error("Rate limit exceeded");
       }
     } catch (error) {
       throw new Error("Navigation error: " + error.message);

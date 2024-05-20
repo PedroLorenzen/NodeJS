@@ -230,6 +230,45 @@
       },
     );
   }
+
+  async function deleteUser() {
+    const response = await fetch(`http://localhost:8080/users`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    const result = await response.json();
+    if (response.status === 429) {
+      navigate("/RateLimitExceeded");
+      throw new Error("Rate limit exceeded");
+    } else if (response.status === 404) {
+      toast.error(result.error || "User not found", {
+        duration: 3000,
+        position: "top-right",
+      });
+      throw new Error(result.error || "User not found");
+    } else if (!response.ok) {
+      console.log("something went wrong with deleting user");
+      throw new Error(result.error || "Failed to delete user");
+    }
+    setTimeout(() => {
+      navigate("/");
+    }, 2000);
+  }
+
+  async function handleDeleteUser() {
+    await toast.promise(
+      deleteUser(),
+      {
+        loading: "Deleting user...",
+        success: "User deleted successfully. Redirecting...",
+        error: "Failed to delete user - please try again",
+      },
+      {
+        duration: 2000,
+        position: "top-right",
+      },
+    );
+  }
 </script>
 
 <Toaster />
@@ -305,6 +344,9 @@
         />
 
         <button type="submit" class="submit-button">Update User</button>
+        <button type="submit" on:click={handleDeleteUser} class="delete-button"
+          >Delete User And Associated Jobs</button
+        >
       </form>
     {/if}
   </div>
@@ -392,6 +434,20 @@
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+  }
+
+  .delete-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .delete-button:hover {
+    background-color: darkred;
   }
 
   .submit-button:hover {
