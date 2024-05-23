@@ -19,8 +19,8 @@ app.use(express.json());
 app.use(helmet());
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    limit: 50,
+    windowMs: 5 * 60 * 1000,
+    limit: 100,
     standardHeaders: true,
     legacyHeaders: false,
     cookie: { 

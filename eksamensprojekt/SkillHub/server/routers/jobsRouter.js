@@ -157,7 +157,7 @@ router.delete("/jobs", async (req, res) => {
             if (deletedJob.deletedCount === 1) {
                 res.send({ message: "Job deleted successfully: " + jobId });
             } else {
-                res.status(404).send({ error: "Job not found or already deleted" });
+                res.status(404).send({ error: "Job not found" });
             }
         } catch (error) {
             console.error("Database error:", error);

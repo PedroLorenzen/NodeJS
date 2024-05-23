@@ -116,11 +116,10 @@
     div {
         margin-bottom: 20px;
         background: white;
-        padding: 20px 0 40px 0;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        text-align: center;
+        padding-top: 20px;
         color: black;
+        background: white;
+        border-radius: 8px;
     }
     h1 {
         text-align: center;

@@ -24,7 +24,7 @@
 
   let jobId, name, skill_id, description, price;
 
-  function handleEditJob(job) {
+  function editJobForm(job) {
     jobId = job.id;
     name = job.name;
     skill_id = job.skill_id;
@@ -345,6 +345,45 @@
       },
     );
   }
+
+  async function deleteJob(jobId) {
+    const response = await fetch(`http://localhost:8080/jobs?jobId=${jobId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    const result = await response.json();
+    if (response.status === 429) {
+      navigate("/RateLimitExceeded");
+      throw new Error("Rate limit exceeded");
+    } else if (response.status === 404) {
+      toast.error(result.error || "Job not found", {
+        duration: 3000,
+        position: "top-right",
+      });
+      throw new Error(result.error || "Job not found");
+    } else if (!response.ok) {
+      console.log("something went wrong with deleting job");
+      throw new Error(result.error || "Failed to delete job");
+    }
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  }
+
+  async function handleDeleteJob(jobId) {
+    await toast.promise(
+      deleteJob(jobId),
+      {
+        loading: "Deleting job...",
+        success: "Job deleted successfully...",
+        error: "Failed to delete job - please try again",
+      },
+      {
+        duration: 2000,
+        position: "top-right",
+      },
+    );
+  }
 </script>
 
 <Toaster />
@@ -413,8 +452,8 @@
           <label for="newPassword">New Password:</label>
           <input type="password" bind:value={newPassword} id="newPassword" />
           <label for="newPassword" class="passwordRequirements"
-            >Password must be at least 6 characters long, include at least one
-            uppercase letter, one special character and not match the old
+            >Password must be between 6 and 70 characters long, include at least
+            one uppercase letter, one special character and not match the old
             password</label
           >
         </div>
@@ -425,9 +464,12 @@
           bind:value={confirmPassword}
           id="confirmPassword"
         />
-
         <button type="submit" class="submit-button">Update User</button>
-        <button type="button" on:click={handleDeleteUser} class="delete-button">
+        <button
+          type="button"
+          on:click={handleDeleteUser}
+          class="delete-user-button"
+        >
           Delete User And Associated Jobs
         </button>
         <label for="userEmailToDelete">Confirm Delete User:</label>
@@ -467,8 +509,7 @@
             <input type="text" bind:value={userId} id="jobUserId" hidden />
 
             <div class="edit-job-buttons">
-              <button type="submit" class="submit-button">Update Job</button
-              >
+              <button type="submit" class="submit-button">Update Job</button>
               <button
                 type="button"
                 on:click={closeUpdateJob}
@@ -483,7 +524,14 @@
           <p>Skill: {job.skill_name}</p>
           <p>Description: {job.description}</p>
           <p>Price: {job.price}</p>
-          <button on:click={() => handleEditJob(job)}>Edit</button>
+          <button on:click={() => editJobForm(job)}>Edit</button>
+          <button
+            type="button"
+            on:click={() => handleDeleteJob(job.id)}
+            class="delete-job-button"
+          >
+            Delete
+          </button>
         </div>
       {/if}
     {/each}
@@ -564,17 +612,31 @@
     transition: background-color 0.3s ease;
   }
 
-  .delete-button {
+  .delete-user-button {
     background-color: #dc3545;
     color: white;
+    margin: 50px 0 15px 0;
     padding: 10px 20px;
-    margin: 50px 0 20px 0;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
   }
 
-  .delete-button:hover {
+  .delete-user-button:hover {
+    background-color: darkred;
+  }
+
+  .delete-job-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .delete-job-button:hover {
     background-color: darkred;
   }
 
@@ -583,11 +645,9 @@
   }
 
   div {
-    margin: 20px 0 20px 0;
     background: white;
     padding: 0 10px;
     border-radius: 8px;
-    text-align: center;
     color: black;
   }
   h1 {
@@ -616,13 +676,12 @@
   .jobs-container {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
   }
   .job {
     background: lightgrey;
     font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
       "Lucida Sans", Arial, sans-serif;
-    margin: 40px;
+    margin: 10px 100px 10px 100px;
     border: 1px solid #ccc;
     padding: 10px 0 30px 50px;
     box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.1);

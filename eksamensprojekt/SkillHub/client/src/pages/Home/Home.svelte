@@ -12,15 +12,13 @@
     let location = "";
 
     async function postLogin() {
-        const sanitizedEmail = sanitizeEmail(email);
-        const sanitizedPassword = sanitizeHTML(password);
         const response = await fetch("http://localhost:8080/login", {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                email: sanitizedEmail,
-                password: sanitizedPassword,
+                email: sanitizeEmail(email),
+                password: password,
             }),
         });
         if (response.status === 429) {
@@ -98,7 +96,7 @@
             } else if (response.status === 400) {
                 toast.error(
                     result.error ||
-                        "Password must be at least 6 characters long, include at least one uppercase letter, and one special character",
+                        "Password must be between 6 and 70 characters long, include at least one uppercase letter, and one special character",
                     {
                         duration: 3000,
                         position: "top-right",
