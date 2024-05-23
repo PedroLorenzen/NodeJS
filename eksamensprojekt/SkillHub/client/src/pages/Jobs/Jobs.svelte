@@ -6,12 +6,13 @@
 
     let jobs = [];
     let skills = [];
+    let users = [];
     let skillName = {};
+    let userLocation = {};
 
     onMount(async () => {
-        let skillsUrl = "http://localhost:8080/skills";
         try {
-            const skillsResponse = await fetch(skillsUrl, {
+            const skillsResponse = await fetch("http://localhost:8080/skills", {
                 credentials: "include",
             });
 
@@ -36,6 +37,34 @@
         }
 
         try {
+            const userResponse = await fetch("http://localhost:8080/users", {
+                credentials: "include",
+            });
+            if (userResponse.status === 429) {
+                navigate("/RateLimitExceeded");
+                throw new Error("Rate limit exceeded");
+            } else if (!userResponse.ok) {
+                throw new Error(
+                    "Failed to fetch users: " + (await userResponse.text()),
+                );
+            }
+            const userData = await userResponse.json();
+            users = userData.data.map((user) => ({
+                ...user,
+                id: user._id,
+                name: user.name,
+                location: user.location,
+            }));
+            console.log("Fetched users:", users);
+            users.forEach((user) => {
+                userLocation[user._id] = user.location;
+            });
+            console.log("Fetched user locations:", userLocation);
+        } catch (err) {
+            console.error("Error during fetch operations:", err);
+        }
+
+        try {
             const jobResponse = await fetch("http://localhost:8080/jobs", {
                 credentials: "include",
             });
@@ -56,6 +85,7 @@
                 description: job.description,
                 price: job.price,
                 user_id: job.user_id,
+                location: userLocation[job.user_id],
             }));
         } catch (err) {
             console.error("Error during fetch operations:", err);
@@ -78,6 +108,7 @@
                         <div class="job">
                             <h2>{job.name}</h2>
                             <p>Skill: {job.skill_name}</p>
+                            <p>Location: {job.location}</p>
                             <p>Description: {job.description}</p>
                             <p>Price: {job.price}</p>
                             <Link to="/Contact">
@@ -88,6 +119,7 @@
                             <div class="job">
                                 <h2>{jobs[index + 1].name}</h2>
                                 <p>Skill: {jobs[index + 1].skill_name}</p>
+                                <p>Location: {jobs[index + 1].location}</p>
                                 <p>
                                     Description: {jobs[index + 1].description}
                                 </p>

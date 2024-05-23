@@ -41,9 +41,8 @@
   let skillName = {};
 
   onMount(async () => {
-    let skillsUrl = "http://localhost:8080/skills";
     try {
-      const skillsResponse = await fetch(skillsUrl, {
+      const skillsResponse = await fetch("http://localhost:8080/skills", {
         credentials: "include",
       });
 

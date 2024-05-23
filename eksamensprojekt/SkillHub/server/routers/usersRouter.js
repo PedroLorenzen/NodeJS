@@ -58,12 +58,22 @@ router.get("/users", async (req, res) => {
             const db = await connect();
             if (req.query.getUser === "true") {
                 const user = await db.collection("users").findOne({ _id: req.session.user.id });
-                if (user) {
-                    console.log(`Session for userID ${req.session.user.id} retrieved.`);
-                    return res.send({ user });
+                if (!user) {
+                    console.log(`User with ID ${req.session.user.id} not found.`);
+                    return res.status(404).send({ message: "User not found." });
                 }
-                console.log(`User with ID ${req.session.user.id} not found.`);
-                return res.status(404).send({ message: "User not found." });
+                console.log(`Session for userID ${req.session.user.id} retrieved.`);
+                return res.send({ user });
+            }
+            else if (req.query.getUserById) {
+                const userId = parseInt(req.query.getUserById);
+                const user = await db.collection("users").findOne({ _id: userId });
+                if (!user) {
+                    console.log(`User with ID ${userId} not found.`)
+                    return res.status(404).send({ message: "User not found." });
+                }
+                console.log(`User with ID ${userId} retrieved.`);
+                return res.send({ user });
             }
             const result = await db.collection("users").find().toArray();
             res.send({ data: result });

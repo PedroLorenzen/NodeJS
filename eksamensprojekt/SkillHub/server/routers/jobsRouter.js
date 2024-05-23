@@ -59,11 +59,9 @@ router.get("/jobs", async (req, res) => {
         try {
             const db = await connect();
             const query = {};
-
-            if (req.query.filterJobsByUser) {
-                query.user_id = req.session.user.id;
-            } else if (req.query.skillId) {
+            if (req.query.skillId) {
                 const skillId = parseInt(req.query.skillId);
+                console.log("Skill ID: ", skillId);
                 query.skill_id = skillId;
             } else if (req.query.jobId) {
                 const jobId = parseInt(req.query.jobId);
@@ -72,19 +70,24 @@ router.get("/jobs", async (req, res) => {
                     return res.send({ job });
                 }
                 return res.status(404).send({ message: "Job not found." });
-            } else if (req.query.sortBySkills) {
-                const jobs = await db.collection('jobs').find().sort({ skillId: 1 }).toArray();
-                if (jobs && jobs.length > 0) {
+            } /* else if (req.query.userId) {
+                const userId = parseInt(req.query.userId);
+                const user = await db.collection("jobs").findOne({
+                    _id: userId
+                });
+                if (user && user._id === userId) {
                     return res.send({ data: jobs });
                 }
-                return res.status(404).send({ message: "Jobs sorted by skill not found." });
+                return res.status(404).send({ message: "User not found." });
+            }*/
+            else if (req.query.filterJobsByUser) {
+                query.user_id = req.session.user.id;
             }
             const jobs = await db.collection("jobs").find(query).toArray();
             if (jobs && jobs.length > 0) {
                 return res.send({ data: jobs });
             }
-            return res.status(404).send({ message: "Jobs sorted by " + query + " not found."});
-
+            return res.status(404).send({ message: "Jobs sorted by " + query + " not found." });
         } catch (error) {
             console.error("Error fetching jobs:", error);
             res.status(500).send({ error: "Error fetching jobs" });
