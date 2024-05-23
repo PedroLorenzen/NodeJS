@@ -4,7 +4,13 @@
     import { Link } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
 
+    let sortBy = "";
+    let filterBy = "";
+    let filterValue = "";
     let jobs = [];
+    let sortedJobs = [];
+    let filteredJobs = [];
+    let allJobs = [];
     let skills = [];
     let users = [];
     let skillName = {};
@@ -87,10 +93,49 @@
                 user_id: job.user_id,
                 location: userLocation[job.user_id],
             }));
+            jobs = jobs.sort((a, b) =>
+                a.skill_name.localeCompare(b.skill_name),
+            );
+            allJobs = jobs;
         } catch (err) {
             console.error("Error during fetch operations:", err);
         }
     });
+
+    function sortJobs() {
+        if (sortBy === "skill_name") {
+            jobs = allJobs;
+            sortedJobs = jobs.sort((a, b) =>
+                a.skill_name.localeCompare(b.skill_name),
+            );
+        } else if (sortBy === "location") {
+            jobs = allJobs;
+            sortedJobs = jobs.sort((a, b) =>
+                a.location.localeCompare(b.location),
+            );
+        }
+    }
+    function filterJobs() {
+        if (sortedJobs.length > 0) {
+            jobs = sortedJobs;
+            if (filterBy === "skill_name") {
+                jobs = jobs.filter((job) => job.skill_name === filterValue);
+                console.log("Filtered jobs:", jobs);
+            } else if (filterBy === "location") {
+                jobs = jobs.filter((job) => job.location === filterValue);
+                console.log("Filtered jobs:", jobs);
+            }
+        } else {
+            jobs = allJobs;
+            if (filterBy === "skill_name") {
+                jobs = jobs.filter((job) => job.skill_name === filterValue);
+                console.log("Filtered jobs:", jobs);
+            } else if (filterBy === "location") {
+                jobs = jobs.filter((job) => job.location === filterValue);
+                console.log("Filtered jobs:", jobs);
+            }
+        }
+    }
 </script>
 
 <Toaster />
@@ -100,6 +145,50 @@
         <h1>Welcome to SKILLHUB jobs</h1>
         <p>Find the job you need help with</p>
     </div>
+
+    <div class="actions">
+        <label for="filter_by">Filter by:</label>
+        <select bind:value={filterBy} id="filter_by">
+            <option value="" disabled selected>Filter by</option>
+            <option value="skill_name">Skill Name</option>
+            <option value="location">Location</option>
+        </select>
+
+        {#if filterBy === "skill_name"}
+            <label for="skill_id">Skill:</label>
+            <select
+                bind:value={filterValue}
+                on:change={filterJobs}
+                id="skill_id"
+            >
+                <option value="" disabled selected>Select a skill</option>
+                {#each skills as skill}
+                    <option value={skill.name}>{skill.name}</option>
+                {/each}
+            </select>
+        {/if}
+        {#if filterBy === "location"}
+            <label for="location">Location:</label>
+            <select
+                bind:value={filterValue}
+                on:change={filterJobs}
+                id="location"
+            >
+                <option value="" disabled selected>Select a location</option>
+                {#each Object.values(userLocation) as loc}
+                    <option value={loc}>{loc}</option>
+                {/each}
+            </select>
+        {/if}
+
+        <label for="sort_by">Sort by:</label>
+        <select bind:value={sortBy} on:change={sortJobs} id="sort_by">
+            <option value="" disabled selected>Sort by</option>
+            <option value="skill_name">Skill Name</option>
+            <option value="location">Location</option>
+        </select>
+    </div>
+
     {#if jobs.length > 0}
         <div class="jobs-container">
             {#each jobs as job, index (job.id)}
@@ -181,7 +270,16 @@
     .job p {
         margin: 5px;
     }
-
+    .actions {
+        background: lightgrey;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
+        margin: 10px;
+        border: 1px solid #ccc;
+        padding: 20px;
+        box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.1);
+        align-items: center;
+    }
     button {
         background-color: #28a745;
         color: white;
