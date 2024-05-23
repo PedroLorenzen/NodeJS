@@ -184,7 +184,7 @@
         <label for="sort_by">Sort by:</label>
         <select bind:value={sortBy} on:change={sortJobs} id="sort_by">
             <option value="" disabled selected>Sort by</option>
-            <option value="skill_name">Skill Name</option>
+            <option value="skill_name" selected>Skill Name</option>
             <option value="location">Location</option>
         </select>
     </div>
@@ -279,11 +279,31 @@
         padding: 20px;
         box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.1);
         align-items: center;
+        display: flex;
+        justify-content: center;
     }
-    button {
+    .actions label {
+        margin: 0 10px 0 30px;
+    }
+    .actions select {
         background-color: #28a745;
         color: white;
         padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        font-size: medium;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
+    }
+    .actions select:hover {
+        background-color: #218838;
+    }
+
+    button {
+        background-color: #28a745;
+        font-size: large;
+        color: white;
         border: none;
         border-radius: 5px;
         transition: background-color 0.3s ease;
