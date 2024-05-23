@@ -286,7 +286,7 @@
         margin: 0 10px 0 30px;
     }
     .actions select {
-        background-color: #28a745;
+        background-color: #007bff;
         color: white;
         padding: 10px 20px;
         border: none;
@@ -296,10 +296,7 @@
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
     }
-    .actions select:hover {
-        background-color: #218838;
-    }
-
+    
     button {
         background-color: #28a745;
         font-size: large;
