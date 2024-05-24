@@ -20,7 +20,7 @@ router.post("/skills", async (req, res) => {
             const generateSkillId = await db.collection("counters").findOneAndUpdate(
                 { _id: "skillId" },
                 { $inc: { sequence_value: 1 } },
-                { returnDocument: "after" }
+                { returnDocument: "after", upsert: true }
             );
 
             const skillId = generateSkillId.sequence_value;

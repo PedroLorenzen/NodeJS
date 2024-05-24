@@ -23,30 +23,34 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(helmet());
 
+import chatsRouter from "./routers/chatsRouter.js";
+app.use(chatsRouter);
+
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: "*",
-        methods: ["*"]
+        methods: ["GET", "POST"]
     }
 });
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
+io.on("connection", (socket) => {
+    console.log('A user connected');
 
-    socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
-        io.emit('chat message', msg);
+    socket.on("send-chat-message", (data) => {
+        io.emit("chat-message", data);
+        console.log(data);
     });
 
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
+    socket.on("disconnect", () => {
+        console.log('A user disconnected');
+        console.log(socket.id);
     });
 });
 
-const limiter = rateLimit({
-    windowMs: 5 * 60 * 1000,
-    limit: 50,
+/*const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000,
+    limit: 100000,
     standardHeaders: true,
     legacyHeaders: false,
     cookie: {
@@ -60,7 +64,7 @@ const limiter = rateLimit({
     }
 });
 
-app.use(limiter);
+app.use(limiter);*/
 
 import authRouter from "./routers/authRouter.js";
 app.use(authRouter);
@@ -77,14 +81,11 @@ app.use(mailsRouter);
 import skillsRouter from "./routers/skillsRouter.js";
 app.use(skillsRouter);
 
-import chatsRouter from "./routers/chatsRouter.js";
-app.use(chatsRouter);
-
 app.all("*", (req, res) => {
     res.status(404).send({ message: "Not Found" });
 });
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

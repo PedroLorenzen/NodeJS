@@ -24,7 +24,8 @@
     <button on:click={() => navigateTo("")}>Home</button>
     <button on:click={() => navigateTo("User")}>Profile</button>
     <button on:click={() => navigateTo("Jobs")}>Jobs</button>
-    <button on:click={() => navigateTo("Contact")}>Contact</button>
+    <button on:click={() => navigateTo("Chat")}>Chat</button>
+    <button on:click={() => navigateTo("Contact")}>Support</button>
   </nav>
 </header>
 

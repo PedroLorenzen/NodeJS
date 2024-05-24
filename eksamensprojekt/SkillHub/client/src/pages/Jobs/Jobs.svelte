@@ -104,6 +104,11 @@
         }
     });
 
+    function contactUser(user_id) {
+        localStorage.setItem("contact_user_id", user_id);
+        window.location.href = "/Chat";
+    }
+
     function sortJobs() {
         if (sortBy === "skill_name") {
             jobs = allJobs;
@@ -213,9 +218,9 @@
                             <p>Location: {job.location}</p>
                             <p>Description: {job.description}</p>
                             <p>Price: {job.price}</p>
-                            <Link to="/Chat">
-                                <button>Contact User</button>
-                              </Link>
+                            <button on:click={() => contactUser(job.user_id)}
+                                >Contact User</button
+                            >
                         </div>
                         {#if jobs[index + 1]}
                             <div class="job">
@@ -226,9 +231,10 @@
                                     Description: {jobs[index + 1].description}
                                 </p>
                                 <p>Price: {jobs[index + 1].price}</p>
-                                <Link to="/Chat">
-                                    <button>Contact User</button>
-                                  </Link>
+                                <button
+                                    on:click={() => contactUser(job.user_id)}
+                                    >Contact User</button
+                                >
                             </div>
                         {/if}
                     </div>
