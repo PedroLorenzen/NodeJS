@@ -30,7 +30,6 @@ router.get('/chats', async (req, res) => {
             console.error('Error fetching chats:', error);
             return res.status(500).send({ error: 'Error fetching chats' });
         }
-
     } else {
         res.status(401).send({ error: 'Unauthorized' });
     }

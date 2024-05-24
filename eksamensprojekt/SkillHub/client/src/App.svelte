@@ -37,11 +37,7 @@
         <Contact />
       </PrivateRouteGuard>
     </Route>
-    <Route path="/Chat">
-      <PrivateRouteGuard>
-        <Chat />
-      </PrivateRouteGuard>
-    </Route>
+    <Route path="/Chat" component={Chat} />
     <Route path="/Unauthorized" component={Unauthorized} />
     <Route path="/RateLimitExceeded" component={RateLimitExceeded} />
   </Router>
