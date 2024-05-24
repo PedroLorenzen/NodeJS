@@ -69,13 +69,15 @@ router.get("/jobs", async (req, res) => {
                     return res.send({ job });
                 }
                 return res.status(404).send({ message: "Job not found." });
-            }
-            else if (req.query.filterJobsByUser) {
+            } else if (req.query.filterJobsByUser) {
                 query.user_id = req.session.user.id;
+            } else if (req.query.filterJobsBySelectedUser) {
+                query.user_id = parseInt(req.query.filterJobsBySelectedUser);
             }
             const jobs = await db.collection("jobs").find(query).toArray();
             if (jobs && jobs.length > 0) {
-                return res.send({ data: jobs });
+                const filteredJobs = jobs.filter(job => job.user_id !== req.session.user.id);
+                return res.send({ data: filteredJobs });
             }
             return res.status(404).send({ message: "Jobs sorted by " + query + " not found." });
         } catch (error) {

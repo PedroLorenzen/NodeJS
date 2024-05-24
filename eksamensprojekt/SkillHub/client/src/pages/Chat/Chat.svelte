@@ -1,14 +1,39 @@
 <script>
     import { onMount } from "svelte";
     import io from "socket.io-client";
+    import { navigate } from "svelte-routing";
+    import { user } from "../../stores/user.js";
 
     let messages = [];
     let message = "";
     let socket;
-    const otherUserId = 2;
+    let otherUserId = parseInt(localStorage.getItem("contact_user_id"));
+    let name = "";
 
     onMount(async () => {
         socket = io("http://localhost:8080");
+
+        try {
+            console.log("otherUserId", otherUserId);
+            const userResponse = await fetch(
+                `http://localhost:8080/users?getUserById=${otherUserId}`,
+                {
+                    credentials: "include",
+                },
+            );
+            if (userResponse.status === 429) {
+                navigate("/RateLimitExceeded");
+                throw new Error("Rate limit exceeded");
+            } else if (!userResponse.ok) {
+                throw new Error(
+                    "Failed to fetch user: " + (await userResponse.text()),
+                );
+            }
+            let data = await userResponse.json();
+            name = data.user.name;
+        } catch (error) {
+            console.error("Error fetching user:", error);
+        }
 
         try {
             const response = await fetch(
@@ -17,12 +42,38 @@
                     credentials: "include",
                 },
             );
-            const data = await response.json();
-            if (response.ok) {
-                messages = data.chat || [];
-            } else {
-                console.error("Error fetching chat history:", data.message);
+            if (response.status === 429) {
+                navigate("/RateLimitExceeded");
+                throw new Error("Rate limit exceeded");
+            } else if (response.status === 404) {
+                console.error("Chat not found, creating new chat");
+                const newChatResponse = await fetch(
+                    `http://localhost:8080/chats?otherUserId=${otherUserId}`,
+                    {
+                        method: "POST",
+                        credentials: "include",
+                    },
+                );
+                if (newChatResponse.status === 429) {
+                    navigate("/RateLimitExceeded");
+                    throw new Error("Rate limit exceeded");
+                } else if (!newChatResponse.ok) {
+                    console.error(
+                        "Error creating chat:",
+                        newChatResponse.statusText,
+                    );
+                    return;
+                }
+                window.location.reload();
             }
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(
+                    "Failed to fetch chat history: " + data.message,
+                );
+            }
+            messages = data.chat || [];
+            console.log("messages", messages);
         } catch (error) {
             console.error("Error fetching chat history:", error);
         }
@@ -38,8 +89,7 @@
         const newMessage = {
             text: message,
             timestamp: Date.now(),
-            user_id: otherUserId + 1,
-        }; // Assuming the message is from the current user
+        };
         socket.emit("send-chat-message", newMessage);
 
         try {
@@ -62,22 +112,22 @@
             console.error("Error saving message:", error);
         }
 
-        message = ""; // Clear the input field
+        message = "";
     }
 </script>
 
 <main>
     <div class="header">
         <h1>Chat</h1>
+        <h2>You are chatting with {name || "Not Available"}</h2>
     </div>
     <div class="chat-container">
         <div class="input-container">
-            <input
-                type="text"
+            <textarea
                 class="chat-input"
                 placeholder="Type a message..."
                 bind:value={message}
-                on:keydown={(e) => e.key === "Enter" && sendMessage()}
+                on:click={sendMessage}
             />
             <button on:click={sendMessage}>Send</button>
         </div>
@@ -101,90 +151,86 @@
 </main>
 
 <style>
-    h1 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 20px;
-    }
-
     main {
-        background-color: #f9f9f9;
+        background-color: white;
         width: 100%;
-        padding: 20px;
-        box-sizing: border-box;
+        padding: 5px 30px 50px 30px;
+        margin-top: 25px;
+        margin-left: -30px;
+        margin-right: 50px;
     }
-
     .header {
         text-align: center;
         margin-bottom: 20px;
+        color: #333;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
     }
-
     .chat-container {
         display: flex;
         flex-direction: column;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         align-items: center;
         padding: 20px;
-        background: #fff;
+        background: lightgrey;
+        border: 1px solid #ccc;
         border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        max-width: 600px;
+        box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.1);
+        width: 60%;
         margin: auto;
+        margin-bottom: 10px;
     }
-
     .input-container {
         display: flex;
         width: 100%;
         margin-bottom: 20px;
     }
-
     .chat-input {
         flex: 1;
         padding: 10px;
         border: 1px solid #ced4da;
-        border-radius: 4px;
+        border-radius: 5px;
         margin-right: 10px;
         font-size: 16px;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
     }
-
     button {
-        padding: 10px 20px;
+        padding: 10px 40px;
         background-color: #007bff;
         color: #fff;
         border: none;
-        border-radius: 4px;
+        border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
     }
-
     .message-container {
         display: flex;
         flex-direction: column;
         width: 100%;
         gap: 10px;
     }
-
-    .message-other,
-    .message-mine {
-        padding: 10px;
-        border-radius: 10px;
-        max-width: 60%;
-        word-wrap: break-word;
-    }
-
     .message-other {
         align-self: flex-start;
         background-color: #218838;
         color: #fff;
         cursor: default;
+        padding: 10px;
+        border-radius: 10px;
+        max-width: 60%;
+        word-wrap: break-word;
     }
-
     .message-mine {
         align-self: flex-end;
         background-color: #28a745;
         color: #fff;
         cursor: default;
+        padding: 10px;
+        border-radius: 10px;
+        max-width: 60%;
+        word-wrap: break-word;
     }
-
     small {
         display: block;
         font-size: 10px;

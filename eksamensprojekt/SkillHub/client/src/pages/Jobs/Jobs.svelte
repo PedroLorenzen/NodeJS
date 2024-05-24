@@ -92,6 +92,7 @@
                 description: job.description,
                 price: job.price,
                 user_id: job.user_id,
+                user_name: users.find((user) => user.id === job.user_id).name,
                 location: userLocation[job.user_id],
             }));
             jobs = jobs.sort((a, b) =>
@@ -142,6 +143,9 @@
             } else if (filterBy === "location") {
                 jobs = jobs.filter((job) => job.location === filterValue);
                 console.log("Filtered jobs:", jobs);
+            } else if (filterBy === "user") {
+                jobs = jobs.filter((job) => job.user_name === filterValue);
+                console.log("Filtered jobs:", jobs);
             }
         } else {
             jobs = allJobs;
@@ -150,6 +154,9 @@
                 console.log("Filtered jobs:", jobs);
             } else if (filterBy === "location") {
                 jobs = jobs.filter((job) => job.location === filterValue);
+                console.log("Filtered jobs:", jobs);
+            } else if (filterBy === "user") {
+                jobs = jobs.filter((job) => job.user_name === filterValue);
                 console.log("Filtered jobs:", jobs);
             }
         }
@@ -170,6 +177,7 @@
             <option value="" disabled selected>Filter by</option>
             <option value="skill_name">Skill Name</option>
             <option value="location">Location</option>
+            <option value="user">User</option>
         </select>
 
         {#if filterBy === "skill_name"}
@@ -198,7 +206,19 @@
                 {/each}
             </select>
         {/if}
-
+        {#if filterBy === "user"}
+            <label for="user_id">User:</label>
+            <select
+                bind:value={filterValue}
+                on:change={filterJobs}
+                id="user_id"
+            >
+                <option value="" disabled selected>Select a user</option>
+                {#each users as user}
+                    <option value={user.name}>{user.name}</option>
+                {/each}
+            </select>
+        {/if}
         <label for="sort_by">Sort by:</label>
         <select bind:value={sortBy} on:change={sortJobs} id="sort_by">
             <option value="" disabled selected>Sort by</option>
@@ -218,6 +238,7 @@
                             <p>Location: {job.location}</p>
                             <p>Description: {job.description}</p>
                             <p>Price: {job.price}</p>
+                            <p>Name: {job.user_name}</p>
                             <button on:click={() => contactUser(job.user_id)}
                                 >Contact User</button
                             >
@@ -231,6 +252,7 @@
                                     Description: {jobs[index + 1].description}
                                 </p>
                                 <p>Price: {jobs[index + 1].price}</p>
+                                <p>Name: {jobs[index + 1].user_name}</p>
                                 <button
                                     on:click={() => contactUser(job.user_id)}
                                     >Contact User</button

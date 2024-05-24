@@ -6,9 +6,7 @@ import cors from "cors";
 import sessionMiddleware from "./middleware/sessionMiddleware.js";
 import { Server } from "socket.io";
 import http from "http";
-
-//const http = require('http');
-//const socketIo = require('socket.io');
+import { sanitizeHTML } from "./util/sanitize.js";
 
 const app = express();
 
@@ -23,9 +21,6 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(helmet());
 
-import chatsRouter from "./routers/chatsRouter.js";
-app.use(chatsRouter);
-
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -38,6 +33,9 @@ io.on("connection", (socket) => {
     console.log('A user connected');
 
     socket.on("send-chat-message", (data) => {
+        if (data.text === "" || data.text === null || data.text === undefined) {
+            return;
+        }
         io.emit("chat-message", data);
         console.log(data);
     });
@@ -48,7 +46,7 @@ io.on("connection", (socket) => {
     });
 });
 
-/*const limiter = rateLimit({
+const limiter = rateLimit({
     windowMs: 1 * 60 * 1000,
     limit: 100000,
     standardHeaders: true,
@@ -64,7 +62,7 @@ io.on("connection", (socket) => {
     }
 });
 
-app.use(limiter);*/
+app.use(limiter);
 
 import authRouter from "./routers/authRouter.js";
 app.use(authRouter);
@@ -80,6 +78,9 @@ app.use(mailsRouter);
 
 import skillsRouter from "./routers/skillsRouter.js";
 app.use(skillsRouter);
+
+import chatsRouter from "./routers/chatsRouter.js";
+app.use(chatsRouter);
 
 app.all("*", (req, res) => {
     res.status(404).send({ message: "Not Found" });
