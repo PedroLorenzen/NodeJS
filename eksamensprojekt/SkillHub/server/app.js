@@ -4,6 +4,11 @@ import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import cors from "cors";
 import sessionMiddleware from "./middleware/sessionMiddleware.js";
+import { Server } from "socket.io";
+import http from "http";
+
+//const http = require('http');
+//const socketIo = require('socket.io');
 
 const app = express();
 
@@ -18,17 +23,38 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(helmet());
 
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["*"]
+    }
+});
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+
+    socket.on('chat message', (msg) => {
+        console.log('message: ' + msg);
+        io.emit('chat message', msg);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
+});
+
 const limiter = rateLimit({
     windowMs: 5 * 60 * 1000,
     limit: 50,
     standardHeaders: true,
     legacyHeaders: false,
-    cookie: { 
+    cookie: {
         secure: false,
         httpOnly: true,
         sameSite: "strict"
     },
-    handler: (req, res) => {        
+    handler: (req, res) => {
         console.log(`Rate limit exceeded for ${req.ip}`);
         res.status(429).send("Too many requests, please try again later.");
     }
@@ -50,6 +76,9 @@ app.use(mailsRouter);
 
 import skillsRouter from "./routers/skillsRouter.js";
 app.use(skillsRouter);
+
+import chatsRouter from "./routers/chatsRouter.js";
+app.use(chatsRouter);
 
 app.all("*", (req, res) => {
     res.status(404).send({ message: "Not Found" });

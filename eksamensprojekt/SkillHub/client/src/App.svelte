@@ -9,16 +9,14 @@
   import User from "./pages/User/User.svelte";
   import Jobs from "./pages/Jobs/Jobs.svelte";
   import Contact from "./pages/Contact/Contact.svelte";
+  import Chat from "./pages/Chat/Chat.svelte";
   import Unauthorized from "./pages/Unauthorized/Unauthorized.svelte";
   import RateLimitExceeded from "./pages/RateLimitExceeded/RateLimitExceeded.svelte";
 
   onMount(async () => {
-      await checkSession();
+    await checkSession();
   });
-
 </script>
-
-
 
 <main>
   <Header />
@@ -37,6 +35,11 @@
     <Route path="/Contact">
       <PrivateRouteGuard>
         <Contact />
+      </PrivateRouteGuard>
+    </Route>
+    <Route path="/Chat">
+      <PrivateRouteGuard>
+        <Chat />
       </PrivateRouteGuard>
     </Route>
     <Route path="/Unauthorized" component={Unauthorized} />

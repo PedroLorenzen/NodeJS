@@ -12,6 +12,7 @@
     let filteredJobs = [];
     let allJobs = [];
     let skills = [];
+    let locations = [];
     let users = [];
     let skillName = {};
     let userLocation = {};
@@ -97,6 +98,7 @@
                 a.skill_name.localeCompare(b.skill_name),
             );
             allJobs = jobs;
+            filterLocations();
         } catch (err) {
             console.error("Error during fetch operations:", err);
         }
@@ -115,6 +117,17 @@
             );
         }
     }
+
+    async function filterLocations() {
+        jobs = allJobs;
+        locations = [];
+        for (let job of jobs) {
+            if (!locations.includes(job.location)) {
+                locations.push(job.location);
+            }
+        }
+    }
+
     function filterJobs() {
         if (sortedJobs.length > 0) {
             jobs = sortedJobs;
@@ -175,8 +188,8 @@
                 id="location"
             >
                 <option value="" disabled selected>Select a location</option>
-                {#each Object.values(userLocation) as loc}
-                    <option value={loc}>{loc}</option>
+                {#each locations as location}
+                    <option value={location}>{location}</option>
                 {/each}
             </select>
         {/if}
@@ -200,9 +213,9 @@
                             <p>Location: {job.location}</p>
                             <p>Description: {job.description}</p>
                             <p>Price: {job.price}</p>
-                            <Link to="/Contact">
+                            <Link to="/Chat">
                                 <button>Contact User</button>
-                            </Link>
+                              </Link>
                         </div>
                         {#if jobs[index + 1]}
                             <div class="job">
@@ -213,9 +226,9 @@
                                     Description: {jobs[index + 1].description}
                                 </p>
                                 <p>Price: {jobs[index + 1].price}</p>
-                                <Link to="/Contact">
+                                <Link to="/Chat">
                                     <button>Contact User</button>
-                                </Link>
+                                  </Link>
                             </div>
                         {/if}
                     </div>
@@ -296,7 +309,7 @@
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
     }
-    
+
     button {
         background-color: #28a745;
         font-size: large;

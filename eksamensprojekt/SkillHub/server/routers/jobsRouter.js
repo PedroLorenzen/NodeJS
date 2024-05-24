@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { connect } from "../database/connection.js";
 import { sanitizeHTML } from "../util/sanitize.js";
-import { parse } from "dotenv";
 
 const router = Router();
 
@@ -28,7 +27,7 @@ router.post("/jobs", async (req, res) => {
             const generateJobId = await db.collection("counters").findOneAndUpdate(
                 { _id: "jobId" },
                 { $inc: { sequence_value: 1 } },
-                { returnDocument: "after", upsert: true }
+                { returnDocument: "after" }
             );
             const jobId = generateJobId.sequence_value;
 
@@ -70,16 +69,7 @@ router.get("/jobs", async (req, res) => {
                     return res.send({ job });
                 }
                 return res.status(404).send({ message: "Job not found." });
-            } /* else if (req.query.userId) {
-                const userId = parseInt(req.query.userId);
-                const user = await db.collection("jobs").findOne({
-                    _id: userId
-                });
-                if (user && user._id === userId) {
-                    return res.send({ data: jobs });
-                }
-                return res.status(404).send({ message: "User not found." });
-            }*/
+            }
             else if (req.query.filterJobsByUser) {
                 query.user_id = req.session.user.id;
             }

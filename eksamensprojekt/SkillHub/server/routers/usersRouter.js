@@ -30,7 +30,7 @@ router.post("/users", async (req, res) => {
         const generateUserId = await db.collection("counters").findOneAndUpdate(
             { _id: "userId" },
             { $inc: { sequence_value: 1 } },
-            { returnDocument: "after", upsert: true }
+            { returnDocument: "after" }
         );
 
         const userId = generateUserId.sequence_value;
