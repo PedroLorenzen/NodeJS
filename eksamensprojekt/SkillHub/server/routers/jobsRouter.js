@@ -57,7 +57,7 @@ router.get("/jobs", async (req, res) => {
     if (req.session.user) {
         try {
             const db = await connect();
-            const query = {};
+            let query = {};
             if (req.query.skillId) {
                 const skillId = parseInt(req.query.skillId);
                 console.log("Skill ID: ", skillId);
@@ -71,13 +71,13 @@ router.get("/jobs", async (req, res) => {
                 return res.status(404).send({ message: "Job not found." });
             } else if (req.query.filterJobsByUser) {
                 query.user_id = req.session.user.id;
-            } else if (req.query.filterJobsBySelectedUser) {
-                query.user_id = parseInt(req.query.filterJobsBySelectedUser);
+            } else if (req.query.filterUserJobs) {
+                query = { user_id: { $ne: req.session.user.id } }
             }
             const jobs = await db.collection("jobs").find(query).toArray();
+            console.log("Jobs: ", jobs);
             if (jobs && jobs.length > 0) {
-                const filteredJobs = jobs.filter(job => job.user_id !== req.session.user.id);
-                return res.send({ data: filteredJobs });
+                return res.send({ data: jobs });
             }
             return res.status(404).send({ message: "Jobs sorted by " + query + " not found." });
         } catch (error) {

@@ -34,7 +34,7 @@
         } catch (error) {
             console.error("Error fetching user:", error);
         }
-
+        
         try {
             const response = await fetch(
                 `http://localhost:8080/chats?otherUserId=${otherUserId}`,
@@ -74,8 +74,10 @@
             }
             messages = data.chat || [];
             console.log("messages", messages);
+            
         } catch (error) {
             console.error("Error fetching chat history:", error);
+            return error;
         }
 
         socket.on("chat-message", (data) => {

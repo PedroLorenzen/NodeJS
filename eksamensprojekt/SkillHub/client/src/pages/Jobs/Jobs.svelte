@@ -9,7 +9,6 @@
     let filterValue = "";
     let jobs = [];
     let sortedJobs = [];
-    let filteredJobs = [];
     let allJobs = [];
     let skills = [];
     let locations = [];
@@ -72,7 +71,7 @@
         }
 
         try {
-            const jobResponse = await fetch("http://localhost:8080/jobs", {
+            const jobResponse = await fetch("http://localhost:8080/jobs?filterUserJobs=true", {
                 credentials: "include",
             });
             if (jobResponse.status === 429) {
@@ -84,6 +83,7 @@
                 );
             }
             const jobData = await jobResponse.json();
+            console.log("Fetched jobs:", jobData);
             jobs = jobData.data.map((job) => ({
                 ...job,
                 id: job._id,
