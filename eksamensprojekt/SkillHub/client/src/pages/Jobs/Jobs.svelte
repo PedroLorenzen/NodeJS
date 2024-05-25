@@ -71,9 +71,12 @@
         }
 
         try {
-            const jobResponse = await fetch("http://localhost:8080/jobs?filterUserJobs=true", {
-                credentials: "include",
-            });
+            const jobResponse = await fetch(
+                "http://localhost:8080/jobs?filterUserJobs=true",
+                {
+                    credentials: "include",
+                },
+            );
             if (jobResponse.status === 429) {
                 navigate("/RateLimitExceeded");
                 throw new Error("Rate limit exceeded");
@@ -304,12 +307,19 @@
             "Lucida Sans", Arial, sans-serif;
         margin: 0 40px;
         border: 1px solid #ccc;
-        padding: 10px 0 30px 50px;
+        padding: 10px 30px 30px 50px;
         box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.1);
         text-align: left;
     }
     .job p {
         margin: 5px;
+        background-color: #ccc;
+        border: 1px solid #ccc;
+        padding: 5px 10px 5px 10px;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
     }
     .actions {
         background: lightgrey;
@@ -342,6 +352,7 @@
         background-color: #28a745;
         font-size: large;
         color: white;
+        margin-top: 20px;
         border: none;
         border-radius: 5px;
         transition: background-color 0.3s ease;

@@ -40,7 +40,8 @@ router.post("/users", async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            location
+            location,
+            isAdmin: false
         };
 
         await db.collection("users").insertOne(newUser);
@@ -91,8 +92,15 @@ router.put("/users", async (req, res) => {
         try {
             const { name, email, location, oldPassword, newPassword } = req.body;
             let user = {};
+            let id = null;
             const db = await connect();
-            user = await db.collection("users").findOne({ _id: req.session.user.id });
+            if (req.query.updateUser) {
+                user = await db.collection("users").findOne({ _id: parseInt(req.query.updateUser) });
+                id = parseInt(req.query.updateUser);
+            } else {
+                user = await db.collection("users").findOne({ _id: req.session.user.id });
+                id = req.session.user.id;
+            }
             if (user) {
                 if (!name || !email || !location) {
                     return res.status(400).send({ error: "Missing required information" });
@@ -108,9 +116,9 @@ router.put("/users", async (req, res) => {
                         const salt = await bcrypt.genSalt(12);
                         const hashedPassword = await bcrypt.hash(newPassword, salt);
                         await db.collection("users").updateOne(
-                            { _id: req.session.user.id },
                             {
                                 $set: {
+                                    _id: id,
                                     name: sanitizeHTML(name),
                                     email: sanitizeEmail(email),
                                     location: sanitizeHTML(location),

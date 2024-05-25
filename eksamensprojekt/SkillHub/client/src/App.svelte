@@ -9,7 +9,10 @@
   import User from "./pages/User/User.svelte";
   import Jobs from "./pages/Jobs/Jobs.svelte";
   import Contact from "./pages/Contact/Contact.svelte";
+  import Chats from "./pages/Chats/Chats.svelte";
   import Chat from "./pages/Chat/Chat.svelte";
+  import AdminRouteGuard from "./components/AdminRouteGuard/AdminRouteGuard.svelte";
+  import Admin from "./pages/Admin/Admin.svelte";
   import Unauthorized from "./pages/Unauthorized/Unauthorized.svelte";
   import RateLimitExceeded from "./pages/RateLimitExceeded/RateLimitExceeded.svelte";
 
@@ -37,7 +40,21 @@
         <Contact />
       </PrivateRouteGuard>
     </Route>
-    <Route path="/Chat" component={Chat} />
+    <Route path="/Chats">
+      <PrivateRouteGuard>
+        <Chats />
+      </PrivateRouteGuard>
+    </Route>
+    <Route path="/Chat">
+      <PrivateRouteGuard>
+        <Chat />
+      </PrivateRouteGuard>
+    </Route>
+    <Route path="/Admin">
+      <AdminRouteGuard>
+        <Admin />
+      </AdminRouteGuard>
+    </Route>
     <Route path="/Unauthorized" component={Unauthorized} />
     <Route path="/RateLimitExceeded" component={RateLimitExceeded} />
   </Router>

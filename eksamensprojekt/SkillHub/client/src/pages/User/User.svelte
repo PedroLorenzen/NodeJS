@@ -687,7 +687,14 @@
     text-align: left;
   }
   .job p {
-    margin: 5px;
+    margin: 5px 100px 5px 5px;
+    background-color: #ccc;
+    border: 1px solid #ccc;
+    padding: 5px 10px 5px 10px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
   }
   .edit-job-form {
     display: flex;

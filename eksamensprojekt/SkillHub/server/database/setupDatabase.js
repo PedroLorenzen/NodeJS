@@ -33,16 +33,16 @@ async function setupDatabase() {
         await usersCollection.createIndex({ location: 1 });
 
         const initialUsers = [
-            { _id: 1, name: "Chris Johnson", email: "chris@johnson.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Vejle" },
-            { _id: 2, name: "Jens Hansen", email: "jens@hansen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Holte" },
-            { _id: 3, name: "Alice Doe", email: "alice@doe.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "København" },
-            { _id: 4, name: "Sophie Nielsen", email: "sophie@nielsen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Roskilde" },
-            { _id: 5, name: "Lars Løkke", email: "lars@løkke.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Vejle" },
-            { _id: 6, name: "Emma Rasmussen", email: "emma@rasmussen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "København" },
-            { _id: 7, name: "Ole Christensen", email: "ole@christensen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Holte" },
-            { _id: 8, name: "Ida Madsen", email: "ida@madsen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Odense" },
-            { _id: 9, name: "Thomas Kjeldsen", email: "thomas@kjeldsen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Vejle" },
-            { _id: 10, name: "Marie Sørensen", email: "marie@sørensen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Roskilde" }
+            { _id: 1, name: "Chris Johnson", email: "chris@johnson.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Vejle", isAdmin: true },
+            { _id: 2, name: "Jens Hansen", email: "jens@hansen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Holte", isAdmin: false},
+            { _id: 3, name: "Alice Doe", email: "alice@doe.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "København", isAdmin: false},
+            { _id: 4, name: "Sophie Nielsen", email: "sophie@nielsen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Roskilde", isAdmin: false },
+            { _id: 5, name: "Lars Løkke", email: "lars@løkke.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Vejle", isAdmin: false },
+            { _id: 6, name: "Emma Rasmussen", email: "emma@rasmussen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "København", isAdmin: false },
+            { _id: 7, name: "Ole Christensen", email: "ole@christensen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Holte", isAdmin: false },
+            { _id: 8, name: "Ida Madsen", email: "ida@madsen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Odense", isAdmin: false },
+            { _id: 9, name: "Thomas Kjeldsen", email: "thomas@kjeldsen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Vejle", isAdmin: false },
+            { _id: 10, name: "Marie Sørensen", email: "marie@sørensen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "Roskilde", isAdmin: false }
         ];
         await usersCollection.insertMany(initialUsers);
         console.log("Initial users inserted");
