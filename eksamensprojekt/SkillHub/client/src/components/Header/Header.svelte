@@ -34,6 +34,7 @@
   header {
     background-color: beige;
     padding: 5px;
+    padding-top: 20px;
     text-align: center;
     font-size: 20px;
     color: #333;
