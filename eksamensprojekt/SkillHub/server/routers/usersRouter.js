@@ -173,11 +173,21 @@ router.put("/users", async (req, res) => {
 router.delete("/users", async (req, res) => {
     if (req.session.user) {
         try {
+            let id = null;
+            let user = {};
             const db = await connect();
-            const user = await db.collection("users").findOne({ _id: req.session.user.id });
+
+            if (req.query.getUserId) {
+                user = await db.collection("users").findOne({ _id: parseInt(req.query.getUserId) });
+                id = parseInt(req.query.getUserId);
+            } else {
+                user = await db.collection("users").findOne({ _id: req.session.user.id });
+                id = req.session.user.id;
+            }
             if (user) {
-                await db.collection("jobs").deleteMany({ user_id: req.session.user.id });
-                await db.collection("users").deleteOne({ _id: req.session.user.id });
+                await db.collection("jobs").deleteMany({ user_id: id });
+                await db.collection('chats').deleteMany({ user_ids: id });
+                await db.collection("users").deleteOne({ _id: id });
                 return res.send({ message: "User deleted successfully" });
             }
             return res.status(404).send({ message: "User not found." });

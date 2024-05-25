@@ -120,8 +120,29 @@ router.delete('/chats', async (req, res) => {
     if (req.session.user) {
         try {
             const db = await connect();
-            const userId = req.session.user.id;
+            let userId = null;
             const otherUserId = parseInt(req.query.otherUserId);
+
+            if (req.query.getUserId) {
+                userId = parseInt(req.query.getUserId);
+                const chats = await db.collection("chats").find({ user_ids: userId }).toArray();
+                if (chats.length === 0) {
+                    console.log(`No chats with ID ${userId} found.`);
+                    return res.status(404).send({ message: 'Chat not found.' });
+                }
+                const result = await db.collection('chats').deleteMany({
+                    user_ids: userId
+                });
+                if (result.deletedCount === 0) {
+                    console.log(`No chats with user ID ${userId} found or user not authorized.`);
+                    return res.status(404).send({ message: 'Chat not found or user not authorized.' });
+                }
+                console.log(`Chats from user ID ${userId} deleted.`);
+                return res.status(200).send({ message: 'Chats deleted successfully.' });
+
+            } else {
+                userId = req.session.user.id;
+            }
 
             if (!otherUserId) {
                 return res.status(400).send({ error: "Missing other user ID" });
@@ -143,7 +164,7 @@ router.delete('/chats', async (req, res) => {
             }
 
             console.log(`Chat between user ID ${userId} and user ID ${otherUserId} deleted.`);
-            return res.status(404).send({ message: 'Chat deleted successfully.' });
+            return res.status(200).send({ message: 'Chat deleted successfully.' });
         } catch (error) {
             console.error('Error deleting chat:', error);
             res.status(500).send({ error: 'Error deleting chat' });

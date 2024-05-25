@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { navigate } from "svelte-routing";
     import { sanitizeHTML } from "../../util/sanitize.js";
-    import { toast } from "svelte-french-toast";
+    import toast, { Toaster } from "svelte-french-toast";
 
     let users = [];
 
@@ -86,7 +86,44 @@
             },
         );
     }
+
+    async function deleteUser(user) {
+        const response = await fetch(
+            `http://localhost:8080/users?getUserId=${user.id}`,
+            {
+                method: "DELETE",
+                credentials: "include",
+            },
+        );
+        const result = await response.json();
+        if (response.status === 429) {
+            navigate("/RateLimitExceeded");
+            throw new Error("Rate limit exceeded");
+        } else if (!response.ok) {
+            throw new Error(result.error || "Failed to delete user");
+        }
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    }
+
+    async function handleDeleteUser(user) {
+        await toast.promise(
+            deleteUser(user),
+            {
+                loading: "Deleting user...",
+                success: "User deleted successfully. Refreshing page...",
+                error: "Failed to delete user - please try again",
+            },
+            {
+                duration: 2000,
+                position: "top-right",
+            },
+        );
+    }
 </script>
+
+<Toaster />
 
 <main>
     <div>
@@ -129,6 +166,11 @@
                             <td>
                                 <button on:click={() => handlePutUser(user)}
                                     >Update</button
+                                >
+                            </td>
+                            <td>
+                                <button on:click={() => handleDeleteUser(user)}
+                                    >Delete</button
                                 >
                             </td>
                         </tr>
