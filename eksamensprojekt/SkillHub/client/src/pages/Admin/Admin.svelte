@@ -34,7 +34,7 @@
     });
 
     async function putUser(user) {
-        const response = await fetch(`http://localhost:8080/users`, {
+        const response = await fetch(`http://localhost:8080/users?getUserId={user.id}`, {
             method: "PUT",
             credentials: "include",
             headers: {
@@ -45,7 +45,7 @@
                 name: sanitizeHTML(user.name),
                 email: sanitizeHTML(user.email),
                 location: sanitizeHTML(user.location),
-                isAdmin: user.isAdmin // No need to sanitize boolean values
+                isAdmin: user.isAdmin
             }),
         });
         const result = await response.json();

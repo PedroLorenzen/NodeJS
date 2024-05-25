@@ -33,10 +33,9 @@
 <style>
   header {
     background-color: beige;
-    padding: 5px;
-    padding-top: 20px;
+    padding: 10px;
     text-align: center;
-    font-size: 20px;
+    font-size: 17px;
     color: #333;
     position: fixed;
     top: 0;
