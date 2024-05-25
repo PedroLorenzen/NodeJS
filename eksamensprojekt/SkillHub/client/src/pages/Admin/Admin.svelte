@@ -34,20 +34,23 @@
     });
 
     async function putUser(user) {
-        const response = await fetch(`http://localhost:8080/users?getUserId={user.id}`, {
-            method: "PUT",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
+        const response = await fetch(
+            `http://localhost:8080/users?getUserId=${user.id}`,
+            {
+                method: "PUT",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: user.id,
+                    name: sanitizeHTML(user.name),
+                    email: sanitizeHTML(user.email),
+                    location: sanitizeHTML(user.location),
+                    isAdmin: user.isAdmin,
+                }),
             },
-            body: JSON.stringify({
-                id: user.id,
-                name: sanitizeHTML(user.name),
-                email: sanitizeHTML(user.email),
-                location: sanitizeHTML(user.location),
-                isAdmin: user.isAdmin
-            }),
-        });
+        );
         const result = await response.json();
         if (response.status === 429) {
             navigate("/RateLimitExceeded");
@@ -104,12 +107,18 @@
                     <tr>
                         <td><input type="text" bind:value={user.name} /></td>
                         <td><input type="email" bind:value={user.email} /></td>
-                        <td><input type="text" bind:value={user.location} /></td>
+                        <td><input type="text" bind:value={user.location} /></td
+                        >
                         <td>
-                            <input type="checkbox" bind:checked={user.isAdmin} />
+                            <input
+                                type="checkbox"
+                                bind:checked={user.isAdmin}
+                            />
                         </td>
                         <td>
-                            <button on:click={() => handlePutUser(user)}>Update</button>
+                            <button on:click={() => handlePutUser(user)}
+                                >Update</button
+                            >
                         </td>
                     </tr>
                 {/each}
@@ -127,7 +136,8 @@
         border-collapse: collapse;
         margin-top: 20px;
     }
-    th, td {
+    th,
+    td {
         border: 1px solid #ddd;
         padding: 8px;
     }

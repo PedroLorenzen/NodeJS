@@ -90,7 +90,7 @@ router.get("/users", async (req, res) => {
 router.put("/users", async (req, res) => {
     if (req.session.user) {
         try {
-            const { name, email, location, oldPassword, newPassword } = req.body;
+            const { name, email, location, oldPassword, newPassword, isAdmin } = req.body;
             let user = {};
             let id = null;
             const db = await connect();
@@ -133,8 +133,21 @@ router.put("/users", async (req, res) => {
                         return res.send({ message: "User updated successfully", user });
                     }
                     return res.status(401).send({ error: "Incorrect old password" });
+                } if (isAdmin !== undefined) {
+                    await db.collection("users").updateOne(
+                        { _id: id },
+                        {
+                            $set: {
+                                name: sanitizeHTML(name),
+                                email: sanitizeEmail(email),
+                                location: sanitizeHTML(location),
+                                isAdmin: isAdmin
+                            }
+                        },
+                        { returnDocument: "after" }
+                    );
+                    return res.send({ message: "User updated successfully", user });
                 }
-
                 await db.collection("users").updateOne(
                     { _id: id },
                     {
