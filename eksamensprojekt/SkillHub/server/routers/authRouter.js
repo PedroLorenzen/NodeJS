@@ -24,7 +24,8 @@ router.post("/login", authRateLimiter, async (req, res) => {
                 id: userQuery._id,
                 email: userQuery.email,
                 name: userQuery.name,
-                location: userQuery.location
+                location: userQuery.location,
+                isAdmin: userQuery.isAdmin
             };
             console.log(`User with ID: ${userQuery._id} has logged in`);
             return res.send({ message: "Logged in successfully" });

@@ -5,7 +5,7 @@ import { sanitizeHTML } from "../util/sanitize.js";
 const router = Router();
 
 router.post("/skills", async (req, res) => {
-    if (req.session.user) {
+    if (req.session.user.isAdmin) {
         try {
             let { name } = req.body;
             const db = await connect();
@@ -42,6 +42,7 @@ router.post("/skills", async (req, res) => {
 });
 
 router.get("/skills", async (req, res) => {
+    console.log(req.session.user)
     if (req.session.user) {
         try {
             const db = await connect();
@@ -67,7 +68,7 @@ router.get("/skills", async (req, res) => {
 });
 
 router.put("/skills", async (req, res) => {
-    if (req.session.user) {
+    if (req.session.user.isAdmin) {
         const skillId = parseInt(req.query.skillId);
         if (!skillId) {
             return res.status(400).send({ error: "Skill ID must be provided as a query parameter" });
@@ -99,7 +100,7 @@ router.put("/skills", async (req, res) => {
 });
 
 router.delete("/skills", async (req, res) => {
-    if (req.session.user) {
+    if (req.session.user.isAdmin) {
         const userId = req.session.user.id;
         const skillId = parseInt(req.query.skillId);
         if (!skillId) {
