@@ -92,44 +92,62 @@
     <div>
         <h1>Admin</h1>
         <p>Admin page</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Location</th>
-                    <th>Admin</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {#each users as user (user.id)}
+        <div class="table-container">
+            <table>
+                <thead>
                     <tr>
-                        <td><input type="text" bind:value={user.name} /></td>
-                        <td><input type="email" bind:value={user.email} /></td>
-                        <td><input type="text" bind:value={user.location} /></td
-                        >
-                        <td>
-                            <input
-                                type="checkbox"
-                                bind:checked={user.isAdmin}
-                            />
-                        </td>
-                        <td>
-                            <button on:click={() => handlePutUser(user)}
-                                >Update</button
-                            >
-                        </td>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Location</th>
+                        <th>Admin</th>
+                        <th>Actions</th>
                     </tr>
-                {/each}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {#each users as user (user.id)}
+                        <tr>
+                            <td><input type="text" bind:value={user.name} /></td
+                            >
+                            <td
+                                ><input
+                                    type="email"
+                                    bind:value={user.email}
+                                /></td
+                            >
+                            <td
+                                ><input
+                                    type="text"
+                                    bind:value={user.location}
+                                /></td
+                            >
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    bind:checked={user.isAdmin}
+                                />
+                            </td>
+                            <td>
+                                <button on:click={() => handlePutUser(user)}
+                                    >Update</button
+                                >
+                            </td>
+                        </tr>
+                    {/each}
+                </tbody>
+            </table>
+        </div>
     </div>
 </main>
 
 <style>
     main {
         padding: 100px;
+    }
+    .table-container {
+        max-height: 60vh; /* Adjust the height as needed */
+        overflow: auto;
+        margin-top: 20px;
+        border: 1px solid #ddd;
     }
     table {
         width: 100%;
