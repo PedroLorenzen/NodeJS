@@ -14,7 +14,6 @@ router.post("/login", authRateLimiter, async (req, res) => {
         const userQuery = await db.collection("users").findOne({ email });
 
         if (!userQuery) {
-            console.log(`User with email: ${email} does not exist in the database`);
             return res.status(404).send({ message: "Invalid email" });
         }
 
@@ -27,28 +26,27 @@ router.post("/login", authRateLimiter, async (req, res) => {
                 location: userQuery.location,
                 isAdmin: userQuery.isAdmin
             };
-            console.log(`User with ID: ${userQuery._id} has logged in`);
             return res.send({ message: "Logged in successfully" });
         }
-
-        console.log(`User with ID: ${userQuery._id} has entered an invalid password`);
         return res.status(401).send({ message: "Invalid password" });
 
     } catch (error) {
-        console.error("Login error:", error);
         return res.status(500).send({ message: "Error logging in" });
     }
 });
 
 router.get("/logout", authRateLimiter, (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            return res.status(500).send({ message: "Error logging out" });
+    try {
+        if (!req.session.user) {
+            return res.status(400).send({ message: "User is not logged in" });
         }
-        res.clearCookie("sid");
-        res.send({ message: "Logged out successfully" });
-        console.log("User has logged out and session destroyed");
-    });
+        req.session.destroy(() => {
+            res.clearCookie("sid");
+            res.send({ message: "Logged out successfully" });
+        });
+    } catch (error) {
+        return res.status(500).send({ message: "Error logging out: " + error });
+    }
 });
 
 export default router;

@@ -4,6 +4,7 @@
   import toast, { Toaster } from "svelte-french-toast";
   import { user } from "../../stores/user.js";
   import { sanitizeHTML } from "../../util/sanitize.js";
+  import logout from "../../util/api/auth/logout.js";
 
   $user;
 
@@ -97,43 +98,6 @@
       console.error("Error during job fetch operations:", error);
     }
   });
-
-  async function postLogout() {
-    const response = await fetch("http://localhost:8080/logout", {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (response.status === 429) {
-      navigate("/RateLimitExceeded");
-      throw new Error("Rate limit exceeded");
-      return;
-    }
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message || "Failed to logout");
-    }
-
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
-  }
-
-  async function handlePostLogout() {
-    await toast.promise(
-      postLogout(),
-      {
-        loading: "Logging out...",
-        success: "Logged out successfully. Redirecting...",
-        error: "Failed to logout - please try again",
-      },
-      {
-        duration: 2000,
-        position: "top-right",
-      },
-    );
-  }
 
   async function postJob() {
     const response = await fetch("http://localhost:8080/jobs", {
@@ -390,7 +354,7 @@
 <main>
   <div>
     <h1>Welcome {username || "Not Available"}</h1>
-    <button on:click={handlePostLogout} class="logout">Logout</button>
+    <button on:click={logout} class="logout">Logout</button>
   </div>
   <div class="container">
     <div class="formButtons">

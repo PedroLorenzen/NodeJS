@@ -5,23 +5,32 @@
     import { onMount } from "svelte";
     import { writable } from "svelte/store";
 
-    let isLoading = writable(true);
+    const isLoading = writable(true);
+    const isAuthorized = writable(false);
+    const isError = writable(false);
 
     onMount(async () => {
-        const userData = await checkSession();
-        isLoading.set(false);
-        if (!userData) {
-            navigate("/Unauthorized", { replace: true });
-        } else {
-            user.set(userData);
+        try {
+            const userData = await checkSession();
+            if (userData) {
+                user.set(userData);
+                isAuthorized.set(true);
+            } else {
+                navigate("/Unauthorized", { replace: true });
+            }
+        } catch (error) {
+            console.error("Session check failed:", error);
+            isError.set(true);
+        } finally {
+            isLoading.set(false);
         }
     });
 </script>
 
 {#if $isLoading}
     <div>Loading...</div>
-{:else if $user}
+{:else if $isError}
+    <p>Error occurred while checking session.</p>
+{:else if $isAuthorized}
     <slot />
-{:else}
-    <p>Unauthorized</p>
 {/if}

@@ -1,8 +1,7 @@
 <script>
-    import { navigate } from "svelte-routing";
-    import toast, { Toaster } from "svelte-french-toast";
-    import { sanitizeHTML } from "../../util/sanitize.js";
-    import { sanitizeEmail } from "../../util/sanitize.js";
+    import { Toaster } from "svelte-french-toast";
+    import handleLogin from "../../util/api/auth/login.js"
+    import handleRegister from "../../util/api/auth/register.js"
 
     let showLogin = true;
     let showRegister = false;
@@ -11,117 +10,12 @@
     let name = "";
     let location = "";
 
-    async function postLogin() {
-        const response = await fetch("http://localhost:8080/login", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                email: sanitizeEmail(email),
-                password: password,
-            }),
-        });
-        if (response.status === 429) {
-            navigate("/RateLimitExceeded");
-            throw new Error("Rate limit exceeded");
-        }
-        const result = await response.json();
-        if (response.status === 404) {
-            toast.error(
-                result.error || "Invalid email",
-                {
-                    duration: 3000,
-                    position: "top-right",
-                },
-            );
-            throw new Error(result.message || "Invalid email");
-        } else if (response.status === 401) {
-            toast.error(
-                result.error || "Invalid password",
-                {
-                    duration: 3000,
-                    position: "top-right",
-                },
-            );
-            throw new Error(result.message || "Invalid password");
-        } else if (!response.ok) {
-            throw new Error(result.message || "Failed to login");
-        }
-        setTimeout(() => {
-            navigate("/User");
-        }, 2000);
+    function login() {
+        handleLogin(email, password);
     }
 
-    async function handlePostLogin() {
-        await toast.promise(
-            postLogin(),
-            {
-                loading: "Logging in...",
-                success: "Login successful - redirecting...",
-                error: "Failed to login - please try again",
-            },
-            {
-                duration: 2000,
-                position: "top-right",
-            },
-        );
-    }
-
-    async function postRegister() {
-        const response = await fetch("http://localhost:8080/users", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                name: sanitizeHTML(name),
-                email: sanitizeEmail(email),
-                password: sanitizeHTML(password),
-                location: sanitizeHTML(location),
-            }),
-        });
-        if (response.status === 429) {
-            navigate("/RateLimitExceeded");
-            throw new Error("Rate limit exceeded");
-        }
-        const result = await response.json();
-        if (!response.ok) {
-            if (response.status === 409) {
-                toast.error(
-                    result.error || "User with this email already exists",
-                    {
-                        duration: 3000,
-                        position: "top-right",
-                    },
-                );
-            } else if (response.status === 400) {
-                toast.error(
-                    result.error ||
-                        "Password must be between 6 and 70 characters long, include at least one uppercase letter, and one special character",
-                    {
-                        duration: 3000,
-                        position: "top-right",
-                    },
-                );
-            }
-            throw new Error(result.message || "Failed to register");
-        }
-        handlePostLogin();
-    }
-
-    async function handlePostRegister() {
-        await toast.promise(
-            postRegister(),
-            {
-                loading: "Registering new user...",
-                success:
-                    "You have been registered successfully - Redirecting...",
-                error: "Failed to register - please try again",
-            },
-            {
-                duration: 2000,
-                position: "top-right",
-            },
-        );
+    function register() {
+        handleRegister(email, password, name, location);
     }
 
     function toggleLogin() {
@@ -148,7 +42,7 @@
             <button on:click={toggleRegister}>Create Account</button>
         </div>
         {#if showLogin}
-            <form on:submit|preventDefault={handlePostLogin} class="form">
+            <form on:submit|preventDefault={login} class="form">
                 <label for="email">Email:</label>
                 <input
                     type="email"
@@ -171,7 +65,7 @@
             </form>
         {/if}
         {#if showRegister}
-            <form on:submit|preventDefault={handlePostRegister} class="form">
+            <form on:submit|preventDefault={register} class="form">
                 <label for="name">Name:</label>
                 <input type="text" bind:value={name} id="name" required />
 
