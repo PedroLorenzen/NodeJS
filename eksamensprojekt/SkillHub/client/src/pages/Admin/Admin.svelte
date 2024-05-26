@@ -344,7 +344,7 @@
         border-radius: 10px;
         background-color: #28a745;
     }
-    td input {
+    td input, select, option, button {
         margin: 5px;
         background-color: #ccc;
         color: black;
@@ -362,40 +362,6 @@
         border: 1px solid #ccc;
         padding: 5px 10px;
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-        border-radius: 10px;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
-    }
-
-    select {
-        margin: 5px;
-        background-color: #ccc;
-        color: black;
-        border: 1px solid #ccc;
-        padding: 5px 10px 5px 10px;
-        box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
-    }
-    option {
-        background-color: #ccc;
-        color: black;
-        border: 1px solid #ccc;
-        padding: 5px 10px 5px 10px;
-        box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
-    }
-    button {
-        margin: 5px;
-        font-size: 14px;
-        background-color: #ccc;
-        color: black;
-        border: 1px solid #ccc;
-        padding: 5px 10px 5px 10px;
-        box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.3);
         border-radius: 10px;
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
