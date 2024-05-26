@@ -47,10 +47,8 @@
         jobs = allJobs;
         if (filterBy === "skill") {
             jobs = jobs.filter((job) => job.skill_id === parseInt(filterValue));
-            console.log("Filtered jobs by skill:", jobs);
         } else if (filterBy === "user") {
             jobs = jobs.filter((job) => job.user_id === parseInt(filterValue));
-            console.log("Filtered jobs by user:", jobs);
         }
     }
 

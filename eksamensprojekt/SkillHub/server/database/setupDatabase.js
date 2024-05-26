@@ -1,7 +1,6 @@
 import { connect, disconnect } from "./connection.js";
 
 const deleteMode = process.argv.includes("--delete");
-console.log(process.argv);
 
 async function setupDatabase() {
     try {

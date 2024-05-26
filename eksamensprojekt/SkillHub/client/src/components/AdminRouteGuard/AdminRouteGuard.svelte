@@ -19,7 +19,6 @@
                 navigate("/Unauthorized", { replace: true });
             }
         } catch (error) {
-            console.error("Session check failed:", error);
             isError.set(true);
         } finally {
             isLoading.set(false);

@@ -18,7 +18,6 @@ export async function getJobsByUser(skills, jobs, showToast) {
                 description: sanitizeHTML(job.description),
                 price: job.price,
             }));
-            console.log("Fetched jobs:", jobs);
         } else if (jobResponse.status === 429) {
             navigate("/RateLimitExceeded");
             throw new Error("Rate limit exceeded");
@@ -29,10 +28,10 @@ export async function getJobsByUser(skills, jobs, showToast) {
                 position: "top-right",
             });
         } else {
-            console.error("Failed to fetch jobs:", await jobResponse.text());
+            throw new Error("Failed to fetch jobs" + jobResponse.status);
         }
     } catch (error) {
-        console.error("Error during job fetch operations:", error);
+        throw new Error("Failed to fetch jobs - please try again: " + error.message);
     }
 
     if (showToast) {

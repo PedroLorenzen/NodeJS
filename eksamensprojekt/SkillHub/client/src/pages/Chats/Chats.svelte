@@ -22,8 +22,8 @@
             let result = await response.json();
             users = result.data;
         } catch (error) {
-            console.error("Error fetching users:", error);
             toast.error("Error fetching users: " + error.message);
+            throw new Error("Error fetching users: " + error.message);
         }
     }
 
@@ -60,11 +60,9 @@
                     otherUserName: getUserById(otherUserId),
                 };
             });
-            console.log(chats);
-            console.log(chats);
         } catch (error) {
-            console.error("Error fetching chats:", error);
             toast.error("Error fetching chats: " + error.message);
+            throw new Error("Error fetching chats: " + error.message);
         }
     });
 

@@ -30,25 +30,21 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-    console.log('A user connected');
 
     socket.on("send-chat-message", (data) => {
         if (data.text === "" || data.text === null || data.text === undefined) {
             return;
         }
         io.emit("chat-message", data);
-        console.log(data);
     });
 
     socket.on("disconnect", () => {
-        console.log('A user disconnected');
-        console.log(socket.id);
     });
 });
 
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000,
-    limit: 100000,
+    limit: 60,
     standardHeaders: true,
     legacyHeaders: false,
     cookie: {

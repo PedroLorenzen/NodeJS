@@ -12,26 +12,21 @@ router.get("/users", async (req, res) => {
             if (req.query.getUser === "true") {
                 const user = await db.collection("users").findOne({ _id: req.session.user.id });
                 if (!user) {
-                    console.log(`User with ID ${req.session.user.id} not found.`);
                     return res.status(404).send({ message: "User not found." });
                 }
-                console.log(`Session for userID ${req.session.user.id} retrieved.`);
                 return res.send({ user });
             }
             else if (req.query.getUserById) {
                 const userId = parseInt(req.query.getUserById);
                 const user = await db.collection("users").findOne({ _id: userId });
                 if (!user) {
-                    console.log(`User with ID ${userId} not found.`)
                     return res.status(404).send({ message: "User not found." });
                 }
-                console.log(`User with ID ${userId} retrieved.`);
                 return res.send({ user });
             }
             const result = await db.collection("users").find().toArray();
             res.send({ data: result });
         } catch (error) {
-            console.error("Error fetching users:", error);
             res.status(500).send({ error: "Error fetching users" });
         }
     } else {
@@ -82,9 +77,7 @@ router.post("/users", async (req, res) => {
 
         await db.collection("users").insertOne(newUser);
         res.send({ message: "User registered successfully" });
-        console.log("New user with ID: " + newUser._id + " has been created");
     } catch (error) {
-        console.error("Error registering user:", error);
         res.status(500).send({ error: "Error registering user" });
     }
 });
@@ -167,7 +160,6 @@ router.put("/users", async (req, res) => {
             }
             return res.status(404).send({ message: "User not found." });
         } catch (error) {
-            console.error("Error updating user:", error);
             res.status(500).send({ error: "Error updating user" });
         }
     }
@@ -196,7 +188,6 @@ router.delete("/users", async (req, res) => {
             }
             return res.status(404).send({ message: "User not found." });
         } catch (error) {
-            console.error("Error deleting user:", error);
             res.status(500).send({ error: "Error deleting user" });
         }
     } else {

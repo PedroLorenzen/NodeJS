@@ -18,8 +18,6 @@
   let email = $user.user.email;
   let location = $user.user.location;
 
-  console.log("userId", userId);
-
   let handleUser = {
     id: userId,
     name: username,
@@ -130,7 +128,7 @@
         <input type="email" bind:value={handleUser.email} id="email" required />
 
         <label for="location">Location:</label>
-        <input type="text" bind:value={handleUser.email} id="location" required />
+        <input type="text" bind:value={handleUser.location} id="location" required />
 
         <label for="oldPassword">Old Password:</label>
         <input type="password" bind:value={oldPassword} id="oldPassword" />

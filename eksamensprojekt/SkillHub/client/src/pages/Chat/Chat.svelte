@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import io from "socket.io-client";
     import { navigate } from "svelte-routing";
+    import toast from "svelte-french-toast";
 
     let messages = [];
     let message = "";
@@ -13,7 +14,6 @@
         socket = io("http://localhost:8080");
 
         try {
-            console.log("otherUserId", otherUserId);
             const userResponse = await fetch(
                 `http://localhost:8080/users?getUserById=${otherUserId}`,
                 {
@@ -31,9 +31,9 @@
             let data = await userResponse.json();
             name = data.user.name;
         } catch (error) {
-            console.error("Error fetching user:", error);
+            throw new Error("Error fetching user: " + error);
         }
-        
+
         try {
             const response = await fetch(
                 `http://localhost:8080/chats?otherUserId=${otherUserId}`,
@@ -45,7 +45,7 @@
                 navigate("/RateLimitExceeded");
                 throw new Error("Rate limit exceeded");
             } else if (response.status === 404) {
-                console.error("Chat not found, creating new chat");
+                toast.error("No chat exists, creating new chat...");
                 const newChatResponse = await fetch(
                     `http://localhost:8080/chats?otherUserId=${otherUserId}`,
                     {
@@ -57,11 +57,8 @@
                     navigate("/RateLimitExceeded");
                     throw new Error("Rate limit exceeded");
                 } else if (!newChatResponse.ok) {
-                    console.error(
-                        "Error creating chat:",
-                        newChatResponse.statusText,
-                    );
-                    return;
+                    throw new Error(
+                        "Failed to create new chat: " + newChatResponse.text());
                 }
                 window.location.reload();
             }
@@ -72,11 +69,8 @@
                 );
             }
             messages = data.chat || [];
-            console.log("messages", messages);
-            
         } catch (error) {
-            console.error("Error fetching chat history:", error);
-            return error;
+            throw new Error("Error fetching chat history: " + error);
         }
 
         socket.on("chat-message", (data) => {
@@ -107,10 +101,10 @@
             );
             const data = await response.json();
             if (!response.ok) {
-                console.error("Error saving message:", data.message);
+                throw new Error("Failed to save message: " + data.message);
             }
         } catch (error) {
-            console.error("Error saving message:", error);
+            throw new Error("Error saving message: " + error);
         }
 
         message = "";

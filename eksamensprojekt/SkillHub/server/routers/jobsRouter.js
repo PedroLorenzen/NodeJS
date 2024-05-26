@@ -11,7 +11,6 @@ router.get("/jobs", async (req, res) => {
             let query = {};
             if (req.query.skillId) {
                 const skillId = parseInt(req.query.skillId);
-                console.log("Skill ID: ", skillId);
                 query.skill_id = skillId;
             } else if (req.query.jobId) {
                 const jobId = parseInt(req.query.jobId);
@@ -26,13 +25,11 @@ router.get("/jobs", async (req, res) => {
                 query = { user_id: { $ne: req.session.user.id } }
             }
             const jobs = await db.collection("jobs").find(query).toArray();
-            console.log("Jobs: ", jobs);
             if (jobs && jobs.length > 0) {
                 return res.send({ data: jobs });
             }
             return res.status(404).send({ message: "Jobs sorted by " + query + " not found." });
         } catch (error) {
-            console.error("Error fetching jobs:", error);
             res.status(500).send({ error: "Error fetching jobs" });
         }
     } else {
@@ -80,7 +77,6 @@ router.post("/jobs", async (req, res) => {
             res.send({ message: "Job created successfully" });
 
         } catch (error) {
-            console.error("Database error:", error);
             res.status(500).send({ error: "Database operation failed" });
         }
     } else {
@@ -92,9 +88,7 @@ router.post("/jobs", async (req, res) => {
 router.put("/jobs", async (req, res) => {
     if (req.session.user) {
         const jobId = parseInt(req.query.jobId);
-        console.log("ID: ", jobId);
         if (!jobId) {
-            console.log("error the job id is not provided" + jobId)
             return res.status(400).send({ error: "Job ID must be provided as a query parameter" });
         }
         try {
@@ -130,7 +124,6 @@ router.put("/jobs", async (req, res) => {
                 },
                 { returnDocument: "after" }
             );
-            console.log("Updated job: ", updatedJob);
             res.send({ message: "Job updated successfully: ", job: updatedJob });
         } catch (error) {
             res.status(500).send({ error: "Database operation failed" });
@@ -156,7 +149,6 @@ router.delete("/jobs", async (req, res) => {
                 res.status(404).send({ error: "Job not found" });
             }
         } catch (error) {
-            console.error("Database error:", error);
             res.status(500).send({ error: "Database operation failed" });
         }
     } else {

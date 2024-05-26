@@ -19,16 +19,14 @@
         try {
             skills = await getSkills();
         } catch (error) {
-            console.error("Error during skill fetch operations:", error);
+            throw new Error("Error during skill fetch operations:", error);
         }
-        console.log("Fetched skills:", skills);
 
         try {
             users = await getUsers();
         } catch (error) {
-            console.error("Error during user fetch operations:", error);
+            throw new Error("Error during user fetch operations:", error);
         }
-        console.log("Fetched users:", users);
 
         try {
             jobs = await getJobs();
@@ -47,7 +45,7 @@
             allJobs = jobs;
             filterLocations();
         } catch (error) {
-            console.error("Error during job fetch operations:", error);
+            throw new Error("Error during job fetch operations: ", error);
         }
     });
 
@@ -87,25 +85,19 @@
             jobs = sortedJobs;
             if (filterBy === "skill_name") {
                 jobs = jobs.filter((job) => job.skill_name === filterValue);
-                console.log("Filtered jobs:", jobs);
             } else if (filterBy === "location") {
                 jobs = jobs.filter((job) => job.location === filterValue);
-                console.log("Filtered jobs:", jobs);
             } else if (filterBy === "user") {
                 jobs = jobs.filter((job) => job.user_name === filterValue);
-                console.log("Filtered jobs:", jobs);
             }
         } else {
             jobs = allJobs;
             if (filterBy === "skill_name") {
                 jobs = jobs.filter((job) => job.skill_name === filterValue);
-                console.log("Filtered jobs:", jobs);
             } else if (filterBy === "location") {
                 jobs = jobs.filter((job) => job.location === filterValue);
-                console.log("Filtered jobs:", jobs);
             } else if (filterBy === "user") {
                 jobs = jobs.filter((job) => job.user_name === filterValue);
-                console.log("Filtered jobs:", jobs);
             }
         }
     }

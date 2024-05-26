@@ -14,20 +14,16 @@ router.get('/chats', async (req, res) => {
             if (!otherUserId) {
                 const chats = await db.collection('chats').find({ user_ids: userId }).toArray();
                 if (!chats || chats.length === 0) {
-                    console.log(`No chats found for userID ${userId}.`);
                     return res.status(404).send({ message: 'No chats found.' });
                 }
-                console.log(`Chats for userID ${userId} retrieved.`);
                 return res.send({ chats });
             }
             const chat = await db.collection("chats").findOne({ user_ids: { $all: [userId, otherUserId] } });
             if (!chat) {
                 return res.status(404).send({ message: "Chat not found." });
             }
-            console.log(`Chat history between user ID ${userId} and user ID ${otherUserId} retrieved.`);
             return res.send({ chat: chat.messages });
         } catch (error) {
-            console.error('Error fetching chats:', error);
             return res.status(500).send({ error: 'Error fetching chats' });
         }
     } else {
@@ -68,7 +64,6 @@ router.post("/chats", async (req, res) => {
             res.send({ message: "Chat created successfully", chatId });
 
         } catch (error) {
-            console.error("Database error:", error);
             res.status(500).send({ error: "Database operation failed" });
         }
     } else {
@@ -101,14 +96,11 @@ router.put('/chats', async (req, res) => {
             );
 
             if (result.modifiedCount === 0) {
-                console.log(`Chat between user ID ${userId} and user ID ${otherUserId} not found or user not authorized.`);
                 return res.status(404).send({ message: 'Chat not found or user not authorized.' });
             }
 
-            console.log(`Message added to chat between user ID ${userId} and user ID ${otherUserId}.`);
             return res.send({ message: 'Message added to chat.' });
         } catch (error) {
-            console.error('Error updating chat:', error);
             res.status(500).send({ error: 'Error updating chat' });
         }
     } else {
@@ -127,17 +119,14 @@ router.delete('/chats', async (req, res) => {
                 userId = parseInt(req.query.getUserId);
                 const chats = await db.collection("chats").find({ user_ids: userId }).toArray();
                 if (chats.length === 0) {
-                    console.log(`No chats with ID ${userId} found.`);
                     return res.status(404).send({ message: 'Chat not found.' });
                 }
                 const result = await db.collection('chats').deleteMany({
                     user_ids: userId
                 });
                 if (result.deletedCount === 0) {
-                    console.log(`No chats with user ID ${userId} found or user not authorized.`);
                     return res.status(404).send({ message: 'Chat not found or user not authorized.' });
                 }
-                console.log(`Chats from user ID ${userId} deleted.`);
                 return res.status(200).send({ message: 'Chats deleted successfully.' });
 
             } else {
@@ -149,9 +138,7 @@ router.delete('/chats', async (req, res) => {
             }
 
             const chat = await db.collection("chats").findOne({ user_ids: { $all: [userId, otherUserId] } });
-            console.log(chat);
             if (!chat) {
-                console.log(`Chat between user ID ${userId} and user ID ${otherUserId} not found.`);
                 return res.status(404).send({ message: "Chat not found." });
             }
             const result = await db.collection('chats').deleteOne({
@@ -159,14 +146,11 @@ router.delete('/chats', async (req, res) => {
             });
 
             if (result.deletedCount === 0) {
-                console.log(`Chat between user ID ${userId} and user ID ${otherUserId} not found or user not authorized.`);
                 return res.status(404).send({ message: 'Chat not found or user not authorized.' });
             }
 
-            console.log(`Chat between user ID ${userId} and user ID ${otherUserId} deleted.`);
             return res.status(200).send({ message: 'Chat deleted successfully.' });
         } catch (error) {
-            console.error('Error deleting chat:', error);
             res.status(500).send({ error: 'Error deleting chat' });
         }
     } else {
