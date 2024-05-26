@@ -32,6 +32,8 @@
 
 <style>
   header {
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+                 "Lucida Sans", Arial, sans-serif;
     background-color: beige;
     padding: 10px;
     text-align: center;

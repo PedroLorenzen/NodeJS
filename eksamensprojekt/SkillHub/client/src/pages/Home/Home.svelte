@@ -1,7 +1,7 @@
 <script>
     import { Toaster } from "svelte-french-toast";
-    import handleLogin from "../../util/api/auth/login.js"
-    import handleRegister from "../../util/api/auth/register.js"
+    import handleLogin from "../../util/api/auth/login.js";
+    import handleRegister from "../../util/api/auth/register.js";
 
     let showLogin = true;
     let showRegister = false;
@@ -96,6 +96,8 @@
 
 <style>
     main {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         background-color: white;
         width: 100%;
         padding: 10px 30px 50px 30px;
@@ -143,15 +145,12 @@
     .form {
         display: flex;
         color: white;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
         flex-direction: column;
         width: 100%;
     }
 
     .form label {
         margin-bottom: 5px;
-        font-family: Georgia, "Times New Roman", Times, serif;
         color: #333;
         text-align: left;
     }
