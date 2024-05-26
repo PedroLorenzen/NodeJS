@@ -3,6 +3,9 @@
     import { navigate } from "svelte-routing";
     import { sanitizeHTML } from "../../util/sanitize.js";
     import toast, { Toaster } from "svelte-french-toast";
+    import { getSkills } from "../../util/api/skills/getSkills.js";
+    import { getUsers } from "../../util/api/users/getUsers.js";
+    import { getJobs } from "../../util/api/jobs/getJobs.js";
 
     let users = [];
     let jobs = [];
@@ -14,82 +17,23 @@
 
     onMount(async () => {
         try {
-            const userResponse = await fetch("http://localhost:8080/users", {
-                credentials: "include",
-            });
-            if (userResponse.status === 429) {
-                navigate("/RateLimitExceeded");
-                throw new Error("Rate limit exceeded");
-            } else if (!userResponse.ok) {
-                throw new Error(
-                    "Failed to fetch users: " + (await userResponse.text()),
-                );
-            }
-            const userData = await userResponse.json();
-            users = userData.data.map((user) => ({
-                ...user,
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                location: user.location,
-                isAdmin: user.isAdmin,
-            }));
-        } catch (err) {
-            console.error("Error during fetch operations:", err);
-        }
-
-        try {
-            const response = await fetch("http://localhost:8080/skills", {
-                credentials: "include",
-            });
-            if (response.status === 429) {
-                navigate("/RateLimitExceeded");
-                throw new Error("Rate limit exceeded");
-            } else if (!response.ok) {
-                throw new Error(
-                    "Failed to fetch skills: " + (await response.text()),
-                );
-            }
-            const skillData = await response.json();
-            skills = skillData.map((skill) => ({
-                ...skill,
-                id: skill._id,
-                name: skill.name,
-            }));
+            users = await getUsers();
         } catch (error) {
-            console.error("Error fetching skills:", error);
-            toast.error("Error fetching skills: " + error.message);
+            throw new Error("Failed to load users: " + error.message);
         }
 
         try {
-            const response = await fetch("http://localhost:8080/jobs", {
-                credentials: "include",
-            });
-            if (response.status === 429) {
-                navigate("/RateLimitExceeded");
-                throw new Error("Rate limit exceeded");
-            } else if (!response.ok) {
-                throw new Error(
-                    "Failed to fetch jobs: " + (await response.text()),
-                );
-            }
+            skills = await getSkills();
+        } catch (error) {
+            throw new Error("Failed to load skills: " + error.message);
+        }
 
-            const jobData = await response.json();
-            jobs = jobData.data.map((job) => ({
-                ...job,
-                id: job._id,
-                user: job.user_id,
-                name: job.name,
-                skill: job.skill_id,
-                description: job.description,
-                price: job.price,
-            }));
-            console.log(jobs);
+        try {
+            jobs = await getJobs();
             jobs = jobs.sort((a, b) => a.user - b.user);
             allJobs = jobs;
         } catch (error) {
-            console.error("Error fetching jobs:", error);
-            toast.error("Error fetching jobs: " + error.message);
+            throw new Error("Failed to load jobs: " + error.message);
         }
     });
 
@@ -395,7 +339,8 @@
             throw new Error("Rate limit exceeded");
         } else if (response.status === 400) {
             toast.error(
-                result.error || "The skill is missing some required information",
+                result.error ||
+                    "The skill is missing some required information",
                 {
                     duration: 3000,
                     position: "top-right",
@@ -424,7 +369,6 @@
             },
         );
     }
-
 </script>
 
 <Toaster />
@@ -591,7 +535,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <input type="text" bind:value={skillName}  />
+                        <input type="text" bind:value={skillName} />
                     </td>
                     <td>
                         <button on:click={() => handlePostSkill()}

@@ -33,7 +33,6 @@ router.post("/skills", async (req, res) => {
             await db.collection("skills").insertOne(newSkill);
             res.send({ message: "Skill created successfully", newSkill });
         } catch (error) {
-            console.error("Database error:", error);
             res.status(500).send({ error: "Database operation failed" });
         }
     } else {
@@ -58,7 +57,6 @@ router.get("/skills", async (req, res) => {
             const skills = await db.collection("skills").find(query).toArray();
             res.send(skills);
         } catch (error) {
-            console.error("Error fetching skills:", error);
             res.status(500).send({ error: "Error fetching skills" });
         }
     } else {
@@ -90,7 +88,6 @@ router.put("/skills", async (req, res) => {
             );
             res.send({ message: "Skill updated successfully", skill: updatedSkill.value });
         } catch (error) {
-            console.error("Database error:", error);
             res.status(500).send({ error: "Database operation failed" });
         }
     } else {
@@ -118,7 +115,6 @@ router.delete("/skills", async (req, res) => {
                 res.status(404).send({ error: "Skill not found or already deleted" });
             }
         } catch (error) {
-            console.error("Database error:", error);
             res.status(500).send({ error: "Database operation failed" });
         }
     } else {

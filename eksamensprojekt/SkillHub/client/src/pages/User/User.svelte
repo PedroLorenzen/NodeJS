@@ -5,6 +5,7 @@
   import { user } from "../../stores/user.js";
   import { sanitizeHTML } from "../../util/sanitize.js";
   import logout from "../../util/api/auth/logout.js";
+  import { get } from "svelte/store";
 
   $user;
 
@@ -503,6 +504,8 @@
 
 <style>
   main {
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+      "Lucida Sans", Arial, sans-serif;
     background-color: white;
     width: 100%;
     padding: 20px 30px 50px 30px;
@@ -524,8 +527,6 @@
   }
   .form {
     display: flex;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-      "Lucida Sans", Arial, sans-serif;
     color: white;
     flex-direction: column;
     width: 100%;
@@ -642,8 +643,6 @@
   }
   .job {
     background: lightgrey;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-      "Lucida Sans", Arial, sans-serif;
     margin: 10px 100px 10px 100px;
     border: 1px solid #ccc;
     padding: 10px 0 30px 50px;
@@ -657,8 +656,6 @@
     padding: 5px 10px 5px 10px;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-      "Lucida Sans", Arial, sans-serif;
   }
   .edit-job-form {
     display: flex;
@@ -669,8 +666,6 @@
     width: 450px;
     padding: 40px;
     margin: 40px auto;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-      "Lucida Sans", Arial, sans-serif;
     color: white;
   }
   .edit-job-form h2 {
@@ -682,8 +677,6 @@
     margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-      "Lucida Sans", Arial, sans-serif;
   }
 
   .edit-job-buttons {
