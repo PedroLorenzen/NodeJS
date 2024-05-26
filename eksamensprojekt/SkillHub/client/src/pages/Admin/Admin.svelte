@@ -339,6 +339,17 @@
         border-radius: 8px;
         width: 100%;
     }
+    th {
+        background-color: #007bff;
+        text-align: center;
+        color: black;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
+    }
     td {
         border: 1px solid #ddd;
         border-radius: 10px;
@@ -355,15 +366,7 @@
         font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
             "Lucida Sans", Arial, sans-serif;
     }
-    th {
-        background-color: #007bff;
-        text-align: center;
-        color: black;
-        border: 1px solid #ccc;
-        padding: 5px 10px;
-        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-        border-radius: 10px;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
+    button {
+        font-size: 14px;
     }
 </style>
