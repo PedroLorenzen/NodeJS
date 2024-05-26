@@ -1,7 +1,7 @@
 import { navigate } from "svelte-routing";
 import toast from "svelte-french-toast";
 
-export async function getSkills(redirectPath) {
+export async function getSkills(showToast) {
     try {
         const response = await fetch("http://localhost:8080/skills", {
             credentials: "include",
@@ -21,9 +21,9 @@ export async function getSkills(redirectPath) {
             name: skill.name,
         }));
 
-        if (redirectPath) {
+        if (showToast) {
             setTimeout(() => {
-                navigate(redirectPath);
+                window.location.reload();
             }, 2000);
         }
 
@@ -33,9 +33,9 @@ export async function getSkills(redirectPath) {
     }
 }
 
-export async function handleGetSkills(redirectPath) {
+export async function handleGetSkills(showToast) {
     await toast.promise(
-        getSkills(redirectPath),
+        getSkills(showToast),
         {
             loading: "Fetching skills...",
             success: "Skills fetched successfully",

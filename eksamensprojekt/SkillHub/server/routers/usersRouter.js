@@ -136,7 +136,8 @@ router.put("/users", async (req, res) => {
                         return res.send({ message: "User updated successfully", user });
                     }
                     return res.status(401).send({ error: "Incorrect old password" });
-                } if (isAdmin !== undefined) {
+                } 
+                if (isAdmin !== undefined) {
                     await db.collection("users").updateOne(
                         { _id: id },
                         {

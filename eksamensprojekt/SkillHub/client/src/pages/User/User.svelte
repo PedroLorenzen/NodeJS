@@ -5,7 +5,7 @@
   import { user } from "../../stores/user.js";
   import { sanitizeHTML } from "../../util/sanitize.js";
   import logout from "../../util/api/auth/logout.js";
-  import { get } from "svelte/store";
+  import { getSkills } from "../../util/api/skills/getSkills.js";
 
   $user;
 
@@ -44,26 +44,13 @@
 
   onMount(async () => {
     try {
-      const skillsResponse = await fetch("http://localhost:8080/skills", {
-        credentials: "include",
-      });
-
-      if (skillsResponse.ok) {
-        const skillsData = await skillsResponse.json();
-        skills = skillsData || [];
-        skills.forEach((skill) => {
-          skillName[skill._id] = skill.name;
+            skills = await getSkills();
+            skills.forEach(skill => {
+            skillName[skill.id] = skill.name;  
         });
-        console.log("Fetched skills:", skills);
-      } else if (skillsResponse.status === 429) {
-        navigate("/RateLimitExceeded");
-        throw new Error("Rate limit exceeded");
-      } else {
-        console.error("Failed to fetch skills:", await skillsResponse.text());
-      }
-    } catch (error) {
-      console.error("Error during skill fetch operations:", error);
-    }
+        } catch (error) {
+            throw new Error("Failed to load skills: " + error.message);
+        }
 
     let url = "http://localhost:8080/jobs?filterJobsByUser=true";
 
