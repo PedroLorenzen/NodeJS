@@ -304,21 +304,11 @@
     transition: background-color 0.3s ease;
   }
 
-  .delete-user-button {
-    background-color: #dc3545;
-    color: white;
-    margin: 50px 0 15px 0;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+   .submit-button:hover {
+    background-color: #218838;
   }
 
-  .delete-user-button:hover {
-    background-color: darkred;
-  }
-
-  .delete-job-button {
+  .delete-job-button, .delete-user-button {
     background-color: #dc3545;
     color: white;
     padding: 10px 20px;
@@ -328,12 +318,12 @@
     transition: background-color 0.3s ease;
   }
 
-  .delete-job-button:hover {
-    background-color: darkred;
-  }
+  .delete-user-button {
+    margin: 50px 0 15px 0;
+  }  
 
-  .submit-button:hover {
-    background-color: #218838;
+  .delete-job-button:hover, .delete-user-button:hover {
+    background-color: darkred;
   }
 
   div {
@@ -362,6 +352,7 @@
   button:hover {
     background-color: #0056b3;
   }
+  
   .formButtons {
     background-color: lightgrey;
   }
