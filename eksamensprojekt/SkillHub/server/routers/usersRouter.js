@@ -16,6 +16,7 @@ router.post("/users", async (req, res) => {
                 error: "Password must be at least 6 characters long, include at least one uppercase letter, and one special character."
             });
         }
+        location = location.toLowerCase();
         name = sanitizeHTML(name);
         email = sanitizeEmail(email);
         location = sanitizeHTML(location);
@@ -34,6 +35,7 @@ router.post("/users", async (req, res) => {
         );
 
         const userId = generateUserId.sequence_value;
+        location = location.toLowerCase();
 
         const newUser = {
             _id: userId,
@@ -90,7 +92,7 @@ router.get("/users", async (req, res) => {
 router.put("/users", async (req, res) => {
     if (req.session.user) {
         try {
-            const { name, email, location, oldPassword, newPassword, isAdmin } = req.body;
+            let { name, email, location, oldPassword, newPassword, isAdmin } = req.body;
             let user = {};
             let id = null;
             const db = await connect();
@@ -107,6 +109,7 @@ router.put("/users", async (req, res) => {
                 if (!name || !email || !location) {
                     return res.status(400).send({ error: "Missing required information" });
                 }
+                location = location.toLowerCase();
 
                 if (oldPassword) {
                     if (newPassword.length < 6 || !newPassword.match(/[A-Z]/) || !newPassword.match(/[^\w\s]/) || newPassword === oldPassword || newPassword === undefined) {
