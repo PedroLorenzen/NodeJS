@@ -305,6 +305,8 @@
 
 <style>
     main {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         background-color: white;
         width: 100%;
         padding: 10px 30px 50px 30px;
@@ -327,7 +329,7 @@
         margin-bottom: 20px;
     }
     .table-container {
-        max-height: 60vh; /* Adjust the height as needed */
+        max-height: 60vh;
         overflow: auto;
         width: 95%;
         margin: 0 auto;
@@ -347,8 +349,7 @@
         padding: 5px 10px;
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
         border-radius: 10px;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
+        
     }
     td {
         border: 1px solid #ddd;
@@ -363,8 +364,6 @@
         padding: 5px 10px 5px 10px;
         box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.3);
         border-radius: 10px;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
     }
     button {
         font-size: 14px;

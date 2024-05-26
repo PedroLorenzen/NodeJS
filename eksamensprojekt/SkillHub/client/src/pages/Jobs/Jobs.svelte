@@ -3,6 +3,9 @@
     import { navigate } from "svelte-routing";
     import { Link } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
+    import { getSkills } from "../../util/api/skills/getSkills";
+    import { getJobs } from "../../util/api/jobs/getJobs";
+    import { getUsers } from "../../util/api/users/getUsers";
 
     let sortBy = "";
     let filterBy = "";
@@ -13,98 +16,44 @@
     let skills = [];
     let locations = [];
     let users = [];
-    let skillName = {};
-    let userLocation = {};
 
     onMount(async () => {
         try {
-            const skillsResponse = await fetch("http://localhost:8080/skills", {
-                credentials: "include",
-            });
-
-            if (skillsResponse.ok) {
-                const skillsData = await skillsResponse.json();
-                skills = skillsData || [];
-                skills.forEach((skill) => {
-                    skillName[skill._id] = skill.name;
-                });
-                console.log("Fetched skills:", skills);
-            } else if (skillsResponse.status === 429) {
-                navigate("/RateLimitExceeded");
-                throw new Error("Rate limit exceeded");
-            } else {
-                console.error(
-                    "Failed to fetch skills:",
-                    await skillsResponse.text(),
-                );
-            }
+            skills = await getSkills();
         } catch (error) {
             console.error("Error during skill fetch operations:", error);
         }
+        console.log("Fetched skills:", skills);
 
         try {
-            const userResponse = await fetch("http://localhost:8080/users", {
-                credentials: "include",
-            });
-            if (userResponse.status === 429) {
-                navigate("/RateLimitExceeded");
-                throw new Error("Rate limit exceeded");
-            } else if (!userResponse.ok) {
-                throw new Error(
-                    "Failed to fetch users: " + (await userResponse.text()),
-                );
-            }
-            const userData = await userResponse.json();
-            users = userData.data.map((user) => ({
-                ...user,
-                id: user._id,
-                name: user.name,
-                location: user.location,
-            }));
-            console.log("Fetched users:", users);
-            users.forEach((user) => {
-                userLocation[user._id] = user.location;
-            });
-            console.log("Fetched user locations:", userLocation);
-        } catch (err) {
-            console.error("Error during fetch operations:", err);
+            users = await getUsers();
+        } catch (error) {
+            console.error("Error during user fetch operations:", error);
         }
+        console.log("Fetched users:", users);
 
         try {
-            const jobResponse = await fetch(
-                "http://localhost:8080/jobs?filterUserJobs=true",
-                {
-                    credentials: "include",
-                },
-            );
-            if (jobResponse.status === 429) {
-                navigate("/RateLimitExceeded");
-                throw new Error("Rate limit exceeded");
-            } else if (!jobResponse.ok) {
-                throw new Error(
-                    "Failed to fetch jobs: " + (await jobResponse.text()),
-                );
-            }
-            const jobData = await jobResponse.json();
-            console.log("Fetched jobs:", jobData);
-            jobs = jobData.data.map((job) => ({
+            jobs = await getJobs();
+            jobs = jobs.map((job) => ({
                 ...job,
                 id: job._id,
                 name: job.name,
-                skill_name: skillName[job.skill_id],
+                skill_name: skills.find((skill) => skill.id === job.skill_id)
+                    .name,
                 description: job.description,
                 price: job.price,
                 user_id: job.user_id,
                 user_name: users.find((user) => user.id === job.user_id).name,
-                location: userLocation[job.user_id],
+                location: users.find((user) => user.id === job.user_id)
+                    .location,
             }));
             jobs = jobs.sort((a, b) =>
                 a.skill_name.localeCompare(b.skill_name),
             );
             allJobs = jobs;
             filterLocations();
-        } catch (err) {
-            console.error("Error during fetch operations:", err);
+        } catch (error) {
+            console.error("Error during job fetch operations:", error);
         }
     });
 
@@ -114,6 +63,8 @@
     }
 
     function sortJobs() {
+        filterBy = "";
+        filterValue = "";
         if (sortBy === "skill_name") {
             jobs = allJobs;
             sortedJobs = jobs.sort((a, b) =>
@@ -271,6 +222,8 @@
 
 <style>
     main {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         background-color: white;
         width: 100%;
         padding: 0 30px 50px 30px;
@@ -303,8 +256,6 @@
     .job {
         flex: 1 1;
         background: lightgrey;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
         margin: 0 40px;
         border: 1px solid #ccc;
         padding: 10px 30px 30px 50px;
@@ -318,13 +269,9 @@
         padding: 5px 10px 5px 10px;
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
         border-radius: 10px;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
     }
     .actions {
         background: lightgrey;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
         margin: 10px;
         border: 1px solid #ccc;
         padding: 20px;
@@ -344,8 +291,6 @@
         border-radius: 5px;
         transition: background-color 0.3s ease;
         font-size: medium;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
     }
 
     button {
