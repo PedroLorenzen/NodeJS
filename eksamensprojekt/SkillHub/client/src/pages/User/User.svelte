@@ -6,6 +6,12 @@
   import { sanitizeHTML } from "../../util/sanitize.js";
   import logout from "../../util/api/auth/logout.js";
   import { getSkills } from "../../util/api/skills/getSkills.js";
+  import { getJobsByUser } from "../../util/api/jobs/getJobsByUser.js";
+  import { handlePostJob } from "../../util/api/jobs/postJob.js";
+  import { handlePutJob } from "../../util/api/jobs/putJob.js";
+  import { handlePutUser } from "../../util/api/users/putUser.js";
+  import { handleDeleteUser } from "../../util/api/users/deleteUser.js";
+  import { handleDeleteJob } from "../../util/api/jobs/deleteJob.js";
 
   $user;
 
@@ -13,6 +19,15 @@
   let username = $user.user.name;
   let email = $user.user.email;
   let location = $user.user.location;
+
+  console.log("userId", userId);
+
+  let handleUser = {
+    id: userId,
+    name: username,
+    email: email,
+    location: location
+  };
 
   let activeForm = "createJob";
 
@@ -24,7 +39,7 @@
 
   let emailToDelete;
 
-  let jobId, name, skill_id, description, price;
+  let jobId, name, skill_id, description = "", price = null;
 
   function editJobForm(job) {
     jobId = job.id;
@@ -40,301 +55,20 @@
 
   let jobs = [];
   let skills = [];
-  let skillName = {};
 
   onMount(async () => {
     try {
-            skills = await getSkills();
-            skills.forEach(skill => {
-            skillName[skill.id] = skill.name;  
-        });
-        } catch (error) {
-            throw new Error("Failed to load skills: " + error.message);
-        }
-
-    let url = "http://localhost:8080/jobs?filterJobsByUser=true";
+      skills = await getSkills();
+    } catch (error) {
+      throw new Error("Failed to load skills: " + error.message);
+    }
 
     try {
-      const jobResponse = await fetch(url, {
-        credentials: "include",
-      });
-
-      if (jobResponse.ok) {
-        const jobData = await jobResponse.json();
-        jobs = jobData.data.map((job) => ({
-          ...job,
-          id: job._id,
-          name: sanitizeHTML(job.name),
-          skill_name: skillName[job.skill_id],
-          description: sanitizeHTML(job.description),
-          price: job.price,
-        }));
-        console.log("Fetched jobs:", jobs);
-      } else if (jobResponse.status === 429) {
-        navigate("/RateLimitExceeded");
-        throw new Error("Rate limit exceeded");
-      } else if (jobResponse.status === 400) {
-        const errorData = await jobResponse.json();
-        toast.error(errorData.error || "Server error", {
-          duration: 2000,
-          position: "top-right",
-        });
-      } else {
-        console.error("Failed to fetch jobs:", await jobResponse.text());
-      }
+      jobs = await getJobsByUser(skills, jobs);
     } catch (error) {
-      console.error("Error during job fetch operations:", error);
+      throw new Error("Failed to load jobs: " + error.message);
     }
   });
-
-  async function postJob() {
-    const response = await fetch("http://localhost:8080/jobs", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: sanitizeHTML(name),
-        skill_id: skill_id,
-        description: sanitizeHTML(description),
-        price: price,
-        user_id: userId,
-      }),
-    });
-    const result = await response.json();
-    if (response.status === 429) {
-      navigate("/RateLimitExceeded");
-      throw new Error("Rate limit exceeded");
-    } else if (response.status === 400) {
-      toast.error(
-        result.error || "The job is missing some required information",
-        {
-          duration: 3000,
-          position: "top-right",
-        },
-      );
-      throw new Error(result.error || "Failed to post job");
-    } else if (!response.ok) {
-      throw new Error(result.error || "Failed to post job");
-    }
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  }
-
-  async function handlePostJob() {
-    await toast.promise(
-      postJob(),
-      {
-        loading: "Creating job...",
-        success: "Job created successfully. Refreshing page...",
-        error: "Failed to create job - please try again",
-      },
-      {
-        duration: 2000,
-        position: "top-right",
-      },
-    );
-  }
-
-  async function putJob() {
-    const response = await fetch(`http://localhost:8080/jobs?jobId=${jobId}`, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: sanitizeHTML(name),
-        skill_id: skill_id,
-        description: sanitizeHTML(description),
-        price: price,
-        user_id: userId,
-      }),
-    });
-    const result = await response.json();
-    if (response.status === 429) {
-      navigate("/RateLimitExceeded");
-      throw new Error("Rate limit exceeded");
-    } else if (response.status === 400) {
-      toast.error(
-        result.error || "The job is missing some required information",
-        {
-          duration: 3000,
-          position: "top-right",
-        },
-      );
-      throw new Error(result.error || "Failed to update job");
-    } else if (!response.ok) {
-      throw new Error(result.error || "Failed to update job");
-    }
-    setTimeout(() => {
-      closeUpdateJob();
-      window.location.reload();
-    }, 2000);
-  }
-
-  async function handlePutJob() {
-    await toast.promise(
-      putJob(),
-      {
-        loading: "Updating job...",
-        success: "Job updated successfully. Refreshing page...",
-        error: "Failed to update job - please try again",
-      },
-      {
-        duration: 2000,
-        position: "top-right",
-      },
-    );
-  }
-
-  async function putUser() {
-    if (newPassword !== confirmPassword) {
-      toast.error("New password and confirm password do not match", {
-        duration: 3000,
-        position: "top-right",
-      });
-      throw new Error("New password and confirm password do not match");
-    }
-    const response = await fetch(`http://localhost:8080/users`, {
-      method: "PUT",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: sanitizeHTML(username),
-        email: sanitizeHTML(email),
-        location: sanitizeHTML(location),
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-      }),
-    });
-    const result = await response.json();
-    if (response.status === 429) {
-      navigate("/RateLimitExceeded");
-      throw new Error("Rate limit exceeded");
-    } else if (response.status === 400) {
-      toast.error(
-        result.error || "The user is missing some required information",
-        {
-          duration: 3000,
-          position: "top-right",
-        },
-      );
-      throw new Error(result.error || "Failed to update user");
-    } else if (!response.ok) {
-      throw new Error(result.error || "Failed to update user");
-    }
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  }
-
-  async function handlePutUser() {
-    await toast.promise(
-      putUser(),
-      {
-        loading: "Updating user...",
-        success: "User updated successfully. Refreshing page...",
-        error: "Failed to update user - please try again",
-      },
-      {
-        duration: 2000,
-        position: "top-right",
-      },
-    );
-  }
-
-  async function deleteUser() {
-    const response = await fetch(`http://localhost:8080/users`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    const result = await response.json();
-    if (response.status === 429) {
-      navigate("/RateLimitExceeded");
-      throw new Error("Rate limit exceeded");
-    } else if (response.status === 404) {
-      toast.error(result.error || "User not found", {
-        duration: 3000,
-        position: "top-right",
-      });
-      throw new Error(result.error || "User not found");
-    } else if (!response.ok) {
-      console.log("something went wrong with deleting user");
-      throw new Error(result.error || "Failed to delete user");
-    }
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
-  }
-
-  async function handleDeleteUser() {
-    if (emailToDelete !== email) {
-      toast.error(
-        "Please enter your email to delete your user Profile and all associated jobs",
-        {
-          duration: 3000,
-          position: "top-right",
-        },
-      );
-      throw new Error("Email does not match");
-    }
-    await toast.promise(
-      deleteUser(),
-      {
-        loading: "Deleting user...",
-        success: "User deleted successfully. Redirecting...",
-        error: "Failed to delete user - please try again",
-      },
-      {
-        duration: 2000,
-        position: "top-right",
-      },
-    );
-  }
-
-  async function deleteJob(jobId) {
-    const response = await fetch(`http://localhost:8080/jobs?jobId=${jobId}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
-    const result = await response.json();
-    if (response.status === 429) {
-      navigate("/RateLimitExceeded");
-      throw new Error("Rate limit exceeded");
-    } else if (response.status === 404) {
-      toast.error(result.error || "Job not found", {
-        duration: 3000,
-        position: "top-right",
-      });
-      throw new Error(result.error || "Job not found");
-    } else if (!response.ok) {
-      console.log("something went wrong with deleting job");
-      throw new Error(result.error || "Failed to delete job");
-    }
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  }
-
-  async function handleDeleteJob(jobId) {
-    await toast.promise(
-      deleteJob(jobId),
-      {
-        loading: "Deleting job...",
-        success: "Job deleted successfully...",
-        error: "Failed to delete job - please try again",
-      },
-      {
-        duration: 2000,
-        position: "top-right",
-      },
-    );
-  }
 </script>
 
 <Toaster />
@@ -356,7 +90,11 @@
 
     {#if activeForm === "createJob"}
       <h2>Create a New Job</h2>
-      <form on:submit|preventDefault={handlePostJob} class="form">
+      <form
+        on:submit|preventDefault={() =>
+          handlePostJob(name, skill_id, description, price, userId, true)}
+        class="form"
+      >
         <label for="name">Name:</label>
         <input type="text" bind:value={name} id="name" required />
 
@@ -383,18 +121,18 @@
 
     {#if activeForm === "editUser"}
       <h2>Edit User</h2>
-      <form on:submit|preventDefault={handlePutUser} class="form">
+      <form on:submit|preventDefault={() => handlePutUser(handleUser, oldPassword, newPassword, true)} class="form">
         <label for="userId">User ID:</label>
-        <input type="text" bind:value={userId} id="userId" readonly />
+        <input type="text" bind:value={handleUser.id} id="userId" readonly />
 
         <label for="username">Username:</label>
-        <input type="text" bind:value={username} id="username" required />
+        <input type="text" bind:value={handleUser.name} id="username" required />
 
         <label for="email">Email:</label>
-        <input type="email" bind:value={email} id="email" required />
+        <input type="email" bind:value={handleUser.email} id="email" required />
 
         <label for="location">Location:</label>
-        <input type="text" bind:value={location} id="location" required />
+        <input type="text" bind:value={handleUser.email} id="location" required />
 
         <label for="oldPassword">Old Password:</label>
         <input type="password" bind:value={oldPassword} id="oldPassword" />
@@ -418,7 +156,7 @@
         <button type="submit" class="submit-button">Update User</button>
         <button
           type="button"
-          on:click={handleDeleteUser}
+          on:click={() => handleDeleteUser(handleUser, "", emailToDelete, email, true)}
           class="delete-user-button"
         >
           Delete User And Associated Jobs
@@ -439,11 +177,14 @@
       {#if job.id === jobId}
         <div class="edit-job-form">
           <h2>Edit Job</h2>
-          <form on:submit|preventDefault={handlePutJob} class="form">
+          <form
+            on:submit|preventDefault={() => handlePutJob(job, true)}
+            class="form"
+          >
             <label for="jobName">Job Name:</label>
-            <input type="text" bind:value={name} id="jobName" required />
+            <input type="text" bind:value={job.name} id="jobName" required />
 
-            <select bind:value={skill_id} id="skill_id" required>
+            <select bind:value={job.skill_id} id="skill_id" required>
               <option value="" disabled selected>Select a skill</option>
               {#each skills as skill}
                 <option value={skill._id}>{skill.name}</option>
@@ -451,13 +192,13 @@
             </select>
 
             <label for="jobDescription">Description:</label>
-            <textarea bind:value={description} id="jobDescription" required />
+            <textarea bind:value={job.description} id="jobDescription" required />
 
             <label for="jobPrice">Price:</label>
-            <input type="number" bind:value={price} id="jobPrice" required />
+            <input type="number" bind:value={job.price} id="jobPrice" required />
 
             <label for="jobUserId" hidden>User ID:</label>
-            <input type="text" bind:value={userId} id="jobUserId" hidden />
+            <input type="text" bind:value={job.userId} id="jobUserId" hidden />
 
             <div class="edit-job-buttons">
               <button type="submit" class="submit-button">Update Job</button>
@@ -478,7 +219,7 @@
           <button on:click={() => editJobForm(job)}>Edit</button>
           <button
             type="button"
-            on:click={() => handleDeleteJob(job.id)}
+            on:click={() => handleDeleteJob(job, true)}
             class="delete-job-button"
           >
             Delete

@@ -24,12 +24,24 @@ export async function deleteUser(user, showToast) {
     }
 }
 
-export async function handleDeleteUser(user, showToast) {
+export async function handleDeleteUser(user, adminOverride, emailToDelete, email, showToast) {
+    if (!adminOverride) {
+        if (emailToDelete !== email) {
+            toast.error(
+                "Please enter your email to delete your user Profile and all associated jobs",
+                {
+                    duration: 3000,
+                    position: "top-right",
+                },
+            );
+            throw new Error("Email does not match");
+        }
+    }
     await toast.promise(
         deleteUser(user, showToast),
         {
             loading: "Deleting user...",
-            success: "User deleted successfully. Refreshing page...",
+            success: "User deleted successfully. Redirecting...",
             error: "Failed to delete user - please try again",
         },
         {
@@ -38,3 +50,5 @@ export async function handleDeleteUser(user, showToast) {
         },
     );
 }
+
+

@@ -151,12 +151,12 @@
                                 />
                             </td>
                             <td>
-                                <button on:click={() => handlePutUser(user, true)}
+                                <button on:click={() => handlePutUser(user,"","", true)}
                                     >Update</button
                                 >
                             </td>
                             <td>
-                                <button on:click={() => handleDeleteUser(user, true)}
+                                <button on:click={() => handleDeleteUser(user, true, "", "", true)}
                                     >Delete</button
                                 >
                             </td>

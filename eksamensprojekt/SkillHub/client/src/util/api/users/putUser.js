@@ -2,7 +2,7 @@ import { navigate } from "svelte-routing";
 import toast from "svelte-french-toast";
 import { sanitizeEmail, sanitizeHTML } from "../../sanitize.js";
 
-export async function putUser(user, showToast) {
+export async function putUser(user, oldPassword, newPassword, showToast) {
     const response = await fetch(
         `http://localhost:8080/users?getUserId=${user.id}`,
         {
@@ -17,6 +17,8 @@ export async function putUser(user, showToast) {
                 email: sanitizeEmail(user.email),
                 location: sanitizeHTML(user.location),
                 isAdmin: user.isAdmin,
+                oldPassword: oldPassword,
+                newPassword: newPassword,
             }),
         },
     );
@@ -44,9 +46,9 @@ export async function putUser(user, showToast) {
     }
 }
 
-export async function handlePutUser(user, showToast) {
+export async function handlePutUser(user, oldPassword, newPassword, showToast) {
     await toast.promise(
-        putUser(user, showToast),
+        putUser(user, oldPassword, newPassword, showToast),
         {
             loading: "Updating user...",
             success: "User updated successfully. Refreshing page...",

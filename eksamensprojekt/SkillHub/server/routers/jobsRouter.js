@@ -130,6 +130,7 @@ router.put("/jobs", async (req, res) => {
                 },
                 { returnDocument: "after" }
             );
+            console.log("Updated job: ", updatedJob);
             res.send({ message: "Job updated successfully: ", job: updatedJob });
         } catch (error) {
             res.status(500).send({ error: "Database operation failed" });
