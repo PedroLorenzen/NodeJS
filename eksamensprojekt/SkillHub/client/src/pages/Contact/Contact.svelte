@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from "svelte";
     import { navigate } from "svelte-routing";
     import toast, { Toaster } from "svelte-french-toast";
     import { sanitizeHTML } from "../../util/sanitize.js";
@@ -94,6 +93,8 @@
 
 <style>
     main {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         background-color: white;
         width: 100%;
         padding: 50px 30px 50px 30px;
@@ -119,8 +120,6 @@
     }
     .form {
         display: flex;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
         color: white;
         flex-direction: column;
         width: 100%;

@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
     import io from "socket.io-client";
     import { navigate } from "svelte-routing";
-    import { user } from "../../stores/user.js";
 
     let messages = [];
     let message = "";
@@ -154,6 +153,8 @@
 
 <style>
     main {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         background-color: white;
         width: 100%;
         padding: 5px 30px 50px 30px;
@@ -165,14 +166,10 @@
         text-align: center;
         margin-bottom: 20px;
         color: #333;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
     }
     .chat-container {
         display: flex;
         flex-direction: column;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
         align-items: center;
         padding: 20px;
         background: lightgrey;
@@ -195,8 +192,6 @@
         border-radius: 5px;
         margin-right: 10px;
         font-size: 16px;
-        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-            "Lucida Sans", Arial, sans-serif;
     }
     button {
         padding: 10px 40px;

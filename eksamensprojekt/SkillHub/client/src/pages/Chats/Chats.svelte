@@ -4,12 +4,9 @@
     import toast, { Toaster } from "svelte-french-toast";
     import { get } from "svelte/store";
     import { user } from "../../stores/user.js";
-    import Chat from "../Chat/Chat.svelte";
 
     let chats = [];
     let myId = get(user).user._id;
-    let otherUserId = null;
-    let otherUserName = "";
     let users = [];
 
     async function fetchAllUsers() {
@@ -97,6 +94,8 @@
 
 <style>
     main {
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+            "Lucida Sans", Arial, sans-serif;
         background-color: white;
         width: 100%;
         padding: 5px 30px 50px 30px;

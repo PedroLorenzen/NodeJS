@@ -1,9 +1,7 @@
 <script>
   import { onMount } from "svelte";
-  import { navigate } from "svelte-routing";
-  import toast, { Toaster } from "svelte-french-toast";
+  import { Toaster } from "svelte-french-toast";
   import { user } from "../../stores/user.js";
-  import { sanitizeHTML } from "../../util/sanitize.js";
   import logout from "../../util/api/auth/logout.js";
   import { getSkills } from "../../util/api/skills/getSkills.js";
   import { getJobsByUser } from "../../util/api/jobs/getJobsByUser.js";
@@ -352,7 +350,7 @@
   button:hover {
     background-color: #0056b3;
   }
-  
+
   .formButtons {
     background-color: lightgrey;
   }

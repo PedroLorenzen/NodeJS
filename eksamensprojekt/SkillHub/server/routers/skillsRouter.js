@@ -4,6 +4,30 @@ import { sanitizeHTML } from "../util/sanitize.js";
 
 const router = Router();
 
+router.get("/skills", async (req, res) => {
+    if (req.session.user) {
+        try {
+            const db = await connect();
+            const query = {};
+
+            if (req.query.skillId) {
+                const skillId = parseInt(req.query.skillId);
+                const skill = await db.collection("skills").findOne({ _id: skillId });
+                if (!skill) {
+                    return res.status(404).send({ message: "Skill not found" });
+                }
+                return res.send(skill);
+            }
+            const skills = await db.collection("skills").find(query).toArray();
+            res.send(skills);
+        } catch (error) {
+            res.status(500).send({ error: "Error fetching skills" });
+        }
+    } else {
+        res.status(401).send({ error: "Unauthorized" });
+    }
+});
+
 router.post("/skills", async (req, res) => {
     if (req.session.user.isAdmin) {
         try {
@@ -34,30 +58,6 @@ router.post("/skills", async (req, res) => {
             res.send({ message: "Skill created successfully", newSkill });
         } catch (error) {
             res.status(500).send({ error: "Database operation failed" });
-        }
-    } else {
-        res.status(401).send({ error: "Unauthorized" });
-    }
-});
-
-router.get("/skills", async (req, res) => {
-    if (req.session.user) {
-        try {
-            const db = await connect();
-            const query = {};
-
-            if (req.query.skillId) {
-                const skillId = parseInt(req.query.skillId);
-                const skill = await db.collection("skills").findOne({ _id: skillId });
-                if (!skill) {
-                    return res.status(404).send({ message: "Skill not found" });
-                }
-                return res.send(skill);
-            }
-            const skills = await db.collection("skills").find(query).toArray();
-            res.send(skills);
-        } catch (error) {
-            res.status(500).send({ error: "Error fetching skills" });
         }
     } else {
         res.status(401).send({ error: "Unauthorized" });

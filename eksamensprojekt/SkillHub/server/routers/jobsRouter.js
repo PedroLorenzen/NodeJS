@@ -4,6 +4,42 @@ import { sanitizeHTML } from "../util/sanitize.js";
 
 const router = Router();
 
+router.get("/jobs", async (req, res) => {
+    if (req.session.user) {
+        try {
+            const db = await connect();
+            let query = {};
+            if (req.query.skillId) {
+                const skillId = parseInt(req.query.skillId);
+                console.log("Skill ID: ", skillId);
+                query.skill_id = skillId;
+            } else if (req.query.jobId) {
+                const jobId = parseInt(req.query.jobId);
+                const job = await db.collection("jobs").findOne({ _id: jobId });
+                if (job && job._id === jobId) {
+                    return res.send({ job });
+                }
+                return res.status(404).send({ message: "Job not found." });
+            } else if (req.query.filterJobsByUser) {
+                query.user_id = req.session.user.id;
+            } else if (req.query.filterUserJobs) {
+                query = { user_id: { $ne: req.session.user.id } }
+            }
+            const jobs = await db.collection("jobs").find(query).toArray();
+            console.log("Jobs: ", jobs);
+            if (jobs && jobs.length > 0) {
+                return res.send({ data: jobs });
+            }
+            return res.status(404).send({ message: "Jobs sorted by " + query + " not found." });
+        } catch (error) {
+            console.error("Error fetching jobs:", error);
+            res.status(500).send({ error: "Error fetching jobs" });
+        }
+    } else {
+        res.status(401).send({ error: "Unauthorized" });
+    }
+});
+
 router.post("/jobs", async (req, res) => {
     if (req.session.user) {
         try {
@@ -51,42 +87,6 @@ router.post("/jobs", async (req, res) => {
         res.status(401).send({ error: "Unauthorized" });
     }
 
-});
-
-router.get("/jobs", async (req, res) => {
-    if (req.session.user) {
-        try {
-            const db = await connect();
-            let query = {};
-            if (req.query.skillId) {
-                const skillId = parseInt(req.query.skillId);
-                console.log("Skill ID: ", skillId);
-                query.skill_id = skillId;
-            } else if (req.query.jobId) {
-                const jobId = parseInt(req.query.jobId);
-                const job = await db.collection("jobs").findOne({ _id: jobId });
-                if (job && job._id === jobId) {
-                    return res.send({ job });
-                }
-                return res.status(404).send({ message: "Job not found." });
-            } else if (req.query.filterJobsByUser) {
-                query.user_id = req.session.user.id;
-            } else if (req.query.filterUserJobs) {
-                query = { user_id: { $ne: req.session.user.id } }
-            }
-            const jobs = await db.collection("jobs").find(query).toArray();
-            console.log("Jobs: ", jobs);
-            if (jobs && jobs.length > 0) {
-                return res.send({ data: jobs });
-            }
-            return res.status(404).send({ message: "Jobs sorted by " + query + " not found." });
-        } catch (error) {
-            console.error("Error fetching jobs:", error);
-            res.status(500).send({ error: "Error fetching jobs" });
-        }
-    } else {
-        res.status(401).send({ error: "Unauthorized" });
-    }
 });
 
 router.put("/jobs", async (req, res) => {

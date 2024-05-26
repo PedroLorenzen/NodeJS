@@ -6,6 +6,20 @@ import authRateLimiter from "../middleware/authRateLimiterMiddleware.js";
 
 const router = Router();
 
+router.get("/logout", authRateLimiter, (req, res) => {
+    try {
+        if (!req.session.user) {
+            return res.status(400).send({ message: "User is not logged in" });
+        }
+        req.session.destroy(() => {
+            res.clearCookie("sid");
+            res.send({ message: "Logged out successfully" });
+        });
+    } catch (error) {
+        return res.status(500).send({ message: "Error logging out: " + error });
+    }
+});
+
 router.post("/login", authRateLimiter, async (req, res) => {
     let { email, password } = req.body;
     email = sanitizeEmail(email);
@@ -32,20 +46,6 @@ router.post("/login", authRateLimiter, async (req, res) => {
 
     } catch (error) {
         return res.status(500).send({ message: "Error logging in" });
-    }
-});
-
-router.get("/logout", authRateLimiter, (req, res) => {
-    try {
-        if (!req.session.user) {
-            return res.status(400).send({ message: "User is not logged in" });
-        }
-        req.session.destroy(() => {
-            res.clearCookie("sid");
-            res.send({ message: "Logged out successfully" });
-        });
-    } catch (error) {
-        return res.status(500).send({ message: "Error logging out: " + error });
     }
 });
 

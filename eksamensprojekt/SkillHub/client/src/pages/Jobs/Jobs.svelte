@@ -1,8 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import { navigate } from "svelte-routing";
-    import { Link } from "svelte-routing";
-    import toast, { Toaster } from "svelte-french-toast";
+    import { Toaster } from "svelte-french-toast";
     import { getSkills } from "../../util/api/skills/getSkills";
     import { getJobs } from "../../util/api/jobs/getJobs";
     import { getUsers } from "../../util/api/users/getUsers";
@@ -36,13 +34,9 @@
             jobs = await getJobs();
             jobs = jobs.map((job) => ({
                 ...job,
-                id: job._id,
-                name: job.name,
                 skill_name: skills.find((skill) => skill.id === job.skill_id)
                     .name,
-                description: job.description,
-                price: job.price,
-                user_id: job.user_id,
+                user_id: job.user,
                 user_name: users.find((user) => user.id === job.user_id).name,
                 location: users.find((user) => user.id === job.user_id)
                     .location,
@@ -208,7 +202,8 @@
                                 <p>Price: {jobs[index + 1].price}</p>
                                 <p>Name: {jobs[index + 1].user_name}</p>
                                 <button
-                                    on:click={() => contactUser(job.user_id)}
+                                    on:click={() =>
+                                        contactUser(jobs[index + 1].user_id)}
                                     >Contact User</button
                                 >
                             </div>
