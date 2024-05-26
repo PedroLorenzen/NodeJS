@@ -6,6 +6,12 @@
     import { getSkills } from "../../util/api/skills/getSkills.js";
     import { getUsers } from "../../util/api/users/getUsers.js";
     import { getJobs } from "../../util/api/jobs/getJobs.js";
+    import { handlePutUser } from "../../util/api/users/putUser.js";
+    import { handleDeleteUser } from "../../util/api/users/deleteUser.js";
+    import { handlePutJob } from "../../util/api/jobs/putJob.js";
+    import { handleDeleteJob } from "../../util/api/jobs/deleteJob.js";
+    import { handlePutSkill } from "../../util/api/skills/putSkill.js";
+    import { handleDeleteSkill } from "../../util/api/skills/deleteSkill.js";
 
     let users = [];
     let jobs = [];
@@ -36,274 +42,6 @@
             throw new Error("Failed to load jobs: " + error.message);
         }
     });
-
-    async function putUser(user) {
-        const response = await fetch(
-            `http://localhost:8080/users?getUserId=${user.id}`,
-            {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id: user.id,
-                    name: sanitizeHTML(user.name),
-                    email: sanitizeHTML(user.email),
-                    location: sanitizeHTML(user.location),
-                    isAdmin: user.isAdmin,
-                }),
-            },
-        );
-        const result = await response.json();
-        if (response.status === 429) {
-            navigate("/RateLimitExceeded");
-            throw new Error("Rate limit exceeded");
-        } else if (response.status === 400) {
-            toast.error(
-                result.error || "The user is missing some required information",
-                {
-                    duration: 3000,
-                    position: "top-right",
-                },
-            );
-            throw new Error(result.error || "Failed to update user");
-        } else if (!response.ok) {
-            throw new Error(result.error || "Failed to update user");
-        }
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    }
-
-    async function handlePutUser(user) {
-        await toast.promise(
-            putUser(user),
-            {
-                loading: "Updating user...",
-                success: "User updated successfully. Refreshing page...",
-                error: "Failed to update user - please try again",
-            },
-            {
-                duration: 2000,
-                position: "top-right",
-            },
-        );
-    }
-
-    async function deleteUser(user) {
-        const response = await fetch(
-            `http://localhost:8080/users?getUserId=${user.id}`,
-            {
-                method: "DELETE",
-                credentials: "include",
-            },
-        );
-        const result = await response.json();
-        if (response.status === 429) {
-            navigate("/RateLimitExceeded");
-            throw new Error("Rate limit exceeded");
-        } else if (!response.ok) {
-            throw new Error(result.error || "Failed to delete user");
-        }
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    }
-
-    async function handleDeleteUser(user) {
-        await toast.promise(
-            deleteUser(user),
-            {
-                loading: "Deleting user...",
-                success: "User deleted successfully. Refreshing page...",
-                error: "Failed to delete user - please try again",
-            },
-            {
-                duration: 2000,
-                position: "top-right",
-            },
-        );
-    }
-
-    async function putJob(job) {
-        console.log(job);
-        const response = await fetch(
-            `http://localhost:8080/jobs?jobId=${job.id}`,
-            {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id: job._id,
-                    user_id: job.user_id,
-                    name: sanitizeHTML(job.name),
-                    description: sanitizeHTML(job.description),
-                    location: sanitizeHTML(job.location),
-                    price: job.price,
-                    skill_id: job.skill_id,
-                }),
-            },
-        );
-        const result = await response.json();
-        if (response.status === 429) {
-            navigate("/RateLimitExceeded");
-            throw new Error("Rate limit exceeded");
-        } else if (response.status === 400) {
-            toast.error(
-                result.error || "The job is missing some required information",
-                {
-                    duration: 3000,
-                    position: "top-right",
-                },
-            );
-            throw new Error(result.error || "Failed to update job");
-        } else if (!response.ok) {
-            throw new Error(result.error || "Failed to update job");
-        }
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    }
-
-    async function handlePutJob(job) {
-        await toast.promise(
-            putJob(job),
-            {
-                loading: "Updating job...",
-                success: "Job updated successfully. Refreshing page...",
-                error: "Failed to update job - please try again",
-            },
-            {
-                duration: 2000,
-                position: "top-right",
-            },
-        );
-    }
-
-    async function deleteJob(job) {
-        const response = await fetch(
-            `http://localhost:8080/jobs?jobId=${job.id}`,
-            {
-                method: "DELETE",
-                credentials: "include",
-            },
-        );
-        const result = await response.json();
-        if (response.status === 429) {
-            navigate("/RateLimitExceeded");
-            throw new Error("Rate limit exceeded");
-        } else if (!response.ok) {
-            throw new Error(result.error || "Failed to delete job");
-        }
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    }
-
-    async function handleDeleteJob(job) {
-        await toast.promise(
-            deleteJob(job),
-            {
-                loading: "Deleting job...",
-                success: "Job deleted successfully. Refreshing page...",
-                error: "Failed to delete job - please try again",
-            },
-            {
-                duration: 2000,
-                position: "top-right",
-            },
-        );
-    }
-
-    async function putSkill(skill) {
-        const response = await fetch(
-            `http://localhost:8080/skills?skillId=${skill.id}`,
-            {
-                method: "PUT",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id: skill.id,
-                    name: sanitizeHTML(skill.name),
-                }),
-            },
-        );
-        const result = await response.json();
-        if (response.status === 429) {
-            navigate("/RateLimitExceeded");
-            throw new Error("Rate limit exceeded");
-        } else if (response.status === 400) {
-            toast.error(
-                result.error ||
-                    "The skill is missing some required information",
-                {
-                    duration: 3000,
-                    position: "top-right",
-                },
-            );
-            throw new Error(result.error || "Failed to update skill");
-        } else if (!response.ok) {
-            throw new Error(result.error || "Failed to update skill");
-        }
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    }
-
-    async function handlePutSkill(skill) {
-        await toast.promise(
-            putSkill(skill),
-            {
-                loading: "Updating skill...",
-                success: "Skill updated successfully. Refreshing page...",
-                error: "Failed to update skill - please try again",
-            },
-            {
-                duration: 2000,
-                position: "top-right",
-            },
-        );
-    }
-
-    async function deleteSkill(skill) {
-        const response = await fetch(
-            `http://localhost:8080/skills?skillId=${skill.id}`,
-            {
-                method: "DELETE",
-                credentials: "include",
-            },
-        );
-        const result = await response.json();
-        if (response.status === 429) {
-            navigate("/RateLimitExceeded");
-            throw new Error("Rate limit exceeded");
-        } else if (!response.ok) {
-            throw new Error(result.error || "Failed to delete skill");
-        }
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    }
-
-    async function handleDeleteSkill(skill) {
-        await toast.promise(
-            deleteSkill(skill),
-            {
-                loading: "Deleting skill...",
-                success: "Skill deleted successfully. Refreshing page...",
-                error: "Failed to delete skill - please try again",
-            },
-            {
-                duration: 2000,
-                position: "top-right",
-            },
-        );
-    }
 
     function filterJobs() {
         jobs = allJobs;
@@ -413,12 +151,12 @@
                                 />
                             </td>
                             <td>
-                                <button on:click={() => handlePutUser(user)}
+                                <button on:click={() => handlePutUser(user, true)}
                                     >Update</button
                                 >
                             </td>
                             <td>
-                                <button on:click={() => handleDeleteUser(user)}
+                                <button on:click={() => handleDeleteUser(user, true)}
                                     >Delete</button
                                 >
                             </td>
@@ -508,12 +246,12 @@
                             </select>
                         </td>
                         <td>
-                            <button on:click={() => handlePutJob(job)}
+                            <button on:click={() => handlePutJob(job, true)}
                                 >Update</button
                             >
                         </td>
                         <td>
-                            <button on:click={() => handleDeleteJob(job)}
+                            <button on:click={() => handleDeleteJob(job, true)}
                                 >Delete</button
                             >
                         </td>
@@ -549,12 +287,12 @@
                             <input type="text" bind:value={skill.name} />
                         </td>
                         <td>
-                            <button on:click={() => handlePutSkill(skill)}
+                            <button on:click={() => handlePutSkill(skill, true)}
                                 >Update</button
                             >
                         </td>
                         <td>
-                            <button on:click={() => handleDeleteSkill(skill)}
+                            <button on:click={() => handleDeleteSkill(skill, true)}
                                 >Delete</button
                             >
                         </td>

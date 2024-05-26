@@ -1,7 +1,7 @@
 import { navigate } from "svelte-routing";
 import toast from "svelte-french-toast";
 
-export async function getUsers() {
+export async function getUsers(redirectPath) {
     try {
         const userResponse = await fetch("http://localhost:8080/users", {
             credentials: "include",
@@ -15,7 +15,7 @@ export async function getUsers() {
             );
         }
         const userData = await userResponse.json();
-        return userData.data.map((user) => ({
+        const users = userData.data.map((user) => ({
             ...user,
             id: user._id,
             name: user.name,
@@ -23,14 +23,22 @@ export async function getUsers() {
             location: user.location,
             isAdmin: user.isAdmin,
         }));
+
+        if (redirectPath) {
+            setTimeout(() => {
+                navigate(redirectPath);
+            }, 2000);
+        }
+
+        return users;
     } catch (err) {
-        console.error("Error during fetch operations:", err);
+        throw new Error("Error fetching users: " + err.message);
     }
 }
 
-export async function handleGetUsers() {
+export async function handleGetUsers(redirectPath) {
     await toast.promise(
-        getUsers(),
+        getUsers(redirectPath),
         {
             loading: "Fetching users...",
             success: "Users fetched successfully",
@@ -40,6 +48,5 @@ export async function handleGetUsers() {
             duration: 2000,
             position: "top-right",
         },
-
     );
 }

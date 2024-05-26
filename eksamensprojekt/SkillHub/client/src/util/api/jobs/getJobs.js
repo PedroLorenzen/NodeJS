@@ -1,7 +1,7 @@
 import { navigate } from "svelte-routing";
 import toast from "svelte-french-toast";
 
-export async function getJobs() {
+export async function getJobs(redirectPath) {
     try {
         const response = await fetch("http://localhost:8080/jobs", {
             credentials: "include",
@@ -16,7 +16,7 @@ export async function getJobs() {
         }
 
         const jobData = await response.json();
-        return jobData.data.map((job) => ({
+        const jobs = jobData.data.map((job) => ({
             ...job,
             id: job._id,
             user: job.user_id,
@@ -24,15 +24,23 @@ export async function getJobs() {
             skill: job.skill_id,
             description: job.description,
             price: job.price,
-        }));        
+        }));     
+        
+        if (redirectPath) {
+            setTimeout(() => {
+                navigate(redirectPath);
+            }, 2000);
+        }
+
+        return jobs;
     } catch (error) {
-        console.error("Error fetching jobs:", error);
+        throw new Error("Error fetching jobs: " + error.message);
     }
 }
 
-export async function handleGetJobs() {
+export async function handleGetJobs(redirectPath) {
     await toast.promise(
-        getJobs(),
+        getJobs(redirectPath),
         {
             loading: "Fetching jobs...",
             success: "Jobs fetched successfully",
