@@ -72,7 +72,7 @@
 <main>
   <div>
     <h1>Welcome {username || "Not Available"}</h1>
-    <button on:click={logout} class="logout">Logout</button>
+    <button class="logout-button" on:click={logout}>Logout</button>
   </div>
   <div class="container">
     <div class="formButtons">
@@ -155,7 +155,7 @@
           on:click={() => handleDeleteUser(handleUser, "", emailToDelete, email, true)}
           class="delete-user-button"
         >
-          Delete User And Associated Jobs
+          Delete User And Associated Jobs & Chats
         </button>
         <label for="userEmailToDelete">Confirm Delete User:</label>
         <input
@@ -291,6 +291,22 @@
     cursor: not-allowed;
   }
 
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
   .submit-button {
     background-color: #28a745;
     color: white;
@@ -304,7 +320,7 @@
     background-color: #218838;
   }
 
-  .delete-job-button, .delete-user-button {
+  .delete-job-button, .delete-user-button, .logout-button {
     background-color: #dc3545;
     color: white;
     padding: 10px 20px;
@@ -332,21 +348,6 @@
     text-align: center;
     margin-bottom: 40px;
     color: black;
-  }
-  button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin-right: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-  }
-
-  button:hover {
-    background-color: #0056b3;
   }
 
   .formButtons {
