@@ -4,7 +4,7 @@ import { sanitizeHTML } from "../util/sanitize.js";
 
 const router = Router();
 
-router.get('/chats', async (req, res) => {
+router.get("/chats", async (req, res) => {
     if (req.session.user) {
         try {
             const db = await connect();
@@ -12,9 +12,9 @@ router.get('/chats', async (req, res) => {
             const otherUserId = parseInt(req.query.otherUserId);
 
             if (!otherUserId) {
-                const chats = await db.collection('chats').find({ user_ids: userId }).toArray();
+                const chats = await db.collection("chats").find({ user_ids: userId }).toArray();
                 if (!chats || chats.length === 0) {
-                    return res.status(404).send({ message: 'No chats found.' });
+                    return res.status(404).send({ message: "No chats found." });
                 }
                 return res.send({ chats });
             }
@@ -24,10 +24,10 @@ router.get('/chats', async (req, res) => {
             }
             return res.send({ chat: chat.messages });
         } catch (error) {
-            return res.status(500).send({ error: 'Error fetching chats' });
+            return res.status(500).send({ error: "Error fetching chats" });
         }
     } else {
-        res.status(401).send({ error: 'Unauthorized' });
+        res.status(401).send({ error: "Unauthorized" });
     }
 });
 
@@ -72,7 +72,7 @@ router.post("/chats", async (req, res) => {
 });
 
 
-router.put('/chats', async (req, res) => {
+router.put("/chats", async (req, res) => {
     if (req.session.user) {
         try {
             const db = await connect();
@@ -90,25 +90,25 @@ router.put('/chats', async (req, res) => {
                 timestamp: new Date()
             };
 
-            const result = await db.collection('chats').updateOne(
+            const result = await db.collection("chats").updateOne(
                 { user_ids: { $all: [userId, otherUserId] } },
                 { $push: { messages: newMessage } }
             );
 
             if (result.modifiedCount === 0) {
-                return res.status(404).send({ message: 'Chat not found or user not authorized.' });
+                return res.status(404).send({ message: "Chat not found or user not authorized." });
             }
 
-            return res.send({ message: 'Message added to chat.' });
+            return res.send({ message: "Message added to chat." });
         } catch (error) {
-            res.status(500).send({ error: 'Error updating chat' });
+            res.status(500).send({ error: "Error updating chat" });
         }
     } else {
-        res.status(401).send({ error: 'Unauthorized' });
+        res.status(401).send({ error: "Unauthorized" });
     }
 });
 
-router.delete('/chats', async (req, res) => {
+router.delete("/chats", async (req, res) => {
     if (req.session.user) {
         try {
             const db = await connect();
@@ -119,15 +119,15 @@ router.delete('/chats', async (req, res) => {
                 userId = parseInt(req.query.getUserId);
                 const chats = await db.collection("chats").find({ user_ids: userId }).toArray();
                 if (chats.length === 0) {
-                    return res.status(404).send({ message: 'Chat not found.' });
+                    return res.status(404).send({ message: "Chat not found." });
                 }
-                const result = await db.collection('chats').deleteMany({
+                const result = await db.collection("chats").deleteMany({
                     user_ids: userId
                 });
                 if (result.deletedCount === 0) {
-                    return res.status(404).send({ message: 'Chat not found or user not authorized.' });
+                    return res.status(404).send({ message: "Chat not found or user not authorized." });
                 }
-                return res.status(200).send({ message: 'Chats deleted successfully.' });
+                return res.status(200).send({ message: "Chats deleted successfully." });
 
             } else {
                 userId = req.session.user.id;
@@ -141,20 +141,20 @@ router.delete('/chats', async (req, res) => {
             if (!chat) {
                 return res.status(404).send({ message: "Chat not found." });
             }
-            const result = await db.collection('chats').deleteOne({
+            const result = await db.collection("chats").deleteOne({
                 user_ids: { $all: [userId, otherUserId] }
             });
 
             if (result.deletedCount === 0) {
-                return res.status(404).send({ message: 'Chat not found or user not authorized.' });
+                return res.status(404).send({ message: "Chat not found or user not authorized." });
             }
 
-            return res.status(200).send({ message: 'Chat deleted successfully.' });
+            return res.status(200).send({ message: "Chat deleted successfully." });
         } catch (error) {
-            res.status(500).send({ error: 'Error deleting chat' });
+            res.status(500).send({ error: "Error deleting chat" });
         }
     } else {
-        res.status(401).send({ error: 'Unauthorized' });
+        res.status(401).send({ error: "Unauthorized" });
     }
 });
 

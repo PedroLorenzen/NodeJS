@@ -10,9 +10,10 @@ async function setupDatabase() {
             const collections = await db.collections();
             for (let collection of collections) {
                 await collection.drop();
-                console.log(`Dropped collection: ${collection.collectionName}`);
             }
+            console.log("Database has been reset");
         }
+
 
         const countersCollection = db.collection("counters");
         await countersCollection.deleteMany({});
@@ -25,7 +26,6 @@ async function setupDatabase() {
         ];
 
         await countersCollection.insertMany(initialCounters);
-        console.log("Initial counters inserted");
 
         const usersCollection = db.collection("users");
         await usersCollection.deleteMany({});
@@ -44,7 +44,6 @@ async function setupDatabase() {
             { _id: 10, name: "Marie Sørensen", email: "marie@sørensen.dk", password: "$2a$12$eIxxyzAG76X21UfZpQtBR.EGPiu.dzczlHhOFNrEPNyTHeCoURVYO", location: "roskilde", isAdmin: false }
         ];
         await usersCollection.insertMany(initialUsers);
-        console.log("Initial users inserted");
 
         const skillsCollection = db.collection("skills");
         await skillsCollection.deleteMany({});
@@ -69,7 +68,6 @@ async function setupDatabase() {
         ];
 
         await skillsCollection.insertMany(initialSkills);
-        console.log("Initial skills inserted");
 
         const jobsCollection = db.collection("jobs");
         await jobsCollection.deleteMany({});
@@ -108,7 +106,6 @@ async function setupDatabase() {
             { _id: 30, name: "Express.js Developer", skill_id: 15, description: "Expert in backend development with Express.js", price: 330, user_id: 7 }
         ];
         await jobsCollection.insertMany(initialJobs);
-        console.log("Initial jobs inserted");
 
         const chatsCollection = db.collection("chats");
         await chatsCollection.deleteMany({});
@@ -142,7 +139,6 @@ async function setupDatabase() {
             }
         ];
         await chatsCollection.insertMany(initialChats);
-        console.log("Initial chats inserted");
 
         console.log("Database setup complete");
     } catch (error) {

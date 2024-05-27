@@ -182,7 +182,7 @@ router.delete("/users", async (req, res) => {
             }
             if (user) {
                 await db.collection("jobs").deleteMany({ user_id: id });
-                await db.collection('chats').deleteMany({ user_ids: id });
+                await db.collection("chats").deleteMany({ user_ids: id });
                 await db.collection("users").deleteOne({ _id: id });
                 return res.send({ message: "User deleted successfully" });
             }

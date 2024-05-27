@@ -4,6 +4,10 @@
     import { getSkills } from "../../util/api/skills/getSkills";
     import { getJobs } from "../../util/api/jobs/getJobs";
     import { getUsers } from "../../util/api/users/getUsers";
+    import { user } from "../../stores/user";
+
+    $user
+    let userId = $user.user._id;
 
     let sortBy = "";
     let filterBy = "";
@@ -39,6 +43,7 @@
                 location: users.find((user) => user.id === job.user_id)
                     .location,
             }));
+            jobs = jobs.filter((job) => job.user_id !== userId);
             jobs = jobs.sort((a, b) =>
                 a.skill_name.localeCompare(b.skill_name),
             );
