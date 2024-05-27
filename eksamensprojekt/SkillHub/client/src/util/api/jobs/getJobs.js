@@ -1,7 +1,7 @@
 import { navigate } from "svelte-routing";
 import toast from "svelte-french-toast";
 
-export async function getJobs(redirectPath) {
+export async function getJobs(showToast) {
     try {
         const response = await fetch("http://localhost:8080/jobs", {
             credentials: "include",
@@ -26,9 +26,9 @@ export async function getJobs(redirectPath) {
             price: job.price,
         }));     
         
-        if (redirectPath) {
+        if (showToast) {
             setTimeout(() => {
-                navigate(redirectPath);
+                window.location.reload();
             }, 2000);
         }
 
@@ -38,9 +38,9 @@ export async function getJobs(redirectPath) {
     }
 }
 
-export async function handleGetJobs(redirectPath) {
+export async function handleGetJobs(showToast) {
     await toast.promise(
-        getJobs(redirectPath),
+        getJobs(showToast),
         {
             loading: "Fetching jobs...",
             success: "Jobs fetched successfully",

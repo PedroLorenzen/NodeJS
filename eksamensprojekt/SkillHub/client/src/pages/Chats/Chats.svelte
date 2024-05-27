@@ -4,23 +4,15 @@
     import toast, { Toaster } from "svelte-french-toast";
     import { get } from "svelte/store";
     import { user } from "../../stores/user.js";
+    import { getUsers } from "../../util/api/users/getUsers.js"
 
     let chats = [];
     let myId = get(user).user._id;
     let users = [];
 
-    async function fetchAllUsers() {
+    async function getAllUsers() {
         try {
-            const response = await fetch("http://localhost:8080/users", {
-                credentials: "include",
-            });
-            if (!response.ok) {
-                throw new Error(
-                    "Failed to fetch users: " + (await response.text()),
-                );
-            }
-            let result = await response.json();
-            users = result.data;
+            users = await getUsers();
         } catch (error) {
             toast.error("Error fetching users: " + error.message);
             throw new Error("Error fetching users: " + error.message);
@@ -38,7 +30,7 @@
 
     onMount(async () => {
         try {
-            await fetchAllUsers();
+            await getAllUsers();
 
             const response = await fetch("http://localhost:8080/chats", {
                 credentials: "include",

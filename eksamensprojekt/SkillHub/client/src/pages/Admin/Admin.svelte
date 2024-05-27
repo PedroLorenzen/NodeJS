@@ -12,6 +12,7 @@
     import { handleDeleteJob } from "../../util/api/jobs/deleteJob.js";
     import { handlePutSkill } from "../../util/api/skills/putSkill.js";
     import { handleDeleteSkill } from "../../util/api/skills/deleteSkill.js";
+    import { handlePostSkill } from "../../util/api/skills/postSkill.js";
 
     let users = [];
     let jobs = [];
@@ -58,53 +59,7 @@
         filterValue = null;
     }
 
-    async function postSkill() {
-        const response = await fetch("http://localhost:8080/skills", {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: sanitizeHTML(skillName),
-            }),
-        });
-        const result = await response.json();
-        if (response.status === 429) {
-            navigate("/RateLimitExceeded");
-            throw new Error("Rate limit exceeded");
-        } else if (response.status === 400) {
-            toast.error(
-                result.error ||
-                    "The skill is missing some required information",
-                {
-                    duration: 3000,
-                    position: "top-right",
-                },
-            );
-            throw new Error(result.error || "Failed to create skill");
-        } else if (!response.ok) {
-            throw new Error(result.error || "Failed to create skill");
-        }
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    }
-
-    async function handlePostSkill() {
-        await toast.promise(
-            postSkill(),
-            {
-                loading: "Creating skill...",
-                success: "Skill created successfully. Refreshing page...",
-                error: "Failed to create skill - please try again",
-            },
-            {
-                duration: 2000,
-                position: "top-right",
-            },
-        );
-    }
+    
 </script>
 
 <Toaster />
@@ -274,7 +229,7 @@
                         <input type="text" bind:value={skillName} />
                     </td>
                     <td>
-                        <button on:click={() => handlePostSkill()}
+                        <button on:click={() => handlePostSkill(skillName, true)}
                             >Create</button
                         >
                     </td>

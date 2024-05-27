@@ -1,7 +1,7 @@
 import { navigate } from "svelte-routing";
 import toast from "svelte-french-toast";
 
-export async function getUsers(redirectPath) {
+export async function getUsers(showToast) {
     try {
         const userResponse = await fetch("http://localhost:8080/users", {
             credentials: "include",
@@ -24,9 +24,9 @@ export async function getUsers(redirectPath) {
             isAdmin: user.isAdmin,
         }));
 
-        if (redirectPath) {
+        if (showToast) {
             setTimeout(() => {
-                navigate(redirectPath);
+                window.location.reload();
             }, 2000);
         }
 
@@ -36,9 +36,9 @@ export async function getUsers(redirectPath) {
     }
 }
 
-export async function handleGetUsers(redirectPath) {
+export async function handleGetUsers(showToast) {
     await toast.promise(
-        getUsers(redirectPath),
+        getUsers(showToast),
         {
             loading: "Fetching users...",
             success: "Users fetched successfully",

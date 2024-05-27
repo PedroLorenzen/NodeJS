@@ -1,8 +1,9 @@
 <script>
     import { onMount } from "svelte";
     import io from "socket.io-client";
-    import { navigate } from "svelte-routing";
-    import toast from "svelte-french-toast";
+    import { getUser } from "../../util/api/users/getUser.js";
+    import { handleChat } from "../../util/api/chats/handleChat.js";
+    import { putChat } from "../../util/api/chats/putChat.js";
 
     let messages = [];
     let message = "";
@@ -14,63 +15,16 @@
         socket = io("http://localhost:8080");
 
         try {
-            const userResponse = await fetch(
-                `http://localhost:8080/users?getUserById=${otherUserId}`,
-                {
-                    credentials: "include",
-                },
-            );
-            if (userResponse.status === 429) {
-                navigate("/RateLimitExceeded");
-                throw new Error("Rate limit exceeded");
-            } else if (!userResponse.ok) {
-                throw new Error(
-                    "Failed to fetch user: " + (await userResponse.text()),
-                );
-            }
-            let data = await userResponse.json();
-            name = data.user.name;
+            const otherUser = await getUser(otherUserId);
+            name = otherUser.user.name;
         } catch (error) {
             throw new Error("Error fetching user: " + error);
         }
 
         try {
-            const response = await fetch(
-                `http://localhost:8080/chats?otherUserId=${otherUserId}`,
-                {
-                    credentials: "include",
-                },
-            );
-            if (response.status === 429) {
-                navigate("/RateLimitExceeded");
-                throw new Error("Rate limit exceeded");
-            } else if (response.status === 404) {
-                toast.error("No chat exists, creating new chat...");
-                const newChatResponse = await fetch(
-                    `http://localhost:8080/chats?otherUserId=${otherUserId}`,
-                    {
-                        method: "POST",
-                        credentials: "include",
-                    },
-                );
-                if (newChatResponse.status === 429) {
-                    navigate("/RateLimitExceeded");
-                    throw new Error("Rate limit exceeded");
-                } else if (!newChatResponse.ok) {
-                    throw new Error(
-                        "Failed to create new chat: " + newChatResponse.text());
-                }
-                window.location.reload();
-            }
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(
-                    "Failed to fetch chat history: " + data.message,
-                );
-            }
-            messages = data.chat || [];
+            messages = await handleChat(otherUserId, messages);
         } catch (error) {
-            throw new Error("Error fetching chat history: " + error);
+            throw new Error("Error fetching chat: " + error);
         }
 
         socket.on("chat-message", (data) => {
@@ -88,23 +42,9 @@
         socket.emit("send-chat-message", newMessage);
 
         try {
-            const response = await fetch(
-                `http://localhost:8080/chats?otherUserId=${otherUserId}`,
-                {
-                    method: "PUT",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(newMessage),
-                },
-            );
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error("Failed to save message: " + data.message);
-            }
+            await putChat(otherUserId, newMessage);
         } catch (error) {
-            throw new Error("Error saving message: " + error);
+            throw new Error("Error sending message: " + error);
         }
 
         message = "";
