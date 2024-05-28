@@ -21,21 +21,21 @@ npm install
 ```
 npm run dev
 ```
+3. follow the link assigned in the console ( propably: "http://localhost:5173/")
 
-3. CD into server and install the packages aswell.
+4. CD into server and install the packages aswell.
 
-4. Create a .env file (you can copy the .env.example file) and fill out the necessary values.
+5. Create a .env file (you can copy the .env.example file) and fill out the necessary values.
 ```
 cp .env.example .env
 ```
-4. Make sure to have mongoDB installed.
-
-5. run this script to create the local mongoDB database
+6. Make sure to have mongoDB installed.
+7. run this script to create the local mongoDB database
 
 ```
 npm run database-create
 ```
-6. start the server:
+8. start the server:
 ```
 node app.js
 ```
