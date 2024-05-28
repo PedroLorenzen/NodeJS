@@ -28,13 +28,14 @@ npm run dev
 ```
 cp .env.example .env
 ```
+4. Make sure to have mongoDB installed.
 
-4. run this script to create the local mongoDB database
+5. run this script to create the local mongoDB database
 
 ```
 npm run database-create
 ```
-5. start the server:
+6. start the server:
 ```
 node app.js
 ```
