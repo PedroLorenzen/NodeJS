@@ -9,12 +9,12 @@ const uri = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.e
 let client;
 
 const connect = async () => {
-    if (!client) {
-      client = new MongoClient(uri);
-      await client.connect();
-    }
-    return client;
-  };
+  if (!client) {
+    client = new MongoClient(uri);
+    await client.connect();
+  }
+  return client;
+};
 
 const sessionMiddleware = session({
   secret: process.env.SESSION_SECRET,
@@ -22,13 +22,13 @@ const sessionMiddleware = session({
   saveUninitialized: false,
   store: MongoStore.create({
     clientPromise: connect(),
-    dbName: process.env.DB_NAME
+    dbName: process.env.DB_NAME,
   }),
   cookie: {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 // 1 dag
-  }
+    maxAge: 1000 * 60 * 60 * 24, // 1 dag
+  },
 });
 
 export default sessionMiddleware;

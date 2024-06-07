@@ -16,14 +16,16 @@ router.post("/mails", async (req, res) => {
       message = sanitizeHTML(message);
 
       if (!to || !subject || !message) {
-        return res.status(400).json({ error: "Please make sure Email, Subject and Message is filled out" });
+        return res.status(400).json({
+          error: "Please make sure Email, Subject and Message is filled out",
+        });
       }
 
       const data = await resend.emails.send({
         from: "Acme <onboarding@resend.dev>",
         to: sanitizeEmail("chri46nj@stud.kea.dk"),
         subject: sanitizeHTML(subject),
-        html: sanitizeHTML(message)
+        html: sanitizeHTML(message),
       });
 
       res.status(200).send({ message: "Email sent successfully" });

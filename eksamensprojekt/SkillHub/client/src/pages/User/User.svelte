@@ -22,7 +22,7 @@
     id: userId,
     name: username,
     email: email,
-    location: location
+    location: location,
   };
 
   let activeForm = "createJob";
@@ -35,7 +35,11 @@
 
   let emailToDelete;
 
-  let jobId, name, skill_id, description = "", price = null;
+  let jobId,
+    name,
+    skill_id,
+    description = "",
+    price = null;
 
   function editJobForm(job) {
     jobId = job.id;
@@ -117,18 +121,32 @@
 
     {#if activeForm === "editUser"}
       <h2>Edit User</h2>
-      <form on:submit|preventDefault={() => handlePutUser(handleUser, oldPassword, newPassword, true)} class="form">
+      <form
+        on:submit|preventDefault={() =>
+          handlePutUser(handleUser, oldPassword, newPassword, true)}
+        class="form"
+      >
         <label for="userId">User ID:</label>
         <input type="text" bind:value={handleUser.id} id="userId" readonly />
 
         <label for="username">Username:</label>
-        <input type="text" bind:value={handleUser.name} id="username" required />
+        <input
+          type="text"
+          bind:value={handleUser.name}
+          id="username"
+          required
+        />
 
         <label for="email">Email:</label>
         <input type="email" bind:value={handleUser.email} id="email" required />
 
         <label for="location">Location:</label>
-        <input type="text" bind:value={handleUser.location} id="location" required />
+        <input
+          type="text"
+          bind:value={handleUser.location}
+          id="location"
+          required
+        />
 
         <label for="oldPassword">Old Password:</label>
         <input type="password" bind:value={oldPassword} id="oldPassword" />
@@ -152,7 +170,8 @@
         <button type="submit" class="submit-button">Update User</button>
         <button
           type="button"
-          on:click={() => handleDeleteUser(handleUser, "", emailToDelete, email, true)}
+          on:click={() =>
+            handleDeleteUser(handleUser, "", emailToDelete, email, true)}
           class="delete-user-button"
         >
           Delete User And Associated Jobs & Chats
@@ -188,10 +207,19 @@
             </select>
 
             <label for="jobDescription">Description:</label>
-            <textarea bind:value={job.description} id="jobDescription" required />
+            <textarea
+              bind:value={job.description}
+              id="jobDescription"
+              required
+            />
 
             <label for="jobPrice">Price:</label>
-            <input type="number" bind:value={job.price} id="jobPrice" required />
+            <input
+              type="number"
+              bind:value={job.price}
+              id="jobPrice"
+              required
+            />
 
             <label for="jobUserId" hidden>User ID:</label>
             <input type="text" bind:value={job.userId} id="jobUserId" hidden />
@@ -316,11 +344,13 @@
     transition: background-color 0.3s ease;
   }
 
-   .submit-button:hover {
+  .submit-button:hover {
     background-color: #218838;
   }
 
-  .delete-job-button, .delete-user-button, .logout-button {
+  .delete-job-button,
+  .delete-user-button,
+  .logout-button {
     background-color: #dc3545;
     color: white;
     padding: 10px 20px;
@@ -332,9 +362,10 @@
 
   .delete-user-button {
     margin: 50px 0 15px 0;
-  }  
+  }
 
-  .delete-job-button:hover, .delete-user-button:hover {
+  .delete-job-button:hover,
+  .delete-user-button:hover {
     background-color: darkred;
   }
 

@@ -10,10 +10,12 @@ import { sanitizeHTML } from "./util/sanitize.js";
 
 const app = express();
 
-app.use(cors({
+app.use(
+  cors({
     origin: true,
-    credentials: true
-}));
+    credentials: true,
+  }),
+);
 
 app.use(sessionMiddleware);
 
@@ -23,39 +25,37 @@ app.use(helmet());
 
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
 });
 
 io.on("connection", (socket) => {
+  socket.on("send-chat-message", (data) => {
+    if (data.text === "" || data.text === null || data.text === undefined) {
+      return;
+    }
+    io.emit("chat-message", data);
+  });
 
-    socket.on("send-chat-message", (data) => {
-        if (data.text === "" || data.text === null || data.text === undefined) {
-            return;
-        }
-        io.emit("chat-message", data);
-    });
-
-    socket.on("disconnect", () => {
-    });
+  socket.on("disconnect", () => {});
 });
 
 const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000,
-    limit: 120,
-    standardHeaders: true,
-    legacyHeaders: false,
-    cookie: {
-        secure: false,
-        httpOnly: true,
-        sameSite: "strict"
-    },
-    handler: (req, res) => {
-        console.log(`Rate limit exceeded for ${req.ip}`);
-        res.status(429).send("Too many requests, please try again later.");
-    }
+  windowMs: 1 * 60 * 1000,
+  limit: 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+  cookie: {
+    secure: false,
+    httpOnly: true,
+    sameSite: "strict",
+  },
+  handler: (req, res) => {
+    console.log(`Rate limit exceeded for ${req.ip}`);
+    res.status(429).send("Too many requests, please try again later.");
+  },
 });
 
 app.use(limiter);
@@ -79,10 +79,10 @@ import chatsRouter from "./routers/chatsRouter.js";
 app.use(chatsRouter);
 
 app.all("*", (req, res) => {
-    res.status(404).send({ message: "Not Found" });
+  res.status(404).send({ message: "Not Found" });
 });
 
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

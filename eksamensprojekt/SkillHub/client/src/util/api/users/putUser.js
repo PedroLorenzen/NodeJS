@@ -3,60 +3,60 @@ import toast from "svelte-french-toast";
 import { sanitizeEmail, sanitizeHTML } from "../../sanitize.js";
 
 export async function putUser(user, oldPassword, newPassword, showToast) {
-    const response = await fetch(
-        `http://localhost:8080/users?getUserId=${user.id}`,
-        {
-            method: "PUT",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                id: user.id,
-                name: sanitizeHTML(user.name),
-                email: sanitizeEmail(user.email),
-                location: sanitizeHTML(user.location),
-                isAdmin: user.isAdmin,
-                oldPassword: oldPassword,
-                newPassword: newPassword,
-            }),
-        },
+  const response = await fetch(
+    `http://localhost:8080/users?getUserId=${user.id}`,
+    {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: user.id,
+        name: sanitizeHTML(user.name),
+        email: sanitizeEmail(user.email),
+        location: sanitizeHTML(user.location),
+        isAdmin: user.isAdmin,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      }),
+    },
+  );
+  const result = await response.json();
+  if (response.status === 429) {
+    navigate("/RateLimitExceeded");
+    throw new Error("Rate limit exceeded");
+  } else if (response.status === 400) {
+    toast.error(
+      result.error || "The user is missing some required information",
+      {
+        duration: 3000,
+        position: "top-right",
+      },
     );
-    const result = await response.json();
-    if (response.status === 429) {
-        navigate("/RateLimitExceeded");
-        throw new Error("Rate limit exceeded");
-    } else if (response.status === 400) {
-        toast.error(
-            result.error || "The user is missing some required information",
-            {
-                duration: 3000,
-                position: "top-right",
-            },
-        );
-        throw new Error(result.error || "Failed to update user");
-    } else if (!response.ok) {
-        throw new Error(result.error || "Failed to update user");
-    }
+    throw new Error(result.error || "Failed to update user");
+  } else if (!response.ok) {
+    throw new Error(result.error || "Failed to update user");
+  }
 
-    if (showToast) {
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
-    }
+  if (showToast) {
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  }
 }
 
 export async function handlePutUser(user, oldPassword, newPassword, showToast) {
-    await toast.promise(
-        putUser(user, oldPassword, newPassword, showToast),
-        {
-            loading: "Updating user...",
-            success: "User updated successfully. Refreshing page...",
-            error: "Failed to update user - please try again",
-        },
-        {
-            duration: 2000,
-            position: "top-right",
-        },
-    );
+  await toast.promise(
+    putUser(user, oldPassword, newPassword, showToast),
+    {
+      loading: "Updating user...",
+      success: "User updated successfully. Refreshing page...",
+      error: "Failed to update user - please try again",
+    },
+    {
+      duration: 2000,
+      position: "top-right",
+    },
+  );
 }
