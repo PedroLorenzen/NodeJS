@@ -7,7 +7,6 @@ export default [
             svelte: sveltePlugin,
         },
         rules: {
-            "prettier/prettier": 0,
             indent: ["error", 2],
             "linebreak-style": ["error", "unix"],
             quotes: ["error", "double"],

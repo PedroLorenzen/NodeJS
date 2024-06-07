@@ -4,7 +4,9 @@
     "lint-server": "eslint \"server/**/*.{js,svelte}\" --config eslint.config.js",
     "lint-client": "eslint \"client/**/*.{js,svelte}\" --config eslint.config.js",
     "format-server": "prettier --write \"server/**/*.{js,svelte}\"",
-    "format-client": "prettier --write \"client/**/*.{js,svelte}\""
+    "format-client": "prettier --write \"client/**/*.{js,svelte}\"",
+    "lint-format-server": "eslint \"server/**/*.{js,svelte}\" --config eslint.config.js --fix && prettier --write \"server/**/*.{js,svelte}\"",
+    "lint-format-client": "eslint \"client/**/*.{js,svelte}\" --config eslint.config.js --fix && prettier --write \"client/**/*.{js,svelte}\""
   },
   "devDependencies": {
     "eslint": "^9.4.0",
