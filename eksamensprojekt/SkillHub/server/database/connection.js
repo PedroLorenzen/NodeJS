@@ -8,20 +8,20 @@ const uri = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.e
 let client;
 
 const connect = async () => {
-  if (!client) {
-    client = new MongoClient(uri);
-    await client.connect();
-    console.log("Connected to MongoDB");
-  }
-  return client.db(process.env.DB_NAME);
+    if (!client) {
+        client = new MongoClient(uri);
+        await client.connect();
+        console.log("Connected to MongoDB");
+    }
+    return client.db(process.env.DB_NAME);
 };
 
 const disconnect = async () => {
-  if (client) {
-    await client.close();
-    client = null;
-    console.log("Disconnected from MongoDB");
-  }
+    if (client) {
+        await client.close();
+        client = null;
+        console.log("Disconnected from MongoDB");
+    }
 };
 
 export { connect, disconnect };

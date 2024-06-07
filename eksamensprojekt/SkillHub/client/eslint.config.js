@@ -1,5 +1,4 @@
-import { ESLint } from "eslint";
-import sveltePlugin from "eslint-plugin-svelte3";
+import sveltePlugin from "eslint-plugin-svelte";
 
 export default [
     {
@@ -7,7 +6,7 @@ export default [
             svelte: sveltePlugin,
         },
         rules: {
-            indent: ["error", 2],
+            indent: ["error", 4],
             "linebreak-style": ["error", "unix"],
             quotes: ["error", "double"],
             semi: ["error", "always"],

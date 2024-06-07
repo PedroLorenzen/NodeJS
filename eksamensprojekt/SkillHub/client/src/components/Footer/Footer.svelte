@@ -2,22 +2,22 @@
 </script>
 
 <footer>
-  <img src="/logo.png" alt="Skill Hub Logo" />
+    <img src="/logo.png" alt="Skill Hub Logo" />
 </footer>
 
 <style>
-  footer {
-    background-color: #222;
-    color: #fff;
-    text-align: center;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-  }
+    footer {
+        background-color: #222;
+        color: #fff;
+        text-align: center;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+    }
 
-  img {
-    height: auto;
-    width: 105%;
-    margin: 0 -60px -35px -60px;
-  }
+    img {
+        height: auto;
+        width: 105%;
+        margin: 0 -60px -35px -60px;
+    }
 </style>
