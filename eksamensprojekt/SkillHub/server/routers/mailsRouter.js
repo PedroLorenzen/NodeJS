@@ -21,7 +21,7 @@ router.post("/mails", async (req, res) => {
                 });
             }
 
-            const data = await resend.emails.send({
+            await resend.emails.send({
                 from: "Acme <onboarding@resend.dev>",
                 to: sanitizeEmail("chri46nj@stud.kea.dk"),
                 subject: sanitizeHTML(subject),

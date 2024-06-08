@@ -6,7 +6,7 @@ import cors from "cors";
 import sessionMiddleware from "./middleware/sessionMiddleware.js";
 import { Server } from "socket.io";
 import http from "http";
-import { sanitizeHTML } from "./util/sanitize.js";
+import socketHandlers from "./sockets/socketHandlers.js";
 
 const app = express();
 
@@ -31,16 +31,7 @@ const io = new Server(server, {
     },
 });
 
-io.on("connection", (socket) => {
-    socket.on("send-chat-message", (data) => {
-        if (data.text === "" || data.text === null || data.text === undefined) {
-            return;
-        }
-        io.emit("chat-message", data);
-    });
-
-    socket.on("disconnect", () => {});
-});
+socketHandlers(io);
 
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000,

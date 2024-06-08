@@ -4,16 +4,20 @@
     import { getUser } from "../../util/api/users/getUser.js";
     import { handleChat } from "../../util/api/chats/handleChat.js";
     import { putChat } from "../../util/api/chats/putChat.js";
+    import { get } from "svelte/store";
+    import { user } from "../../stores/user.js";
 
     let messages = [];
     let message = "";
     let socket;
+    let myId = get(user).user._id;
     let otherUserId = parseInt(localStorage.getItem("contact_user_id"));
     let name = "";
 
     onMount(async () => {
         socket = io("http://localhost:8080");
 
+        socket.emit("register-user", myId);
         try {
             const otherUser = await getUser(otherUserId);
             name = otherUser.user.name;
@@ -38,16 +42,18 @@
         const newMessage = {
             text: message,
             timestamp: Date.now(),
+            from: myId,
+            to: otherUserId,
         };
-        socket.emit("send-chat-message", newMessage);
 
+        messages = [...messages, newMessage];
+        message = "";
+        socket.emit("send-chat-message", newMessage);
         try {
             await putChat(otherUserId, newMessage);
         } catch (error) {
             throw new Error("Error sending message: " + error);
         }
-
-        message = "";
     }
 </script>
 

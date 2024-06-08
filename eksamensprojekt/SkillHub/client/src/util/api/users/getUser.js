@@ -29,9 +29,9 @@ export async function getUser(otherUserId, showToast) {
     }
 }
 
-export async function handleGetUser(otherUserId, name, showToast) {
+export async function handleGetUser(otherUserId, showToast) {
     await toast.promise(
-        getUser(otherUserId, name, showToast),
+        getUser(otherUserId, showToast),
         {
             loading: "Fetching user...",
             success: "User fetched successfully",
